@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<!-- soccer/project/app-calendar.html  07 Jan 2020 03:39:43 GMT -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<link rel="icon" href="image/virus.png" type="image/x-icon"/>
+
+<title>Privacy Policy</title>
+
+<!-- Core css -->
+<link rel="stylesheet" href="assets/css/main.css"/>
+<link rel="stylesheet" href="assets/css/theme1.css"/>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css">
+
+<style>
+    .change {
+        background-color: wheat;
+    }
+
+    .text-green, .text-info, .text-success, .text-danger, .text-primary, .text-warning, .mail-star.active, .page-title {
+        color: white !important;
+    }
+
+</style>
+
+</head>
+
+<body class="font-roboto">
+<!-- Page Loader -->
+{{!-- <div class="page-loader-wrapper">
+    <div class="loader">
+    </div>
+</div> --}}
+
+<div id="main_content">
+    <div class="page">
+        <div class="section-body mt-3">
+            <div class="container-fluid">
+                <div class="row clearfix row-deck">
+                    <div class="row mb-3">
+                        <div class="col-lg-12 col-md-12 ml-4">
+                            <a type="button" href="/" class="btn btn-secondary mr-3">Home</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12">
+                        
+                        <div class="card">
+                            <div class="card-header bline">
+                                <h3 class="card-title"><b>Privacy Policy</b></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="justify-content-between">
+                                    <ul>
+                                        <li>Third party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website.</li>
+                                        <li>Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our site on the Internet.</li>
+                                        <li>Users may opt out of personalized advertising by visiting <a href="https://adssettings.google.com/authenticated">Ads Settings</a>. (Alternatively, we can direct users to opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://optout.aboutads.info/?c=2&lang=EN">www.aboutads.info</a>.)</li>
+                                    </ul>
+                                    <p>If you have not opted out of third-party ad serving, the cookies of other third-party vendors or ad networks may also be used to serve ads on our site, which is also  disclosed in our privacy policy as given below:</p>
+                                    <ul>
+                                        <li>Notify our site visitors of the third-party vendors and ad networks serving ads on our site.</li>
+                                        <li>Provide links to the appropriate vendor and ad network websites.</li>
+                                        <li>User may visit websites to opt out of the use of cookies for personalized advertising (if the vendor or ad network offers this capability). Users can opt out of some third-party vendors’ uses of cookies for personalized advertising by visiting <a href="https://optout.aboutads.info/?c=2&lang=EN">www.aboutads.info</a>.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section-body">
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <a href="https://www.instagram.com/_abhay_sardhara_/" target="_blank"><i class="fi-social-instagram" style="font-size: 35px;" title="Instagram"></i></a>&nbsp;&nbsp;
+                            <a href="https://www.facebook.com/abhay.sardhara.52" target="_blank"><i class="fi-social-facebook" style="font-size: 35px;" title="Facebook"></i></a>&nbsp;&nbsp;
+                            <a href="https://github.com/Abhaysardhara" target="_blank"><i class="fi-social-github" style="font-size: 35px;" style="Github"></i></a>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <p style="float: right; font-weight: bolder; font-size: 15px;">MADE BY ABHAY SARDHARA</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script>
+        $(document).ready(function() {
+
+            if ( $.fn.dataTable.isDataTable( '#example' ) ) {
+                table = $('#example').DataTable();
+            }
+            else {
+                table = $('#example').DataTable( {
+                    "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "All"]],
+                    "paging":   true,
+                    "ordering": true,
+                    "info":     true,
+                    "order": [[ 9, "desc" ]]
+                } );
+            }
+        } );
+
+    </script>
+
+<script src="assets/bundles/lib.vendor.bundle.js"></script>
+
+<script src="assets/bundles/fullcalendar.bundle.js"></script>
+
+<script src="assets/js/core.js"></script>
+<script src="assets/js/page/calendar.js"></script>
+</body>
+
+</html>

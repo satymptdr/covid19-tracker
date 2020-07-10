@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="continer mt-3 ml-3 mr-3">
+        <div class="row">
+            <div class="col">
+                <label for="delete"></label>
+                <center><a href="/chart/delete" class="btn btn-danger">delete file</a></center>
+
+                <br><br>
+
+                <div class="">
+                    <center><b><p class="text" style="font-size : large;">*** Choose File ***</p></b></center>
+                    <form action="/chart/update" method="post" enctype="multipart/form-data" id="form" name="form">
+                        <input type="file" class="form-control" name="filetoupload" id="filetoupload" onchange="file_validation()"><br>
+                        <center><input type="submit" class="btn btn-outline-success" id="submit"></center>
+                    </form>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <p>Status : {{message}}</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function file_validation() {
+            var doc = document.getElementById('filetoupload');
+            var submit = document.getElementById('submit');
+            var name = doc.files[0].name;
+            var arr = name.split('.');
+            console.log(arr[1])
+            if(arr[1] != 'csv' && arr[1] != 'xlsx') {
+                doc.value = '';
+                alert('Please Upload Excel (csv) File!');
+                doc.focus();
+                return false;
+            }
+            else {
+                submit.focus();
+                return true;
+            }
+        }
+
+        document.getElementById('form').addEventListener('submit', function() {
+            if(document.getElementById('filetoupload').value == '') {
+                doc.value = '';
+                alert('Please select file first!');
+                doc.focus();
+            }
+        });
+    </script>
+</body>
+</html>

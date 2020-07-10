@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<!-- soccer/project/  07 Jan 2020 03:36:49 GMT -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<link rel="icon" href="assets/images/virus.png" type="image/x-icon"/>
+
+<title>COVID-19 DATA</title>
+<meta name="title" content="COVID-19 DATA">
+<meta name="description" content="Live statistics and coronavirus tracking the number of confirmed cases, recovered patients, tests, and death toll in the world due to the COVID-19 coronavirus from Wuhan, China. Coronavirus counter with new cases updates, deaths, and number of tests per 1 Million population. Historical data and info. Daily charts, graphs and updates">
+<meta name="keywords" content="coronavirus map,live map,coronavirus,coronavirus update,coronavirus in usa,live,coronavirus dashboard,coronavirus update,usa coronavirus update,coronavirus cases,coronavirus us,coronavirus map,coronavirus tips,coronavirus vaccine,coronavirus symptoms,what is coronavirus,coronavirus china,wuhan coronavirus,covid 19 canada,covid 19 ontario,covid 19 alberta,covid 19 bc,covid 19 waterloo region"/>
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://abhay-covid19.herokuapp.com">
+<meta property="og:title" content="Coronavirus updates - Live covid19 counter">
+<meta property="og:description" content="Live stats and coronavirus news tracking the number of confirmed cases, recovered patients, tests, and deaths due to the COVID-19 coronavirus from Wuhan, China, USA ,Canada, Ontario,Toronto. Coronavirus counter with new cases, deaths, and number of tests per 1 Million population. Historical data and info. Daily charts, graphs, news and updates.">
+
+<script src="assets/js/jquery.min.js"></script>
+
+<link defer rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link defer rel="stylesheet" href="assets/css/jquery.dataTables.min.css">
+
+<!-- Core css -->
+<link defer rel="stylesheet" href="assets/css/main.css"/>
+<link defer rel="stylesheet" href="assets/css/theme1.css"/>
+
+<link defer rel="stylesheet" href="assets/css/buttons.dataTables.min.css">
+
+<script defer src="assets/js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" href="assets/foundation-icons/foundation-icons.css">
+
+<style>
+    .change {   
+        background-color: wheat;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        color: black;
+    }
+
+    .text-green, .text-info, .text-success, .text-danger, .text-primary, .text-warning, .mail-star.active, .page-title {
+        color: white !important;
+    }
+</style>
+
+</head>
+
+{{!-- class = "offcanvas-active" --}}
+<body class="font-roboto">
+
+
+<!-- Page Loader -->
+{{!-- <div class="page-loader-wrapper">
+    <div class="loader"></div>
+</div> --}}
+
+<div id="main_content">
+
+    <div id="header_top" class="header_top">
+        <div class="container">
+            <div class="hleft">
+                <a class="header-brand" href="/"><img src="image/virus.png" alt="" height="55%" width="55%"></a>
+                <div class="dropdown">
+                    <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="image/icon1.jpg" alt="" data-toggle="tooltip" data-placement="right" title="User Menu"/></a>
+                    <a href="app-calendar"  class="nav-link icon app_inbox xs-hide"><i class="fi-calendar"></i></a>
+                </div>
+            </div>
+            <div class="hright">
+                <div class="dropdown">
+                    <a href="javascript:void(0)" class="nav-link icon settingbar"><i class="fi-widget" data-toggle="tooltip" data-placement="right" title="Settings"></i></a>
+                    <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i class="fi-list"></i></a>
+                </div>            
+            </div>
+        </div>
+    </div>
+
+    <div id="rightsidebar" class="right_sidebar">
+        <a href="javascript:void(0)" class="p-3 settingbar float-right"><i class="fi-x"></i></a>
+        <div class="p-4">
+            <div class="mb-4">
+                <h6 class="font-14 font-weight-bold text-muted">Font Style</h6>
+                <div class="custom-controls-stacked font_setting">
+                    <label class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" name="font" value="font-opensans">
+                        <span class="custom-control-label">Open Sans Font</span>
+                    </label>
+                    <label class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" name="font" value="font-montserrat">
+                        <span class="custom-control-label">Montserrat Google Font</span>
+                    </label>
+                    <label class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" name="font" value="font-roboto" checked="">
+                        <span class="custom-control-label">Robot Google Font</span>
+                    </label>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <h6 class="font-14 font-weight-bold mt-4 text-muted">General Settings</h6>
+                <ul class="setting-list list-unstyled mt-1 setting_switch">
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Night Mode</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-darkmode">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Fix Navbar top</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-fixnavbar">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Header Dark</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-pageheader" checked="">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Min Sidebar Dark</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-min_sidebar">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Sidebar Dark</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-sidebar">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Icon Color</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-iconcolor">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Gradient Color</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-gradient">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Box Shadow</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-boxshadow">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">RTL Support</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-rtl">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Box Layout</span>
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input btn-boxlayout">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="user_div">
+        <h5 class="brand-name mb-4">COVID-19<a href="javascript:void(0)" class="user_btn"><i class="fi-x"></i></a></h5>
+        <div class="card-body">
+            <a href="https://github.com/Abhaysardhara"><img class="card-profile-img" src="image/icon1.jpg" alt=""></a>
+            <h6 class="mb-0">Abhay Sardhara</h6>
+            <span>abhays7675@gmail.com</span>
+            <div class="progress progress-xs">
+                <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-orange" role="progressbar" style="width: 5%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-indigo" role="progressbar" style="width: 13%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            {{!-- <h6 class="text-uppercase font-10 mt-1">Performance Score</h6> --}}
+            <hr>
+            <p>Activity</p>
+            <ul class="new_timeline">
+                <li>
+                    <div class="bullet pink"></div>
+                    <div class="time">10:30am</div>
+                    <div class="desc">
+                        <h3>Attendance</h3>
+                        <h4>College Class</h4>
+                    </div>
+                </li>
+                <li>
+                    <div class="bullet pink"></div>
+                    <div class="time">01:30pm</div>
+                    <div class="desc">
+                        <h3>Added an interest</h3>
+                        <h4>“Competitive Programming”</h4>
+                    </div>
+                </li>
+                <li>
+                    <div class="bullet green"></div>
+                    <div class="time">03:00pm</div>
+                    <div class="desc">
+                        <h3>Developer Team</h3>
+                        <h4>Hangouts</h4>
+                        <ul class="list-unstyled team-info margin-0 p-t-5">                                            
+                            <li><img src="image/icon1.jpg" alt="Avatar"></li>                                           
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="bullet green"></div>
+                    <div class="time">05:00pm</div>
+                    <div class="desc">
+                        <h3>Finish</h3>
+                        <h4>Go to Home</h4>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="left-sidebar" class="sidebar ">
+        <h5 class="brand-name">COVID-19 <a href="javascript:void(0)" class="menu_option float-right"><i class="fi-thumbnails toggle" data-toggle="tooltip" data-placement="left" title="Grid & List Toggle"></i></a></h5>
+        <nav id="left-sidebar-nav" class="sidebar-nav">
+            <ul class="metismenu">
+                <li class="g_heading">Project</li>
+                <li class="active"><a href="/"><i class="fi-database"></i><span>Dashboard</span></a></li>                        
+                <li class="g_heading">App</li>
+                <li><a href="/india"><img src="image/india.png" alt="" style="margin-right: 13px;"><span>India</span></a></li>
+                <li><a href="/chart"><img src="image/bar-chart-2.svg" alt="" style="margin-right: 13px;"><span>Charts</span></a></li>
+                <li><a href="/news"><i class="fi-book-bookmark"></i><span>News</span></a></li>
+                <li><a href="/app-calendar"><i class="fi-calendar"></i><span>Calendar</span></a></li>
+                
+                <li class="g_heading">Support</li>
+                <li><a href="/contactus"><i class="fi-telephone"></i><span>ContactUs</span></a></li>
+                <li><a href="/privacy"><i class="fi-key"></i><span>Privacy Policy</span></a></li>
+            </ul>
+        </nav>        
+    </div>
+
+    <div class="page">
+        <div id="page_top" class="section-body top_dark">
+            <div class="container-fluid">
+                <div class="page-header">
+                    <div class="left">
+                        <a href="javascript:void(0)" class="icon menu_toggle mr-3"><i class="fi-list" style="color: white; font-size: large"></i></a>
+                        <h1 class="page-title" style="color: rgb(255, 255, 255);">Dashboard</h1>                        
+                    </div>
+                    <div class="right">
+                        <div class="notification d-flex">
+                            <div class="dropdown d-flex">
+                                <a class="nav-link icon d-none d-md-flex btn btn-default btn-icon ml-2" data-toggle="dropdown"><i class="fi-megaphone"></i><span class="badge badge-primary nav-unread"></span></a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                    <ul class="list-unstyled feeds_widget">
+                                        <li>
+                                            <div class="feeds-left"><i class="fi-check"></i></div>
+                                            <div class="feeds-body">
+                                                <h4 class="title text-danger">No new notification<small class="float-right text-muted"></small></h4>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="javascript:void(0)" class="dropdown-item text-center text-muted-dark readall">Mark all as read</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section-body mt-3">
+            <div class="container-fluid">
+                <div class="row clearfix">
+                    <div class="col-lg-12">
+                        <div class="mb-4">
+                            <small>Measure How Corona Virus Spreading In World. <a href="https://www.who.int/" target="_blank">Learn More</a></small>
+                        </div>                        
+                    </div>
+                </div>
+
+                <center>
+                    <div class="row">
+                        <div class="col">
+                            <b><span id="date" class="col-lg-6 col-6"></span></b>
+                            <span id="time" class="col-lg-6 col-6"></span>
+                        </div>
+                    </div>
+                </center><br>
+                
+                <div class="mb-4">
+                    <div class="row clearfix row-deck">
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-primary" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: tan;">
+                                    <h3 class="card-title"><b>Total Cases</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-25">{{main.0.TotalCases}}  <span style="color: rgb(120, 160, 41); font-size: 20px">{{main.0.NewCases}}</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-danger" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: #DD4B39;">
+                                    <h3 class="card-title"><b>Total Death</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-25">{{main.0.TotalDeaths}}  <span style="color: red; font-size: 20px">{{main.0.NewDeaths}}</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-info" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: #F39C12;">
+                                    <h3 class="card-title"><b>Death Rate</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-25">{{main.0.DeathRate}}</h5> out of 1 Million Population 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-success" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);"> 
+                                <div class="card-header" style="background-color: #00A65A;">
+                                    <h3 class="card-title"><b>Recovered</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-25" style="color: rgb(120, 160, 41);">{{main.0.TotalRecovered}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row clearfix row-deck">
+                    <div class="col-xl-12 col-lg-12 mb-2">
+                        <div class="card mb-4" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">World Wide Case Analysis</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-sm-flex justify-content-between">
+                                    <div class="table-responsive">
+                                        <table id="example" class="table table-striped table-bordered" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Country</th>
+                                                    <th>TotalCases</th>
+                                                    <th>TotalDeaths</th>
+                                                    <th>Recovered</th>
+                                                    <th>ActiveCases</th>
+                                                    <th>TotalTests</th>
+                                                    <th>DeathRate/1M_POP</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each main}}
+                                                    <tr>
+                                                        <th style="font-weight: 1000;">{{this.Country}}</th>
+                                                        <td>{{this.TotalCases}} <p></p><span style="color: green;">{{this.NewCases}}</span></td>
+                                                        <td>{{this.TotalDeaths}} <p></p><span style="color: red;">{{this.NewDeaths}}</span></td>
+                                                        <td>{{this.TotalRecovered}}</td>
+                                                        <td>{{this.ActiveCases}}</td>
+                                                        <td>{{this.TotalTests}}</td>
+                                                        <td>{{this.DeathRate}}</td>
+                                                    </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                
+                    </div>
+                    
+                    <div class="col-xl-6 col-lg-6 mb-2">
+                        <div class="card mb-4" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Age of Coronavirus Deaths - COVID-19 Fatality Rate by AGE</h3>
+                            </div>
+                            <div class="card-body">
+                                <center>
+                                    <div>
+                                        <table class="table table-responsive table-striped table-bordered" style="width : max-content;">
+                                            <thead>
+                                                <tr>
+                                                    <th style="font-weight: bolder;">Age</th>
+                                                    <th style="font-weight: bolder;">Fatality Rate</th>
+                                                </tr>   
+                                            </thead>
+                                            <tbody>
+                                                {{#each agevise}}
+                                                    <tr id="example">
+                                                        <td>{{this.Age}}</td>
+                                                        <td>{{this.DeathRateAllCases}}</td>
+                                                    </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </center>
+                            </div>
+                        </div>                
+                    </div>
+                    <div class="col-xl-6 col-lg-6 mb-2">
+                        <div class="card mb-4" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">COVID-19 Fatality Rate by COMORBIDITY</h3>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <br>
+                                    <h3 class="card-subtitle mb-2 text-muted" style="font-weight: bold;">Death Rate = (number of deaths / number of cases)</h3 ><br>
+                                    <h3 class="card-subtitle mb-2 text-muted"><center><b>Older Statistics</b></center></h3>
+                                    <table class="table table-responsive table-striped table-bordered" style="width : auto;">
+                                        <thead>
+                                            <tr>
+                                                <th style="font-weight: bolder;">PRE EXISTING CONDITION</th>
+                                                <th style="font-weight: bolder;">DEATH RATE Confirmed Cases</th>
+                                                <th style="font-weight: bolder;">DEATH RATE All Cases</th>
+                                            </tr>   
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Cardiovascular disease</td>
+                                                <td>13.2%</td>
+                                                <td>10.5%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Diabetes</td>
+                                                <td>9.2%</td>
+                                                <td>7.3%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Chronic respiratory disease</td>
+                                                <td>8.0%</td>
+                                                <td>6.3%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Hypertension</td>
+                                                <td>8.4%</td>
+                                                <td>6.0%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Cancer</td>
+                                                <td>7.6%</td>
+                                                <td>5.6%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>no pre-existing conditions</td>
+                                                <td></td>
+                                                <td>0.9%</td>
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-body">
+            <div class="container-fluid">    
+                <div class="row clearfix">
+                    <div class="col-12 col-sm-12 mb-3">
+                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Situation Reports By WHO (World Health Organization)</h3>
+                            </div>
+                            <div class="card-body" style="height: 300px; overflow-y:scroll;">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th style="font-weight: bolder;">#</th>
+                                                <th style="font-weight: bolder;">Date</th>
+                                                <th style="font-weight: bolder;">Download Pdf</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each report}}
+                                                <tr>
+                                                    <td>{{this.report}}</td>
+                                                    <td>{{this.date}}</td>
+                                                    <td>
+                                                        <a href="{{this.pdf}}" target="_blank"><i class="fi-page-pdf" aria-hidden="true" style="font-size: 20px; margin-right: 8px"></i>
+                                                            {{#if this.new}}
+                                                                <img src="image/new.gif" alt="New Report" height="20px" width="33px">
+                                                            {{/if}}
+                                                        </a>
+                                                    </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {{!-- News From DailyHunt --}}
+        <div class="section-body">
+            <div class="container-fluid">    
+                <div class="row clearfix">
+                    <div class="col-12 col-sm-12 mb-2">
+                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Latest News</h3>
+                            </div>
+                            <div class="card-body" style="height: 1300px; overflow-y:scroll;">
+                                {{#each cont}}
+                                    <div id="news-{{@index}}" style="height: 90px; left: 0px; position: relative; top: 0px; width: 100%;">
+                                        <div style="float: left; padding-right: 10px">
+                                            <a href="{{this.uri}}" target="_blank">
+                                                <img src="{{this.img}}" alt="" style="width: 80px; height: 80px;">
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; margin-bottom: 5px">
+                                                {{#if this.type_given}}
+                                                    <p style="float: left; color: red; margin-right: 10px">{{this.type}}</p>
+                                                {{/if}}
+                                                <p>{{this.time}}</p>
+                                            </div>
+
+                                            <div style="position: inherit;">
+                                                <a href="{{this.uri}}" target="_blank" style="color: black"><p style="height: 60px; max-height: 60px; overflow: hidden; line-height: 1.4em; font-size: 14px">{{this.title}}</p></a>
+                                            </div>
+                                        </div>
+                                    </div><hr>
+                                {{/each}}
+                            </div>
+                            <div class="card-footer">
+                                <center><a href="https://m.dailyhunt.in/news/india/hindi" target="_blank" class="btn btn-outline-success">Read More</a></center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="section-body">
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-6 col-12">
+                            <a href="https://www.instagram.com/_abhay_sardhara_/" target="_blank"><i class="fi-social-instagram" style="font-size: 35px;" title="Instagram"></i></a>&nbsp;&nbsp;
+                            <a href="https://www.facebook.com/abhay.sardhara.52" target="_blank"><i class="fi-social-facebook" style="font-size: 35px;" title="Facebook"></i></a>&nbsp;&nbsp;
+                            <a href="https://github.com/Abhaysardhara" target="_blank"><i class="fi-social-github" style="font-size: 35px;" style="Github"></i></a>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <p style="font-weight: bolder; font-size: 15px;">MADE BY ABHAY SARDHARA</p>
+                        </div>
+                        <div id="temp"></div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>    
+</div>
+
+<script>
+
+    $(document).ready(function() {
+
+        if ( $.fn.dataTable.isDataTable( '#example' ) ) {
+            table = $('#example').DataTable();
+        }
+        else {
+            table = $('#example').DataTable( {
+                "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "All"]],
+                "paging":   true,
+                "bSort": false,
+                "info":     true,
+                "oLanguage": {
+                    "sSearch": "Country: "
+                }
+            } );
+        }
+
+        $('body').bind('cut copy paste', function (e) {
+            e.preventDefault();
+            alert('Sorry we can\'t let you copy in this page :)');
+        });
+        
+        //Disable mouse right click
+        $("body").on("contextmenu",function(e){
+            alert('Sorry we can\'t let you copy or inspect in this page :)');
+            return false;
+        });
+    } );
+
+    $(function() {
+        var interval = setInterval(() => {
+            var momentNow = moment();
+            $('#date').html(momentNow.format('dddd') + ' - ' + momentNow.format('DD MMMM, YYYY'));
+            $('#time').html(momentNow.format('hh:mm:ss A'));
+        }, 100);
+    });
+</script>
+
+<script src="assets/bundles/lib.vendor.bundle.js"></script>
+<script defer src="assets/bundles/fullcalendar.bundle.js"></script>
+
+<script defer src="assets/js/core.js"></script>
+<script defer src="assets/js/page/calendar.js"></script>
+<script defer src="assets/js/notification/user_data.js"></script>
+
+{{!-- <script defer src="/socket.io/socket.io.js"></script>
+<script defer src="assets/js/notification/websocket.js"></script> --}}
+
+</body>
+</html>

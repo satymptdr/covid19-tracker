@@ -1,0 +1,7 @@
+To Import CSV File in MongoDB ********************
+
+.\mongoimport --type=csv --headerline --host=ds035358.mlab.com --port=35358 --username=abhay --collection=covid_india --db=heroku_k780ktcv --file=covid_19_india.csv
+
+MongoDB-data import for localhost *********************
+
+/mongodb/bin/mongod.exe --dbpath=/mongodb-data
