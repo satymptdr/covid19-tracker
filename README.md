@@ -1,6 +1,6 @@
 # covid19-tracker
 
-[![version](https://img.shields.io/badge/version-1.1-yellow.svg)](https://github.com/Abhaysardhara/Draw-Anything-Google-Chrome-Extension/releases/tag/v1.0)
+[![version](https://img.shields.io/badge/version-1.0-yellow.svg)](https://github.com/Abhaysardhara/Draw-Anything-Google-Chrome-Extension/releases/tag/v1.0)
 
 ## About Project
 Covid 19 Tracker is web application to display up to date data of covid cases.
