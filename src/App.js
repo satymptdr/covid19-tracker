@@ -12,9 +12,9 @@ const cheerio = require('cheerio')
 var moment = require('moment')
 
 var client = redis.createClient({
-    port      : 11239,
-    host      : 'ec2-34-236-54-188.compute-1.amazonaws.com',
-    password  : 'p5b5f53d184136e3decf3b10d4a3d7d5c45eb77f3de00815e621eac19f9eb0213'
+    port      : 17529,
+    host      : 'ec2-34-198-87-71.compute-1.amazonaws.com',
+    password  : 'p666443c54a2adf065097a03a0a86ca53d53416fc781ea2d9de6d57f4273d5aa7'
 });
 
 client.on('connect', (err, reply) => {
@@ -27,11 +27,11 @@ client.on('connect', (err, reply) => {
 dotenv.config();
 
 // mongodb-mLab-robo 3T
-const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient
+// const mongodb = require('mongodb')
+// const MongoClient = mongodb.MongoClient
 
-const connectionURL = 'mongodb://127.0.0.1:27017'
-const databaseName = 'heroku_k780ktcv'
+// const connectionURL = 'mongodb://127.0.0.1:27017'
+// const databaseName = DBNAME
 // const databaseName = 'admin'
 
 var hbs = require('hbs');
@@ -47,7 +47,7 @@ app.use(express.static("public", {
             const date = new Date();
             date.setFullYear(date.getFullYear() + 1);
             res.setHeader("Expires", date.toUTCString());
-            res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+            res.setHeader("Cache-Control", "public, max-age=172800, immutable");
         }
     }
 }));
@@ -57,11 +57,11 @@ app.use('/', express.static("views", {
     lastModified: true,
     setHeaders: (res, path) => {
 
-        if (path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff)$/)) {
+        if (path.match(/\.(css|png|jpg|jpeg|gif|ico|svg|woff)$/)) {
             const date = new Date();
             date.setFullYear(date.getFullYear() + 1);
             res.setHeader("Expires", date.toUTCString());
-            res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+            res.setHeader("Cache-Control", "public, max-age=172800, immutable");
         }
     }
 }));
@@ -81,19 +81,19 @@ var results = [];   // Latest News
 
 
 // MongoDB database connection
-var db;
+// var db;
 
-function connect_db() {
-    MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
-        if (error) {
-            throw error
-        }
-        db = client.db(databaseName)
-    });
-}
+// function connect_db() {
+//     MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
+//         if (error) {
+//             throw error
+//         }
+//         db = client.db(databaseName)
+//     });
+// }
 
 async function get_news() {
-    await connect_db();
+    // await connect_db();
     await getAllHTMLDailyHunt();
 }
 
@@ -124,7 +124,6 @@ const getPostsDailyHunt = (html) => {
             results.push(obj)
         }
     })
-
 }
 
 const getPageHTMLDailyHunt = () =>
@@ -134,25 +133,6 @@ const getPageHTMLDailyHunt = () =>
 const getAllHTMLDailyHunt = async () => {
   getPageHTMLDailyHunt()
     .then(htmls => getPostsDailyHunt(htmls))
-    .then(() => {       
-        db.collection("news").find({uri: results[0].uri}).toArray(function(err, result) {
-            if (err) throw err;
-
-            if(!(result.length > 0)) {
-                function save_to_db() {
-                    db.collection('news').insertMany(results, (error, result) => {
-                        if (error) {
-                            return console.log('Unable to insert user data')
-                        }
-                
-                        console.log('operation successfull')
-                    })
-                }
-            
-                save_to_db();
-            }
-        });
-    })
 }
 
 get_news();
@@ -193,39 +173,6 @@ client.get('report', (err, result) => {
     }
 });
 
-setInterval(function() {
-    client.get('world_data', (err, result) => {
-        if(!result) {
-            covid.plugins[0].reports().then((result) => {
-                var data;
-                for(var i=0; i < result[0].table[0].length - 1; i++) {
-                        let x = result[0].table[0][i];
-        
-                        data = {
-                            Country : x.Country,
-                            TotalCases : x.TotalCases,
-                            NewCases : x.NewCases,
-                            TotalDeaths : x.TotalDeaths,
-                            NewDeaths: x.NewDeaths,
-                            ActiveCases: x.ActiveCases,
-                            TotalTests: x.TotalTests,
-                            TotalRecovered : x.TotalRecovered,
-                            DeathRate : x.Deaths_1M_pop
-                        };
-        
-                        arr.push(data);
-                }
-                
-                arr.sort((a, b) => {
-                    return b.TotalCases - a.TotalCases;
-                });
-            }).then(function() {
-                client.setex('world_data', 21600, JSON.stringify(arr));
-            });
-        }
-    });
-}, 21600);
-
 // Routing
 app.get('/', (req, res) => {
     
@@ -263,17 +210,17 @@ app.get('/', (req, res) => {
         }
     });
 
-    db.collection("news").find({}).sort({"time": -1}).limit(50).toArray((err, result) => {
-        if(err) {
-            throw err
-        }
-        cont = result        
-    })
+    // db.collection("news").find({}).sort({"time": -1}).limit(50).toArray((err, result) => {
+    //     if(err) {
+    //         throw err
+    //     }
+    //     cont = result        
+    // })
 
     client.get('world_data', (err, result) => {
         if(result) {
             result = JSON.parse(result);
-            res.render('index', {main : result, agevise : arr1, report : temp, cont: cont});
+            res.render('index', {main : result, agevise : arr1, report : temp, cont: results});
         }
         else {
             covid.plugins[0].reports().then((result) => {
@@ -300,7 +247,7 @@ app.get('/', (req, res) => {
                     return b.TotalCases - a.TotalCases;
                 });
             }).then(function() {
-                res.render('index', {main : arr, agevise : arr1, report : temp, cont: cont});
+                res.render('index', {main : arr, agevise : arr1, report : temp, cont: results});
                 client.setex('world_data', 21600, JSON.stringify(arr));
             });
         }
@@ -308,39 +255,39 @@ app.get('/', (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log('server started');
+    console.log('server started at port ' + process.env.PORT);
 });
 
-app.post('/abhay/data', async function(req, res, next) {
+// app.post('/abhay/data', async function(req, res, next) {
 
-    function data_save() {
-        db.collection('user-data').insertOne({
-            ip: req.body.ip,
-            city: req.body.city,
-            state: req.body.state,
-            country: req.body.country,
-            postal: req.body.postal,
-            latitude: req.body.latitude,
-            longitude: req.body.longitude,
-            telecome: req.body.telecome,
-            time: req.body.timestamp
-        }, (error, result) => {
-            if (error) {
-                return console.log('Unable to insert user data')
-            }
+//     function data_save() {
+//         db.collection('user-data').insertOne({
+//             ip: req.body.ip,
+//             city: req.body.city,
+//             state: req.body.state,
+//             country: req.body.country,
+//             postal: req.body.postal,
+//             latitude: req.body.latitude,
+//             longitude: req.body.longitude,
+//             telecome: req.body.telecome,
+//             time: req.body.timestamp
+//         }, (error, result) => {
+//             if (error) {
+//                 return console.log('Unable to insert user data')
+//             }
     
-            console.log('operation successfull')
-        })
-    }
+//             console.log('operation successfull')
+//         })
+//     }
 
-    try {
-        await data_save();
-    }
-    catch (error) {
-        return next(error);
-    }
+//     try {
+//         await data_save();
+//     }
+//     catch (error) {
+//         return next(error);
+//     }
 
-}); 
+// }); 
 
 app.get('/app-calendar', (req, res) => {
     res.render('app-calendar');
