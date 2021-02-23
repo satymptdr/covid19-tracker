@@ -12,9 +12,9 @@ const cheerio = require('cheerio')
 var moment = require('moment')
 
 var client = redis.createClient({
-    port      : 17529,
-    host      : 'ec2-34-198-87-71.compute-1.amazonaws.com',
-    password  : 'p666443c54a2adf065097a03a0a86ca53d53416fc781ea2d9de6d57f4273d5aa7'
+    port      : PORT,
+    host      : HOST,
+    password  : PASS
 });
 
 client.on('connect', (err, reply) => {
