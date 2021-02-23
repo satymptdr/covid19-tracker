@@ -24,3 +24,6 @@ Covid 19 Tracker is web application to display up to date data of covid cases.
 I am working on notification features. On opening the site, web app will send covid data to user as per their location(state).
 
 ## Sample
+Solarized dark             |  Solarized Ocean            |  other
+:-------------------------:|:---------------------------:|:-------------------------:
+![](https://...Dark.png)  |  ![](https://...Ocean.png)     ![](https://...Ocean.png)
