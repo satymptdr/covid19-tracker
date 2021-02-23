@@ -24,6 +24,10 @@ Covid 19 Tracker is web application to display up to date data of covid cases.
 I am working on notification features. On opening the site, web app will send covid data to user as per their location(state).
 
 ## Sample
-Solarized dark             |  Solarized Ocean            |  other
+Dashboard Highlight           |  World wild data           |  Situation report & Latest News
 :-------------------------:|:---------------------------:|:-------------------------:
-![](https://...Dark.png)  |  ![](https://...Ocean.png)     ![](https://...Ocean.png)
+![](https://github.com/Abhaysardhara/covid19-tracker/blob/master/Screenshot%20(70).png)  |  ![](https://github.com/Abhaysardhara/covid19-tracker/blob/master/Screenshot%20(71).png)  |  ![](https://github.com/Abhaysardhara/covid19-tracker/blob/master/Screenshot%20(72).png)
+
+Interactive Graphs         |  Civic Tracker           |  My Profile
+:-------------------------:|:---------------------------:|:-------------------------:
+![](https://github.com/Abhaysardhara/covid19-tracker/blob/master/Screenshot%20(73).png)  |  ![](https://github.com/Abhaysardhara/covid19-tracker/blob/master/Screenshot%20(74).png)  |  ![](https://github.com/Abhaysardhara/covid19-tracker/blob/master/Screenshot%20(75).png)
