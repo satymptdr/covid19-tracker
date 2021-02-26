@@ -15,24 +15,18 @@
 <meta name="keywords" content="coronavirus map,live map,coronavirus,coronavirus update,coronavirus in usa,live,coronavirus dashboard,coronavirus update,usa coronavirus update,coronavirus cases,coronavirus us,coronavirus map,coronavirus tips,coronavirus vaccine,coronavirus symptoms,what is coronavirus,coronavirus china,wuhan coronavirus,covid 19 canada,covid 19 ontario,covid 19 alberta,covid 19 bc,covid 19 waterloo region"/>
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="http://abhay-covid19.herokuapp.com">
-<meta property="og:title" content="Coronavirus updates - Live covid19 counter">
+<meta property="og:url" content="https://covid19-tracker-abhay.herokuapp.com/">
+<meta property="og:title" content="Covid Dashboard By Abhay Sardhara">
 <meta property="og:description" content="Live stats and coronavirus news tracking the number of confirmed cases, recovered patients, tests, and deaths due to the COVID-19 coronavirus from Wuhan, China, USA ,Canada, Ontario,Toronto. Coronavirus counter with new cases, deaths, and number of tests per 1 Million population. Historical data and info. Daily charts, graphs, news and updates.">
-
+ 
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" defer>
+<link rel="stylesheet" href="assets/css/jquery.dataTables.min.css" defer>
+<link rel="stylesheet" href="assets/css/main.css" defer/>
+<link rel="stylesheet" href="assets/css/theme1.css" defer/>
+<link rel="stylesheet" href="assets/css/buttons.dataTables.min.css" defer>
 <script src="assets/js/jquery.min.js"></script>
-
-<link defer rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link defer rel="stylesheet" href="assets/css/jquery.dataTables.min.css">
-
-<!-- Core css -->
-<link defer rel="stylesheet" href="assets/css/main.css"/>
-<link defer rel="stylesheet" href="assets/css/theme1.css"/>
-
-<link defer rel="stylesheet" href="assets/css/buttons.dataTables.min.css">
-
-<script defer src="assets/js/jquery.dataTables.min.js"></script>
-
-<link rel="stylesheet" href="assets/foundation-icons/foundation-icons.css">
+<script src="assets/js/jquery.dataTables.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-icons@1.0.1/foundation-icons.css" defer>
 
 <style>
     .change {   
@@ -64,10 +58,9 @@
     <div id="header_top" class="header_top">
         <div class="container">
             <div class="hleft">
-                <a class="header-brand" href="/"><img src="image/virus.png" alt="" height="55%" width="55%"></a>
+                <a class="header-brand" href="/"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/virus.png" alt="" height="55%" width="55%"></a>
                 <div class="dropdown">
-                    <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="image/icon1.jpg" alt="" data-toggle="tooltip" data-placement="right" title="User Menu"/></a>
-                    <a href="app-calendar"  class="nav-link icon app_inbox xs-hide"><i class="fi-calendar"></i></a>
+                    <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/icon1.jpg" alt="" data-toggle="tooltip" data-placement="right" title="User Menu"/></a>
                 </div>
             </div>
             <div class="hright">
@@ -181,7 +174,7 @@
     <div class="user_div">
         <h5 class="brand-name mb-4">COVID-19<a href="javascript:void(0)" class="user_btn"><i class="fi-x"></i></a></h5>
         <div class="card-body">
-            <a href="https://github.com/Abhaysardhara"><img class="card-profile-img" src="image/icon1.jpg" alt=""></a>
+            <a href="https://github.com/Abhaysardhara"><img class="card-profile-img" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/icon1.jpg" alt=""></a>
             <h6 class="mb-0">Abhay Sardhara</h6>
             <span>abhays7675@gmail.com</span>
             <div class="progress progress-xs">
@@ -218,7 +211,7 @@
                         <h3>Developer Team</h3>
                         <h4>Hangouts</h4>
                         <ul class="list-unstyled team-info margin-0 p-t-5">                                            
-                            <li><img src="image/icon1.jpg" alt="Avatar"></li>                                           
+                            <li><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/icon1.jpg" alt="Avatar"></li>                                           
                         </ul>
                     </div>
                 </li>
@@ -241,10 +234,9 @@
                 <li class="g_heading">Project</li>
                 <li class="active"><a href="/"><i class="fi-database"></i><span>Dashboard</span></a></li>                        
                 <li class="g_heading">App</li>
-                <li><a href="/india"><img src="image/india.png" alt="" style="margin-right: 13px;"><span>India</span></a></li>
-                <li><a href="/chart"><img src="image/bar-chart-2.svg" alt="" style="margin-right: 13px;"><span>Charts</span></a></li>
+                <li><a href="/india"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/india.png" alt="" style="margin-right: 13px;"><span>India</span></a></li>
+                <li><a href="/chart"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/bar-chart-2.svg" alt="" style="margin-right: 13px;"><span>Charts</span></a></li>
                 <li><a href="/news"><i class="fi-book-bookmark"></i><span>News</span></a></li>
-                <li><a href="/app-calendar"><i class="fi-calendar"></i><span>Calendar</span></a></li>
                 
                 <li class="g_heading">Support</li>
                 <li><a href="/contactus"><i class="fi-telephone"></i><span>ContactUs</span></a></li>
@@ -503,7 +495,7 @@
                                                     <td>
                                                         <a href="{{this.pdf}}" target="_blank"><i class="fi-page-pdf" aria-hidden="true" style="font-size: 20px; margin-right: 8px"></i>
                                                             {{#if this.new}}
-                                                                <img src="image/new.gif" alt="New Report" height="20px" width="33px">
+                                                                <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/new.gif" alt="New Report" height="20px" width="33px">
                                                             {{/if}}
                                                         </a>
                                                     </td>
@@ -533,7 +525,7 @@
                                     <div id="news-{{@index}}" style="height: 90px; left: 0px; position: relative; top: 0px; width: 100%;">
                                         <div style="float: left; padding-right: 10px">
                                             <a href="{{this.uri}}" target="_blank">
-                                                <img src="{{this.img}}" alt="" style="width: 80px; height: 80px;">
+                                                <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="{{this.img}}" alt="" style="width: 80px; height: 80px;">
                                             </a>
                                         </div>
                                         <div>
@@ -610,7 +602,7 @@
             alert('Sorry we can\'t let you copy or inspect in this page :)');
             return false;
         });
-    } );
+    });
 
     $(function() {
         var interval = setInterval(() => {
@@ -619,17 +611,22 @@
             $('#time').html(momentNow.format('hh:mm:ss A'));
         }, 100);
     });
+
+    function init() {
+        var imgDefer = document.getElementsByTagName('img');
+        for (var i = 0; i < imgDefer.length; i++) {
+            if (imgDefer[i].getAttribute('data-src')) {
+                imgDefer[i].setAttribute('src', imgDefer[i].getAttribute('data-src'));
+            }
+        }
+    }
+
+    window.onload = init;
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
-<script defer src="assets/bundles/fullcalendar.bundle.js"></script>
-
 <script defer src="assets/js/core.js"></script>
-<script defer src="assets/js/page/calendar.js"></script>
-<script defer src="assets/js/notification/user_data.js"></script>
-
-{{!-- <script defer src="/socket.io/socket.io.js"></script>
-<script defer src="assets/js/notification/websocket.js"></script> --}}
 
 </body>
 </html>

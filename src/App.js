@@ -1,4 +1,5 @@
-// process.env.UV_THREADPOOL_SIZE=2;
+const os = require('os');
+process.env.UV_THREADPOOL_SIZE=os.cpus().length;
 const covid = require('covid19-api');
 const express = require('express');
 const app = express();
@@ -12,9 +13,9 @@ const cheerio = require('cheerio')
 var moment = require('moment')
 
 var client = redis.createClient({
-    port      : PORT,
-    host      : HOST,
-    password  : PASS
+    port      : 17529,
+    host      : 'ec2-34-198-87-71.compute-1.amazonaws.com',
+    password  : 'p666443c54a2adf065097a03a0a86ca53d53416fc781ea2d9de6d57f4273d5aa7'
 });
 
 client.on('connect', (err, reply) => {
