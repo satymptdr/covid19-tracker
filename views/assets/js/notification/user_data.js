@@ -17,6 +17,7 @@ fetch('https://ipapi.co/json/').then((response) => {
         console.log(user_data);
         
         // fetch('http://localhost:3000/abhay/data', {
+        //     mode: 'no-cors',
         //     method: 'POST',
         //     headers: {
         //         'Content-Type': 'application/json'

@@ -12,6 +12,8 @@ const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 var moment = require('moment')
 
+var obj = {};
+
 var client = redis.createClient({
     port      : 17529,
     host      : 'ec2-34-198-87-71.compute-1.amazonaws.com',
@@ -259,36 +261,13 @@ app.listen(process.env.PORT || 3000, () => {
     console.log('server started at port ' + process.env.PORT);
 });
 
-// app.post('/abhay/data', async function(req, res, next) {
-
-//     function data_save() {
-//         db.collection('user-data').insertOne({
-//             ip: req.body.ip,
-//             city: req.body.city,
-//             state: req.body.state,
-//             country: req.body.country,
-//             postal: req.body.postal,
-//             latitude: req.body.latitude,
-//             longitude: req.body.longitude,
-//             telecome: req.body.telecome,
-//             time: req.body.timestamp
-//         }, (error, result) => {
-//             if (error) {
-//                 return console.log('Unable to insert user data')
-//             }
-    
-//             console.log('operation successfull')
-//         })
-//     }
-
-//     try {
-//         await data_save();
-//     }
-//     catch (error) {
-//         return next(error);
-//     }
-
-// }); 
+app.post('/abhay/data', async function(req, res, next) {
+    obj = {
+        ip : req.body.ip,
+        city : req.body.city,
+        state : req.body.state
+    };
+}); 
 
 app.get('/app-calendar', (req, res) => {
     res.render('app-calendar');
@@ -406,11 +385,7 @@ app.post('/chart/update', (req, res) => {
 });
 
 app.get('/abhay/data', (req, res) => {
-
-    db.collection("user-data").find({}).toArray(function(err, result) {
-        if (err) throw err;
-        res.render('data', {user: result});
-    });
+    console.log(obj);
 });
 
 // io.on('connection', (socket) => {
