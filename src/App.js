@@ -140,49 +140,11 @@ const getAllHTMLDailyHunt = async () => {
 
 get_news();
 
-covid.plugins[0].fatalityRateByAge().then((result0) => {
-    arr1 = result0;
-    result0 = null;
-    // console.log(arr1);
-});
-
-client.get('report', (err, result) => {
-    if(!result) {
-        covid.plugins[0].situationReports().then((result) => {
-            var data;
-        
-            for(var i=0; i<result.length; i++) {
-                if(i == 0) {
-                    data = {
-                        report : (result[i].report).slice(19),
-                        date : result[i].date,
-                        pdf : result[i].pdf,
-                        new : true
-                    };
-                }
-                else {
-                    data = {
-                        report : (result[i].report).slice(19),
-                        date : result[i].date,
-                        pdf : result[i].pdf,
-                        new : false
-                    };
-                }
-                arr4.push(data);
-            }
-        }).then(() => {
-            client.setex('report', parseInt((new Date().setHours(23, 59, 59, 999)-new Date())/1000), JSON.stringify(arr4));
-        });
-    }
-});
-
 // Routing
 app.get('/', (req, res) => {
-    
-    var temp;
     client.get('report', (err, result) => {
         if(result) {
-            temp = JSON.parse(result);
+            arr4 = JSON.parse(result);
         }
         else {
             covid.plugins[0].situationReports().then((result) => {
@@ -223,7 +185,7 @@ app.get('/', (req, res) => {
     client.get('world_data', (err, result) => {
         if(result) {
             result = JSON.parse(result);
-            res.render('index', {main : result, agevise : arr1, report : temp, cont: results});
+            res.render('index', {main : result, report : temp, cont: results});
         }
         else {
             covid.plugins[0].reports().then((result) => {
@@ -250,7 +212,7 @@ app.get('/', (req, res) => {
                     return b.TotalCases - a.TotalCases;
                 });
             }).then(function() {
-                res.render('index', {main : arr, agevise : arr1, report : temp, cont: results});
+                res.render('index', {main : arr, report : arr4, cont: results});
                 client.setex('world_data', 21600, JSON.stringify(arr));
             });
         }
@@ -259,14 +221,6 @@ app.get('/', (req, res) => {
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('server started at port ' + process.env.PORT);
-});
-
-app.post('/abhay/data', async function(req, res, next) {
-    obj = {
-        ip : req.body.ip,
-        city : req.body.city,
-        state : req.body.state
-    };
 }); 
 
 app.get('/app-calendar', (req, res) => {
@@ -332,61 +286,70 @@ app.get('/privacy', (req, res) => {
     res.render('privacy');
 });
 
-app.get('/file_upload', (req, res) => {
-    res.render('file_upload');
-});
+// app.get('/file_upload', (req, res) => {
+//     res.render('file_upload');
+// });
 
-app.get('/chart/delete', (req, res) => {
-    var fs = require('fs');
+// app.get('/chart/delete', (req, res) => {
+//     var fs = require('fs');
 
-    fs.readdir('./views/assets/uploads', (err, files) => {
-        if(err) {
-            throw err;
-        }
+//     fs.readdir('./views/assets/uploads', (err, files) => {
+//         if(err) {
+//             throw err;
+//         }
 
-        if ((fs.existsSync('./views/assets/uploads/covid_19_india.csv')) && files.length == 1) {
-            fs.unlink('./views/assets/uploads/covid_19_india.csv', (err) => {
-                if(err) 
-                {
-                    res.render('file_upload', {message: 'File Not Deleted!'});
-                }
-                res.render('file_upload', {message: 'File Deleted Successfully'});
-            });
-        }
-        else if(files.length == 0) {
-            res.render('file_upload', {message: 'There is no any file on location!'});
-        }
-        else {
-            res.render('file_upload', {message: 'There is some error!'});
-        }
+//         if ((fs.existsSync('./views/assets/uploads/covid_19_india.csv')) && files.length == 1) {
+//             fs.unlink('./views/assets/uploads/covid_19_india.csv', (err) => {
+//                 if(err) 
+//                 {
+//                     res.render('file_upload', {message: 'File Not Deleted!'});
+//                 }
+//                 res.render('file_upload', {message: 'File Deleted Successfully'});
+//             });
+//         }
+//         else if(files.length == 0) {
+//             res.render('file_upload', {message: 'There is no any file on location!'});
+//         }
+//         else {
+//             res.render('file_upload', {message: 'There is some error!'});
+//         }
 
-    })
+//     })
 
-});
+// });
 
-app.post('/chart/update', (req, res) => {
+// app.post('/chart/update', (req, res) => {
 
-    var fs = require('fs');
-    const formidable = require('formidable');
+//     var fs = require('fs');
+//     const formidable = require('formidable');
 
-    if (req.url == '/chart/update') {
-        var form = new formidable.IncomingForm();
+//     if (req.url == '/chart/update') {
+//         var form = new formidable.IncomingForm();
 
-        form.parse(req);
+//         form.parse(req);
 
-        form.on('fileBegin', function (name, file){
-            file.path = path.join(__dirname , '../views/assets/uploads/covid_19_india.csv');
-        });
+//         form.on('fileBegin', function (name, file){
+//             file.path = path.join(__dirname , '../views/assets/uploads/covid_19_india.csv');
+//         });
 
-        form.on('file', function (name, file){
-            res.render('file_upload', {message : 'File Uploaded'});
-        });
-    }
-});
+//         form.on('file', function (name, file){
+//             res.render('file_upload', {message : 'File Uploaded'});
+//         });
+//     }
+// });
 
-app.get('/abhay/data', (req, res) => {
-    console.log(obj);
-});
+// app.post('/abhay/data', async function(req, res, next) {
+//     obj = {
+//         state : req.body.state,
+//         country : req.body.country,
+//         timestamp : req.body.timestamp
+//     };
+//     console.log(obj);
+// });
+
+// app.get('/abhay/data', (req, res) => {
+//     console.log(obj);
+// });
 
 // io.on('connection', (socket) => {
 //     const message = JSON.stringify({ title: "Live Corona Cases", body: `India Total : ${total_india} \n India New : ${new_india} \n Gujarat Total : ${total_gujarat} \n Gujarat New : +${new_gujarat}`, icon: "image/notification.png"});
