@@ -16,19 +16,19 @@ fetch('https://ipapi.co/json/').then((response) => {
 
         console.log(user_data);
         
-        // fetch('http://localhost:3000/abhay/data', {
-        //     mode: 'no-cors',
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(user_data)
-        // }).then(() => {
-        //     console.log('response returned')
-        // }).catch((error) => {
-        //     console.log('error in routing')
-        //     console.log(error)
-        // });
+        fetch('http://localhost:3000/post_data/', {
+            mode: 'no-cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user_data)
+        }).then(() => {
+            console.log('response returned')
+        }).catch((error) => {
+            console.log('error in routing')
+            console.log(error)
+        });
     })
 }).catch((error) => {
     console.log('error in fetching client data')

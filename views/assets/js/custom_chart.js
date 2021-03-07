@@ -7,8 +7,8 @@ var state = [];
 var india_time = [];
 var config, config1;
 var state_name = 'Gujarat';
-var series_label, bg, border;
 var color = Chart.helpers.color;
+var series_label='Confirmed Cases', bg=color(window.chartColors.blue).alpha(0.5).rgbString(), border=window.chartColors.blue;
 
 var push_confirm = {
                 id: 'confirm_cases',
@@ -39,6 +39,15 @@ var push_death = {
                 fill: false,
                 data: ydata3
             };
+
+var temp = {
+    label: series_label,
+    backgroundColor: bg,
+    borderColor: border,
+    pointRadius: 1,
+    fill: true,
+    data: india_time
+}
 
 getData().then(() => {
     getChart();
@@ -96,22 +105,9 @@ async function timeSeries(type='https://raw.githubusercontent.com/CSSEGISandData
             right = mid-1;
         }
     }
+    india_time.length = 0;
     india_time =  data1[mid].split(',').splice(4);
-    if(type.substring(130) == 'confirmed_global.csv') {
-        series_label = 'Confirmed Cases';
-        bg = color(window.chartColors.blue).alpha(0.5).rgbString();
-        border = window.chartColors.blue;
-    }
-    else if(type.substring(130) == 'recovered_global.csv') {
-        series_label = 'Recovered Cases';
-        bg = color(window.chartColors.yellow).alpha(0.5).rgbString();
-        border = window.chartColors.yellow;
-    }
-    else {
-        series_label = 'Death Cases';
-        bg = color(window.chartColors.red).alpha(0.5).rgbString();
-        border = window.chartColors.red;
-    }
+    temp.data = india_time;
 }
 
 function getChart() {
@@ -402,14 +398,41 @@ document.getElementById('hide_death').addEventListener('click', function() {
     document.getElementById('show_death').disabled = false;
 });
 
+function addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    chart.update();
+}
+
 function Select_Type() {
     india_time = [];
     india_time.length = 0;
 
     let type = document.getElementById('type').value;
 
+    if(type.substring(130) == 'confirmed_global.csv') {
+        temp.label = 'Confirmed Cases';
+        temp.backgroundColor = color(window.chartColors.blue).alpha(0.5).rgbString();
+        temp.borderColor = window.chartColors.blue;
+    }
+    else if(type.substring(130) == 'recovered_global.csv') {
+        temp.label = 'Recovered Cases';
+        temp.backgroundColor = color(window.chartColors.yellow).alpha(0.5).rgbString();
+        temp.borderColor = window.chartColors.yellow;
+    }
+    else {
+        temp.label = 'Death Cases';
+        temp.backgroundColor = color(window.chartColors.red).alpha(0.5).rgbString();
+        temp.borderColor = window.chartColors.red;
+    }
+
     timeSeries(type).then(() => {
-        getConfirmed();
+        window.myLine1.data.datasets.splice(0);
+        window.myLine1.options.scales.yAxes[0].scaleLabel.labelString = 'Number of ' + temp.label;
+        window.myLine1.data.datasets.push(temp);
+        window.myLine1.update();
     });
 }
 
@@ -428,6 +451,10 @@ function select_operation() {
         push_recovered.data = ydata2;
         push_death.data = ydata3;
     }).then(() => {
-        getChart();
+        window.myLine.data.datasets.splice(0);
+        window.myLine.data.datasets.push(push_confirm);
+        window.myLine.data.datasets.push(push_recovered);
+        window.myLine.data.datasets.push(push_death);
+        window.myLine.update();
     });
 }
