@@ -149,6 +149,7 @@ function getChart() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: true,
                 text: 'Corona Virus Cases Visualization'
@@ -193,7 +194,14 @@ function getChart() {
 }
 
 download_img = function(el) {
+    let canvas = document.getElementById("canvas");
     var image = canvas.toDataURL("image/jpg");
+    el.href = image;
+};
+
+download_img1 = function(el) {
+    let canvas1 = document.getElementById("canvas1");
+    var image = canvas1.toDataURL("image/jpg");
     el.href = image;
 };
 
@@ -213,6 +221,7 @@ function getConfirmed() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: true,
                 text: 'India\'s Cases'
@@ -395,6 +404,7 @@ document.getElementById('hide_death').addEventListener('click', function() {
 
 function Select_Type() {
     india_time = [];
+    india_time.length = 0;
 
     let type = document.getElementById('type').value;
 
