@@ -1,10 +1,13 @@
 var xlables = [];
+var xlables1 = [];
 var ydata1 = [];
 var ydata2 = [];
 var ydata3 = [];
 var state = [];
-var config;
+var india_time = [];
+var config, config1;
 var state_name = 'Gujarat';
+var series_label, bg, border;
 var color = Chart.helpers.color;
 
 var push_confirm = {
@@ -63,6 +66,52 @@ async function getData() {
         ydata2.push(row[6]);
         ydata3.push(row[7]);
     });
+}
+
+timeSeries().then(() => {
+    getConfirmed();
+}).catch((e) => {
+    console.log(e);
+});
+
+async function timeSeries(type='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv') {
+    var response = await fetch(type);
+    var data = await response.text();
+
+    let data1 = data.split('\n');
+    xlables1 = data1[0].split(',').splice(4);
+    data1 = data1.splice(1);
+    let left=0, right=data1.length-1, mid;
+
+    while(left <= right) {
+        mid = Math.floor((left + right)/2)
+        let s_row = data1[mid].split(',');
+        if(s_row[1] == "India") {
+            break;
+        }
+        else if(s_row[1] < "India") {
+            left = mid+1;
+        }
+        else { 
+            right = mid-1;
+        }
+    }
+    india_time =  data1[mid].split(',').splice(4);
+    if(type.substring(130) == 'confirmed_global.csv') {
+        series_label = 'Confirmed Cases';
+        bg = color(window.chartColors.blue).alpha(0.5).rgbString();
+        border = window.chartColors.blue;
+    }
+    else if(type.substring(130) == 'recovered_global.csv') {
+        series_label = 'Recovered Cases';
+        bg = color(window.chartColors.yellow).alpha(0.5).rgbString();
+        border = window.chartColors.yellow;
+    }
+    else {
+        series_label = 'Death Cases';
+        bg = color(window.chartColors.red).alpha(0.5).rgbString();
+        border = window.chartColors.red;
+    }
 }
 
 function getChart() {
@@ -147,6 +196,64 @@ download_img = function(el) {
     var image = canvas.toDataURL("image/jpg");
     el.href = image;
 };
+
+function getConfirmed() {
+    config1 = {
+        type: 'line',
+        data: {
+            labels: xlables1,
+            datasets: [{
+                label: series_label,
+                backgroundColor: bg,
+                borderColor: border,
+                pointRadius: 1,
+                fill: true,
+                data: india_time
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'India\'s Cases'
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date'
+                    }                            
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of ' + series_label
+                    }
+                }]
+            },
+            tooltips: {
+                intersect: false,
+                mode: 'index',
+                callbacks: {
+                    label: function(tooltipItem, myData) {
+                        var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        label += tooltipItem.value;
+                        return label;
+                    }
+                }
+            }
+        }
+    };
+
+    
+    var ctx = document.getElementById('canvas1').getContext('2d');
+    window.myLine1 = new Chart(ctx, config1);
+}
 
 document.getElementById('show_confirm_cases').addEventListener('click', function() {
     let available = false;
@@ -286,12 +393,23 @@ document.getElementById('hide_death').addEventListener('click', function() {
     document.getElementById('show_death').disabled = false;
 });
 
+function Select_Type() {
+    india_time = [];
+
+    let type = document.getElementById('type').value;
+
+    timeSeries(type).then(() => {
+        getConfirmed();
+    });
+}
+
+
 function select_operation() {
-    xlables.length = 0;
-    ydata1.length = 0;
-    ydata2.length = 0;
-    ydata3.length = 0;
-    state.length = 0;
+    xlables = [];
+    ydata1 = [];
+    ydata2 = [];
+    ydata3 = [];
+    state = [];
 
     state_name = document.getElementById('states').value;
 

@@ -32,7 +32,7 @@
 
 <script defer src="assets/js/jquery.dataTables.min.js"></script>
 
-<link rel="stylesheet" href="assets/foundation-icons/foundation-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-icons@1.0.1/foundation-icons.css" defer>
 
 {{!-- Chart Js --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
@@ -383,13 +383,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </div>
                     </div>
                 </center>
+                <br>
             </div>            
         </div>
-        <br><br>
         
         <center>
             <div class="btn-group">
                 <a id="download" class="btn btn-danger btn-sm btn-block" download="abhay_covid_19.jpg" href="" onclick="download_img(this);">Click Here To Download Graph</a>
+            </div>
+        </center>
+        <br><br>
+
+        <hr>
+        <center>
+            <b><label for="type">Select type: </label></b>
+            <select id="type" name="type" onchange="Select_Type()">
+                <option value="select" disabled>Choose Option</option>
+                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv">Confirmed Cases</option>
+                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv">Recovered Cases</option>
+                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv">Death Cases</option>
+            </select>
+        </center>
+        <center>
+            <div class="container">
+                <div class="row">
+                    <div class="chart_main co-lg-12 col-xl-12" style="width:100%; height: 50%;">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div>
+                            </div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div>
+                            </div>
+                        </div>
+                        <canvas id="canvas1" style="display: block; width: 100%; height: 100%;" width="100%" height="100%" class="chartjs-render-monitor"></canvas>
+                    </div>
+                </div>
             </div>
         </center>
 

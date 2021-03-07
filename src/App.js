@@ -12,12 +12,10 @@ const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 var moment = require('moment')
 
-var obj = {};
-
 var client = redis.createClient({
-    port      : PORT,
-    host      : HOST,
-    password  : PASSWORD'
+    port      : 6909,
+    host      : 'ec2-3-231-108-166.compute-1.amazonaws.com',
+    password  : 'p666443c54a2adf065097a03a0a86ca53d53416fc781ea2d9de6d57f4273d5aa7'
 });
 
 client.on('connect', (err, reply) => {
@@ -38,7 +36,6 @@ dotenv.config();
 // const databaseName = 'admin'
 
 var hbs = require('hbs');
-const { parse } = require('path');
 app.set('view engine', 'hbs');
 app.use(compression());
 app.use(express.static("public", {
@@ -74,12 +71,10 @@ app.use(bodyParser.json({ type: 'application/*+json' }));
 
 
 var arr = [];      // World Data
-var arr1 = [];     // fatalityRateByAge
 var arr2 = [];     // India Data
 var arr4 = [];     // WHO reports
 var arr5 = [];     // Civic Tracker
 var total;
-var cont;
 var results = [];   // Latest News
 
 
@@ -142,6 +137,7 @@ get_news();
 
 // Routing
 app.get('/', (req, res) => {
+    console.log(req.ipInfo);
     client.get('report', (err, result) => {
         if(result) {
             arr4 = JSON.parse(result);
@@ -184,15 +180,15 @@ app.get('/', (req, res) => {
 
     client.get('world_data', (err, result) => {
         if(result) {
-            result = JSON.parse(result);
-            res.render('index', {main : result, report : temp, cont: results});
+            arr = JSON.parse(result);
+            res.render('index', {main : arr, report : arr4, cont: results});
         }
         else {
             covid.plugins[0].reports().then((result) => {
                 var data;
                 for(var i=0; i < result[0].table[0].length - 1; i++) {
                         let x = result[0].table[0][i];
-        
+
                         data = {
                             Country : x.Country,
                             TotalCases : x.TotalCases,
@@ -234,6 +230,8 @@ app.get('/india', (req, res) => {
     client.get('total', (err, r) => {
         if(r) {
             total_data = JSON.parse(r);
+            india_total = total_data.confirmed;
+            india_new = total_data.deltaconfirmed;
         }
     });
 
@@ -241,7 +239,6 @@ app.get('/india', (req, res) => {
         if(result) {
             result = JSON.parse(result);
             res.render('india', {india : result, total : total_data});
-            
         }
         else {
             covid.plugins[0].indiaCasesByStates().then((result) => {            
@@ -281,6 +278,33 @@ app.get('/news', (req, res) => {
         }
     });
 });
+
+// var myMid;
+// function binary_Search(elToFind) {
+//     var lowIndex = 0;
+//     var highIndex = arr.length - 1;
+//     while (lowIndex <= highIndex) {
+//       var midIndex = Math.floor((lowIndex + highIndex) / 2);
+//       console.log(arr[midIndex].Country.toLowerCase());
+//       if ((arr[midIndex].Country.toLowerCase()) == elToFind) {
+//           console.log('Finally : ' + arr[midIndex].Country.toLowerCase() + ' ' + elToFind);
+//         myMid = midIndex;
+//       } else if ((arr[midIndex].Country.toLowerCase()) < elToFind) {
+//         lowIndex = midIndex + 1;
+//       } else {
+//         highIndex = midIndex - 1;
+//       }
+//     }
+//     return -1;
+//   }
+
+// app.post('/send_post_data', (req, res) => {
+//     binary_Search(req.body.country.toLowerCase());
+//     // io.on('connection', (socket) => {
+//     //     const message = JSON.stringify({ title: "Live Corona Cases", body: `India Total : ${total_india} \n India New : ${new_india} \n Gujarat Total : ${total_gujarat} \n Gujarat New : +${new_gujarat}`, icon: "image/notification.png"});
+//     //     socket.emit('sendOnVisit', message);
+//     // });
+// });
 
 app.get('/privacy', (req, res) => {
     res.render('privacy');
@@ -349,9 +373,4 @@ app.get('/privacy', (req, res) => {
 
 // app.get('/abhay/data', (req, res) => {
 //     console.log(obj);
-// });
-
-// io.on('connection', (socket) => {
-//     const message = JSON.stringify({ title: "Live Corona Cases", body: `India Total : ${total_india} \n India New : ${new_india} \n Gujarat Total : ${total_gujarat} \n Gujarat New : +${new_gujarat}`, icon: "image/notification.png"});
-//     socket.emit('sendOnVisit', message);
 // });
