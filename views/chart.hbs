@@ -451,20 +451,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
-
-    $(document).ready(function() {
-
-        $('body').bind('cut copy paste', function (e) {
-            e.preventDefault();
-            alert('Sorry we can\'t let you copy in this page :)');
-        });
-        
-        //Disable mouse right click
-        $("body").on("contextmenu",function(e){
-            alert('Sorry we can\'t let you copy or inspect in this page :)');
-            return false;
-        });
-    } );
+    $(document).ready(function(){$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})});
 </script>
 
 <script src="assets/js/custom_chart.js"></script>

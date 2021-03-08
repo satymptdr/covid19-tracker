@@ -10,10 +10,10 @@
 <title>COVID-19 DATA</title>
 <meta name="title" content="COVID-19 DATA">
 <meta name="description" content="Live statistics and coronavirus tracking the number of confirmed cases, recovered patients, tests, and death toll in the world due to the COVID-19 coronavirus from Wuhan, China. Coronavirus counter with new cases updates, deaths, and number of tests per 1 Million population. Historical data and info. Daily charts, graphs and updates">
-<meta name="keywords" content="coronavirus map,live map,coronavirus,coronavirus update,coronavirus in usa,live,coronavirus dashboard,coronavirus update,usa coronavirus update,coronavirus cases,coronavirus us,coronavirus map,coronavirus tips,coronavirus vaccine,coronavirus symptoms,what is coronavirus,coronavirus china,wuhan coronavirus,covid 19 canada,covid 19 ontario,covid 19 alberta,covid 19 bc,covid 19 waterloo region"/>
+<meta name="keywords" content="coronavirus map,live map, Confirmed cases, recovered cases, new cases, death cases, fatility rate, comorbidity rate, Abhay, covid19, covid India, News, news, India Cases, India Corona Virus, Deaths, coronavirus,coronavirus update,coronavirus in usa,live,coronavirus dashboard,coronavirus update,usa coronavirus update,coronavirus cases,coronavirus us,coronavirus map,coronavirus tips,coronavirus vaccine,coronavirus symptoms,what is coronavirus,coronavirus china,wuhan coronavirus,covid 19 canada,covid 19 ontario,covid 19 alberta,covid 19 bc,region"/>
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="http://localhost:3000/">
+<meta property="og:url" content="http://covid19-tracker-abhay.herokuapp.com/">
 <meta property="og:title" content="Covid Dashboard By Abhay Sardhara">
 <meta property="og:description" content="Live stats and coronavirus news tracking the number of confirmed cases, recovered patients, tests, and deaths due to the COVID-19 coronavirus from Wuhan, China, USA ,Canada, Ontario,Toronto. Coronavirus counter with new cases, deaths, and number of tests per 1 Million population. Historical data and info. Daily charts, graphs, news and updates.">
  
@@ -590,61 +590,12 @@
 </div>
 
 <script>
-
-    $(document).ready(function() {
-
-        if ( $.fn.dataTable.isDataTable( '#example' ) ) {
-            table = $('#example').DataTable();
-        }
-        else {
-            table = $('#example').DataTable( {
-                "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "All"]],
-                "paging":   true,
-                "bSort": false,
-                "info":     true,
-                "oLanguage": {
-                    "sSearch": "Country: "
-                }
-            } );
-        }
-
-        $('body').bind('cut copy paste', function (e) {
-            e.preventDefault();
-            alert('Sorry we can\'t let you copy in this page :)');
-        });
-        
-        //Disable mouse right click
-        $("body").on("contextmenu",function(e){
-            alert('Sorry we can\'t let you copy or inspect in this page :)');
-            return false;
-        });
-    });
-
-    $(function() {
-        var interval = setInterval(() => {
-            var momentNow = moment();
-            $('#date').html(momentNow.format('dddd') + ' - ' + momentNow.format('DD MMMM, YYYY'));
-            $('#time').html(momentNow.format('hh:mm:ss A'));
-        }, 100);
-    });
-
-    function init() {
-        var imgDefer = document.getElementsByTagName('img');
-        for (var i = 0; i < imgDefer.length; i++) {
-            if (imgDefer[i].getAttribute('data-src')) {
-                imgDefer[i].setAttribute('src', imgDefer[i].getAttribute('data-src'));
-            }
-        }
-    }
-    window.onload = init;
+    function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"Country: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),$(function(){setInterval(()=>{var t=moment();$("#date").html(t.format("dddd")+" - "+t.format("DD MMMM, YYYY")),$("#time").html(t.format("hh:mm:ss A"))},100)}),window.onload=init;
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
 <script defer src="assets/js/core.js"></script>
-{{!-- <script src="assets/js/send_post_data.js"></script> --}}
-{{!-- <script src="assets/js/notification/user_data.js"></script> --}}
-{{!-- <script src="assets/js/notification/websocket.js"></script> --}}
 
 </body>
 </html>
