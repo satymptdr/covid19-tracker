@@ -439,22 +439,23 @@ function Select_Type() {
 
 function select_operation() {
     xlables = [];
+    xlables.length=0;
     ydata1 = [];
+    ydata1.length=0;
     ydata2 = [];
+    ydata2.length=0;
     ydata3 = [];
+    ydata3.length=0;
     state = [];
+    state.length=0;
 
     state_name = document.getElementById('states').value;
 
     getData().then(() => {
-        push_confirm.data = ydata1;
-        push_recovered.data = ydata2;
-        push_death.data = ydata3;
-    }).then(() => {
-        window.myLine.data.datasets.splice(0);
-        window.myLine.data.datasets.push(push_confirm);
-        window.myLine.data.datasets.push(push_recovered);
-        window.myLine.data.datasets.push(push_death);
+        window.myLine.data.labels = xlables;
+        window.myLine.data.datasets[0].data = ydata1;
+        window.myLine.data.datasets[1].data = ydata2;
+        window.myLine.data.datasets[2].data = ydata3;
         window.myLine.update();
     });
 }
