@@ -77,12 +77,21 @@ hbs.registerHelper('formatNewsTime', function (date, format) {
     return moment(date, format).fromNow();
 });
 
+hbs.registerHelper('getTime', function (timestamp) {
+    return moment.unix(timestamp).fromNow();
+});
+
+hbs.registerHelper('getDayMonth', function (timestamp, format) {
+    return moment.unix(timestamp).format(format);
+});
+
 var arr = [];      // World Data
 var arr2 = [];     // India Data
 var arr4 = [];     // WHO reports
 var arr5 = [];     // Civic Tracker
 var total;
 var results = [];   // Latest News
+var arrUpdate = [];  // Latest Update
 
 
 // MongoDB database connection
@@ -144,6 +153,20 @@ const getAllHTMLDailyHunt = async () => {
 
 get_news();
 
+async function getUpdate() {
+    var res = await fetch('https://api.covid19india.org/updatelog/log.json');
+    var d = await res.json();
+    return d;
+}
+
+getUpdate().then(res => {
+    arrUpdate = [];
+    arrUpdate = res;
+    arrUpdate.reverse();
+}).catch(e => {
+    console.log(e);
+});
+
 // Routing
 app.get('/', (req, res) => {
     client.get('report', (err, result) => {
@@ -182,7 +205,7 @@ app.get('/', (req, res) => {
     client.get('world_data', (err, result) => {
         if(result) {
             arr = JSON.parse(result);
-            res.render('index', {main : arr, report : arr4, cont: results});
+            res.render('index', {main : arr, report : arr4, cont: results, update: arrUpdate});
         }
         else {
             covid.plugins[0].reports().then((result) => {
@@ -207,7 +230,7 @@ app.get('/', (req, res) => {
                     return b.TotalCases - a.TotalCases;
                 });
             }).then(function() {
-                res.render('index', {main : arr, report : arr4, cont: results});
+                res.render('index', {main : arr, report : arr4, cont: results,  update: arrUpdate});
                 client.setex('world_data', 21600, JSON.stringify(arr));
             });
         }
