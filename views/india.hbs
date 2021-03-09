@@ -377,11 +377,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                             <thead>
                                                 <tr>
                                                     <th>State</th>
-                                                    <th>Total</th>
-                                                    <th>Active Cases</th>
+                                                    <th>Confirmed Cases</th>
+                                                    <th>Recovered Cases</th>
                                                     <th>Total Deaths</th>
-                                                    <th>Total Recovered</th>
-                                                    <th>New Recovered</th>
+                                                    <th>Active Cases</th>
                                                     <th>Last Updated</th>
                                                 </tr>
                                             </thead>
@@ -389,12 +388,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                                 {{#each india}}
                                                     <tr>
                                                         <th style="font-weight: 1000;">{{this.state}}</th>
-                                                        <td style="font-weight: bolder;">{{this.confirmed}}</td>
-                                                        <td>{{this.active}} <p></p><span style="color: green;">+{{this.deltaconfirmed}}</span></td>
-                                                        <td>{{this.deaths}} <p></p><span style="color: red;">+{{this.deltadeaths}}</span></td>
-                                                        <td style="color: blue">{{this.recovered}}</td>
-                                                        <td style="color: green;">+{{this.deltarecovered}}</td>
-                                                        <td>{{this.lastupdatedtime}}</td>
+                                                        <td style="color: red; font-weight: 600">{{this.confirmed}} <p></p><span style="color: red; font-weight: 300">+{{this.deltaconfirmed}}</span></td>
+                                                        <td style="color: green; font-weight: 600">{{this.recovered}} <p></p><span style="color: green; font-weight: 300">+{{this.deltarecovered}}</span></td>
+                                                        <td style="color: black; font-weight: 600">{{this.deaths}} <p></p><span style="color: black; font-weight: 300">+{{this.deltadeaths}}</span></td>
+                                                        <td style="color: blue">{{this.active}}</td>
+                                                        <td>{{formatIndiaCasesTime lastupdatedtime 'DD/MM/YYYY HH:mm:ss'}}</td>
                                                     </tr>
                                                 {{/each}}
                                             </tbody>
@@ -440,7 +438,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 "bSort": false,
                 "info":     true,
                 "oLanguage": {
-                    "sSearch": "Country: "
+                    "sSearch": "State: "
                 }
             } );
         }

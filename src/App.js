@@ -69,6 +69,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: 'application/*+json' }));
 
+hbs.registerHelper('formatIndiaCasesTime', function (date, format) {
+    return moment(date, format).fromNow();
+});
+
+hbs.registerHelper('formatNewsTime', function (date, format) {
+    return moment(date, format).fromNow();
+});
 
 var arr = [];      // World Data
 var arr2 = [];     // India Data
@@ -101,7 +108,7 @@ async function get_news() {
 // Web Scrapping for news
 const getPostsDailyHunt = (html) => {
     let $ = cheerio.load(html)
-    $('li.lang_hi').each(function() {
+    $('li.lang_en').each(function() {
         let a = $(this).children().children('.img')
         let left = a.children()
             let news_uri = left.attr('href')
@@ -127,7 +134,7 @@ const getPostsDailyHunt = (html) => {
 }
 
 const getPageHTMLDailyHunt = () =>
-  fetch(`https://m.dailyhunt.in/news/india/hindi`)
+  fetch('https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732')
     .then(resp => resp.text())   //Promise
 
 const getAllHTMLDailyHunt = async () => {
@@ -167,7 +174,7 @@ app.get('/', (req, res) => {
                     arr4.push(data);
                 }
             }).then(() => {
-                client.setex('report', parseInt((new Date().setHours(23, 59, 59, 999)-new Date())/1000), JSON.stringify(arr4));
+                client.setex('report', 1296000, JSON.stringify(arr4));
             });
         }
     });
@@ -194,10 +201,8 @@ app.get('/', (req, res) => {
                             TotalRecovered : x.TotalRecovered,
                             DeathRate : x.Deaths_1M_pop
                         };
-        
                         arr.push(data);
                 }
-                
                 arr.sort((a, b) => {
                     return b.TotalCases - a.TotalCases;
                 });
@@ -244,8 +249,8 @@ app.get('/india', (req, res) => {
                 });
             }).then(function() {
                 res.render('india', {india : arr2, total : total});
-                client.setex('india_data', 21600, JSON.stringify(arr2));
-                client.setex('total', 21600, JSON.stringify(total));
+                client.setex('india_data', 3600, JSON.stringify(arr2));
+                client.setex('total', 3600, JSON.stringify(total));
             });
         }
     });
