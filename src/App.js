@@ -85,6 +85,15 @@ hbs.registerHelper('getDayMonth', function (timestamp, format) {
     return moment.unix(timestamp).format(format);
 });
 
+hbs.registerHelper('filterZero', (value) => {
+    if(value == '0' || value == 0) {
+        return '';
+    }
+    else {
+        return '+' + value;
+    }
+});
+
 var arr = [];      // World Data
 var arr2 = [];     // India Data
 var arr4 = [];     // WHO reports
@@ -230,6 +239,7 @@ app.get('/', (req, res) => {
                     return b.TotalCases - a.TotalCases;
                 });
             }).then(function() {
+                arr.shift();
                 res.render('index', {main : arr, report : arr4, cont: results,  update: arrUpdate});
                 client.setex('world_data', 21600, JSON.stringify(arr));
             });
@@ -246,9 +256,7 @@ app.get('/app-calendar', (req, res) => {
 });
 
 app.get('/india', (req, res) => {
-
     var total_data;
-
     client.get('total', (err, r) => {
         if(r) {
             total_data = JSON.parse(r);
@@ -284,7 +292,6 @@ app.get('/chart', (req, res) => {
 })
 
 app.get('/news', (req, res) => {
-
     client.get('news', (err, result) => {
         if(result) {
             result = JSON.parse(result);
