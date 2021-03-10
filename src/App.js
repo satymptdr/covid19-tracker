@@ -212,12 +212,14 @@ app.get('/', (req, res) => {
 
     client.get('world_data', (err, result) => {
         if(result) {
+            arr.length = 0;
             arr = JSON.parse(result);
             res.render('index', {main : arr, report : arr4, cont: results, update: arrUpdate});
         }
         else {
             covid.plugins[0].reports().then((result) => {
                 var data;
+                arr.length = 0;
                 for(var i=0; i < result[0].table[0].length - 1; i++) {
                         let x = result[0].table[0][i];
 
@@ -235,9 +237,10 @@ app.get('/', (req, res) => {
                         arr.push(data);
                 }
                 arr.sort((a, b) => {
-                    return b.TotalCases - a.TotalCases;
+                    return b.TotalCases > a.TotalCases;
                 });
             }).then(function() {
+                console.log(arr[0]);
                 res.render('index', {main : arr, report : arr4, cont: results,  update: arrUpdate});
                 client.setex('world_data', 21600, JSON.stringify(arr));
             });
