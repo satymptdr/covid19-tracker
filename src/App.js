@@ -13,9 +13,9 @@ const cheerio = require('cheerio')
 var moment = require('moment')
 
 var client = redis.createClient({
-    port      : 6909,
-    host      : 'ec2-3-231-108-166.compute-1.amazonaws.com',
-    password  : 'p666443c54a2adf065097a03a0a86ca53d53416fc781ea2d9de6d57f4273d5aa7'
+    port      : PORT,
+    host      : HOST,
+    password  : PASSWORD
 });
 
 client.on('connect', (err, reply) => {
@@ -31,9 +31,8 @@ dotenv.config();
 // const mongodb = require('mongodb')
 // const MongoClient = mongodb.MongoClient
 
-// const connectionURL = 'mongodb+srv://abhays7675:W47@-J@5Qm-EkLb@cluster0.gfoiq.mongodb.net/test'
-// const databaseName = 'covid19-tracker'
-// const databaseName = 'admin'
+// const connectionURL = URL
+// const databaseName = DATABASE
 
 var hbs = require('hbs');
 app.set('view engine', 'hbs');
