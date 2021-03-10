@@ -1,6 +1,6 @@
 # covid19-tracker
 
-[![version](https://img.shields.io/badge/version-1.0-yellow.svg)](https://github.com/Abhaysardhara/Draw-Anything-Google-Chrome-Extension/releases/tag/v1.0)
+[![version](https://img.shields.io/badge/version-1.1-green.svg)](https://github.com/Abhaysardhara/Draw-Anything-Google-Chrome-Extension/releases/tag/v1.0)
 
 ## Live At
 Click here : <https://covid19-tracker-abhay.herokuapp.com/>
