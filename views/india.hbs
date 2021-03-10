@@ -265,20 +265,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul class="metismenu">
                 <li class="g_heading">Project</li>
-                <li><a href="/"><i class="fi-database"></i><span>Dashboard</span></a></li>                        
+                <li><a href="/"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://icongr.am/fontawesome/dashboard.svg?size=18&color=currentColor" alt="Dashboard" srcset="" style="margin-right: 13px;"><span>Dashboard</span></a></li>                        
                 <li class="g_heading">App</li>
-                <li class="active"><a href="/india"><img src="image/india.png" alt="" style="margin-right : 13px;"><span>India</span></a></li>
-                <li><a href="/chart"><img src="image/bar-chart-2.svg" alt="" style="margin-right: 13px;"><span>Charts</span></a></li>
-                <li><a href="/news"><i class="fi-book-bookmark"></i><span>Civic Freedom Tracker</span></a></li>
-                <li><a href="/app-calendar"><i class="fi-calendar"></i><span>Calendar</span></a></li>
+                <li class="active"><a href="/india"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/india.png" alt="India" style="margin-right: 13px;"><span>India</span></a></li>
+                <li><a href="/chart"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://icongr.am/fontawesome/area-chart.svg?size=18&color=currentColor" alt="Charts" style="margin-right: 13px;"><span>Charts</span></a></li>
+                <li><a href="/news"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://icongr.am/entypo/globe.svg?size=18&color=currentColor" alt="Civic freedom tracker" srcset="" style="margin-right: 13px;"><span>Civic Freedom Tracker</span></a></li>
                 
-                {{!-- <li><a href="/app-chat.html"><i class="fa fa-comments"></i><span>Chat</span></a></li>
-                <li><a href="/app-contact.html"><i class="fa fa-address-book"></i><span>Contact</span></a></li>
-                <li><a href="/app-filemanager.html"><i class="fa fa-folder"></i><span>FileManager</span></a></li>
-                <li><a href="/app-setting.html"><i class="fa fa-gear"></i><span>Setting</span></a></li> --}}
                 <li class="g_heading">Support</li>
-                <li><a href="/contactus"><i class="fi-telephone"></i><span>ContactUs</span></a></li>
-                <li><a href="/privacy"><i class="fi-key"></i><span>Privacy Policy</span></a></li>
+                <li><a href="/contactus"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://icongr.am/fontawesome/address-book.svg?size=18&color=currentColor" alt="Contact Us" srcset="" style="margin-right: 13px;"><span>Contact Us</span></a></li>
+                <li><a href="/privacy"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="https://icongr.am/material/book-lock.svg?size=18&color=currentColor" alt="Privacy Policy" srcset="" style="margin-right: 13px;"><span>Privacy Policy</span></a></li>
             </ul>
         </nav>        
     </div>
@@ -425,43 +420,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
-
-    $(document).ready(function() {
-
-        if ( $.fn.dataTable.isDataTable( '#example' ) ) {
-            table = $('#example').DataTable();
-        }
-        else {
-            table = $('#example').DataTable( {
-                "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "All"]],
-                "paging":   true,
-                "bSort": false,
-                "info":     true,
-                "oLanguage": {
-                    "sSearch": "State: "
-                }
-            } );
-        }
-
-        $('body').bind('cut copy paste', function (e) {
-            e.preventDefault();
-            alert('Sorry we can\'t let you copy in this page :)');
-        });
-        
-        //Disable mouse right click
-        $("body").on("contextmenu",function(e){
-            alert('Sorry we can\'t let you copy or inspect in this page :)');
-            return false;
-        });
-    } );
-
-    $(function() {
-        var interval = setInterval(() => {
-            var momentNow = moment();
-            $('#date').html(momentNow.format('dddd') + ' - ' + momentNow.format('DD MMMM, YYYY'));
-            $('#time').html(momentNow.format('hh:mm:ss A'));
-        }, 100);
-    });
+    function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"State: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),$(function(){setInterval(()=>{var t=moment();$("#date").html(t.format("dddd")+" - "+t.format("DD MMMM, YYYY")),$("#time").html(t.format("hh:mm:ss A"))},100)}),window.onload=init;
 </script>
 
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
