@@ -238,7 +238,6 @@ app.get('/', (req, res) => {
                     return b.TotalCases - a.TotalCases;
                 });
             }).then(function() {
-                arr.shift();
                 res.render('index', {main : arr, report : arr4, cont: results,  update: arrUpdate});
                 client.setex('world_data', 21600, JSON.stringify(arr));
             });
