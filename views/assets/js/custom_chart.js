@@ -31,8 +31,8 @@ async function getData() {
     Object.keys(data[state_name]).map(i => {
         xlables.forEach(ele => {
             ydata1.push(data[state_name][i][ele]['total']['confirmed']);
-            ydata3.push(data[state_name][i][ele]['total']['deceased']);
             ydata2.push(data[state_name][i][ele]['total']['recovered']);
+            ydata3.push(data[state_name][i][ele]['total']['deceased']);
         });
     })
 }
