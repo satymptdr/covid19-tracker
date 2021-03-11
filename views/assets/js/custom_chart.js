@@ -5,9 +5,8 @@ var config,
     ydata1 = [],
     ydata2 = [],
     ydata3 = [],
-    state = [],
     india_time = [],
-    state_name = "Gujarat",
+    state_name = "GJ",
     color = Chart.helpers.color,
     series_label = "Confirmed Cases",
     bg = color(window.chartColors.blue).alpha(0.5).rgbString(),
@@ -19,15 +18,23 @@ var push_death = { id: "death", label: "Deaths Cases", backgroundColor: color(wi
 var temp = { label: series_label, backgroundColor: bg, borderColor: border, pointRadius: 1, fill: !0, data: india_time };
 
 async function getData() {
-    var e = await fetch("https://raw.githubusercontent.com/Abhaysardhara/covid19-tracker/master/views/assets/uploads/covid_19_india.csv");
-    var a = await e.text();
-    a = a.split("\n").splice(1).forEach((e) => {
-        (e.split(",")[3] == state_name) && state.push(e);
-    });
-    state.forEach((e) => {
-        var a = e.split(",");
-        xlables.push(a[1]), ydata1.push(a[8]), ydata2.push(a[6]), ydata3.push(a[7]);
-    });
+    var response = await fetch('https://api.covid19india.org/v4/min/timeseries.min.json');
+    var data = await response.json();
+
+    xlables.length = 0;
+    xlables = Object.keys(data[state_name].dates);
+
+    ydata1.length = 0;
+    ydata2.length = 0;
+    ydata3.length = 0;
+
+    Object.keys(data[state_name]).map(i => {
+        xlables.forEach(ele => {
+            ydata1.push(data[state_name][i][ele]['total']['confirmed']);
+            ydata3.push(data[state_name][i][ele]['total']['deceased']);
+            ydata2.push(data[state_name][i][ele]['total']['recovered']);
+        });
+    })
 }
 async function timeSeries(e = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv") {
     var a = await fetch(e);
@@ -100,13 +107,13 @@ function getConfirmed() {
 }
 function addData(e, a, t) {
     e.data.labels.push(a),
-        e.data.datasets.forEach((e) => {
-            e.data.push(t);
-        }),
-        e.update();
+    e.data.datasets.forEach((e) => {
+        e.data.push(t);
+    }),
+    e.update();
 }
 function Select_Type() {
-    (india_time = []).length = 0;
+    india_time.length = 0;
     let e = document.getElementById("type").value;
     "confirmed_global.csv" == e.substring(130)
         ? ((temp.label = "Confirmed Cases"), (temp.backgroundColor = color(window.chartColors.blue).alpha(0.5).rgbString()), (temp.borderColor = window.chartColors.blue))
@@ -117,17 +124,24 @@ function Select_Type() {
             window.myLine1.data.datasets.splice(0), (window.myLine1.options.scales.yAxes[0].scaleLabel.labelString = "Number of " + temp.label), window.myLine1.data.datasets.push(temp), window.myLine1.update();
         });
 }
+
 function select_operation() {
-    ((xlables = []).length = 0),
-        ((ydata1 = []).length = 0),
-        ((ydata2 = []).length = 0),
-        ((ydata3 = []).length = 0),
-        ((state = []).length = 0),
-        (state_name = document.getElementById("states").value),
-        getData().then(() => {
-            (window.myLine.data.labels = xlables), (window.myLine.data.datasets[0].data = ydata1), (window.myLine.data.datasets[1].data = ydata2), (window.myLine.data.datasets[2].data = ydata3), window.myLine.update();
-        });
+    xlables.length = 0;
+    ydata1.length = 0;
+    ydata2.length = 0;
+    ydata3.length = 0;
+	
+    state_name = document.getElementById('states').value;
+
+    getData().then(() => {
+        window.myLine.data.labels = xlables;
+        window.myLine.data.datasets[0].data = ydata1;
+        window.myLine.data.datasets[1].data = ydata2;
+        window.myLine.data.datasets[2].data = ydata3;
+        window.myLine.update();
+    });
 }
+
 getData().then(() => {
     getChart();
 })
@@ -152,60 +166,139 @@ download_img1 = function (e) {
     e.href = a;
 };
 
-document.getElementById("show_confirm_cases").addEventListener("click", function () {
-    let e = !1;
-    for (var a = 0; a < config.data.datasets.length; a++) "confirm_cases" == config.data.datasets[a].id && (e = !0);
-    if (0 == e) {
-        if ((config.data.datasets.push(push_confirm), 1 == config.data.datasets.length && (config.data.datasets[0].fill = !0), config.data.datasets.length > 1))
-            for (a = 0; a < config.data.datasets.length; a++) config.data.datasets[a].fill = !1;
-        window.myLine.update(), (document.getElementById("hide_confirm_cases").disabled = !1), (document.getElementById("show_confirm_cases").disabled = !0);
+document.getElementById('show_confirm_cases').addEventListener('click', function() {
+    let available = false;
+    for(var i = 0; i < config.data.datasets.length; i++) {
+        if(config.data.datasets[i].id == 'confirm_cases') {
+            available = true;
+        }
+    }
+    
+    if(available == false) {
+        config.data.datasets.push(push_confirm);
+
+        if(config.data.datasets.length == 1) {
+            config.data.datasets[0].fill = true;
+        }
+
+        if(config.data.datasets.length > 1) {
+            for(var i=0; i<config.data.datasets.length; i++) {
+                config.data.datasets[i].fill = false;
+            }
+        }
+
+        window.myLine.update();
+        document.getElementById('hide_confirm_cases').disabled = false;
+        document.getElementById('show_confirm_cases').disabled = true;
     }
 });
 
-document.getElementById("show_recovered_cases").addEventListener("click", function () {
-    for (var e = !1, a = 0; a < config.data.datasets.length; a++) "recovered_cases" == config.data.datasets[a].id && (e = !0);
-    if (0 == e) {
-        if ((config.data.datasets.push(push_recovered), 1 == config.data.datasets.length && (config.data.datasets[0].fill = !0), config.data.datasets.length > 1))
-            for (a = 0; a < config.data.datasets.length; a++) config.data.datasets[a].fill = !1;
-        window.myLine.update(), (document.getElementById("hide_recovered_cases").disabled = !1), (document.getElementById("show_recovered_cases").disabled = !0);
+document.getElementById('show_recovered_cases').addEventListener('click', function() {
+    var available = false;
+    for(var i = 0; i < config.data.datasets.length; i++) {
+        if(config.data.datasets[i].id == 'recovered_cases') {
+            available = true;
+        }
     }
-});
+    
+    if(available == false) {
+        config.data.datasets.push(push_recovered);
 
-document.getElementById("show_death").addEventListener("click", function () {
-    for (var e = !1, a = 0; a < config.data.datasets.length; a++) "death" == config.data.datasets[a].id && (e = !0);
-    if (0 == e) {
-        if ((config.data.datasets.push(push_death), 1 == config.data.datasets.length && (config.data.datasets[0].fill = !0), config.data.datasets.length > 1))
-            for (a = 0; a < config.data.datasets.length; a++) config.data.datasets[a].fill = !1;
-        window.myLine.update(), (document.getElementById("hide_death").disabled = !1), (document.getElementById("show_death").disabled = !0);
+        if(config.data.datasets.length == 1) {
+            config.data.datasets[0].fill = true;
+        }
+
+        if(config.data.datasets.length > 1) {
+            for(var i=0; i<config.data.datasets.length; i++) {
+                config.data.datasets[i].fill = false;
+            }
+        }
+
+        window.myLine.update();
+        document.getElementById('hide_recovered_cases').disabled = false;
+        document.getElementById('show_recovered_cases').disabled = true;
     }
+    
 });
 
-document.getElementById("hide_confirm_cases").addEventListener("click", function () {
-    var e;
-    for (e = 0; e < config.data.datasets.length && "confirm_cases" != config.data.datasets[e].id; e++);
-    config.data.datasets.splice(e, 1),
-        1 == config.data.datasets.length && (config.data.datasets[0].fill = !0),
-        window.myLine.update(),
-        (document.getElementById("hide_confirm_cases").disabled = !0),
-        (document.getElementById("show_confirm_cases").disabled = !1);
+document.getElementById('show_death').addEventListener('click', function() {
+    var available = false;
+    for(var i = 0; i < config.data.datasets.length; i++) {
+        if(config.data.datasets[i].id == 'death') {
+            available = true;
+        }
+    }
+    
+    if(available == false) {
+        config.data.datasets.push(push_death);
+
+        if(config.data.datasets.length == 1) {
+            config.data.datasets[0].fill = true;
+        }
+
+        if(config.data.datasets.length > 1) {
+            for(var i=0; i<config.data.datasets.length; i++) {
+                config.data.datasets[i].fill = false;
+            }
+        }
+
+        window.myLine.update();
+        document.getElementById('hide_death').disabled = false;
+        document.getElementById('show_death').disabled = true;
+    } 
 });
 
-document.getElementById("hide_recovered_cases").addEventListener("click", function () {
-    var e;
-    for (e = 0; e < config.data.datasets.length && "recovered_cases" != config.data.datasets[e].id; e++);
-    config.data.datasets.splice(e, 1),
-        1 == config.data.datasets.length && (config.data.datasets[0].fill = !0),
-        window.myLine.update(),
-        (document.getElementById("hide_recovered_cases").disabled = !0),
-        (document.getElementById("show_recovered_cases").disabled = !1);
+document.getElementById('hide_confirm_cases').addEventListener('click', function() {
+    var i;
+    for(i = 0; i < config.data.datasets.length; i++) {
+        if(config.data.datasets[i].id == 'confirm_cases') {
+            break;
+        }
+    }
+    config.data.datasets.splice(i, 1);
+
+    if(config.data.datasets.length == 1) {
+        config.data.datasets[0].fill = true;
+    }
+
+    window.myLine.update();
+    document.getElementById('hide_confirm_cases').disabled = true;
+    document.getElementById('show_confirm_cases').disabled = false;
 });
 
-document.getElementById("hide_death").addEventListener("click", function () {
-    var e;
-    for (e = 0; e < config.data.datasets.length && "death" != config.data.datasets[e].id; e++);
-    config.data.datasets.splice(e, 1),
-        1 == config.data.datasets.length && (config.data.datasets[0].fill = !0),
-        window.myLine.update(),
-        (document.getElementById("hide_death").disabled = !0),
-        (document.getElementById("show_death").disabled = !1);
+document.getElementById('hide_recovered_cases').addEventListener('click', function() {
+    var i;
+    for(i = 0; i < config.data.datasets.length; i++) {
+        if(config.data.datasets[i].id == 'recovered_cases') {
+            break;
+        }
+    }
+    
+    config.data.datasets.splice(i, 1);
+
+    if(config.data.datasets.length == 1) {
+        config.data.datasets[0].fill = true;
+    }
+
+    window.myLine.update();
+    document.getElementById('hide_recovered_cases').disabled = true;
+    document.getElementById('show_recovered_cases').disabled = false;
+});
+
+document.getElementById('hide_death').addEventListener('click', function() {
+    var i;
+    for(i = 0; i < config.data.datasets.length; i++) {
+        if(config.data.datasets[i].id == 'death') {
+            break;
+        }
+    }
+    config.data.datasets.splice(i, 1);
+
+    if(config.data.datasets.length == 1) {
+        config.data.datasets[0].fill = true;
+    }
+
+    window.myLine.update();
+    document.getElementById('hide_death').disabled = true;
+    document.getElementById('show_death').disabled = false;
 });
