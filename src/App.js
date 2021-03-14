@@ -313,58 +313,6 @@ app.get('/privacy', (req, res) => {
     res.render('privacy');
 });
 
-// app.get('/file_upload', (req, res) => {
-//     res.render('file_upload');
-// });
-
-// app.get('/chart/delete', (req, res) => {
-//     var fs = require('fs');
-
-//     fs.readdir('./views/assets/uploads', (err, files) => {
-//         if(err) {
-//             throw err;
-//         }
-
-//         if ((fs.existsSync('./views/assets/uploads/covid_19_india.csv')) && files.length == 1) {
-//             fs.unlink('./views/assets/uploads/covid_19_india.csv', (err) => {
-//                 if(err) 
-//                 {
-//                     res.render('file_upload', {message: 'File Not Deleted!'});
-//                 }
-//                 res.render('file_upload', {message: 'File Deleted Successfully'});
-//             });
-//         }
-//         else if(files.length == 0) {
-//             res.render('file_upload', {message: 'There is no any file on location!'});
-//         }
-//         else {
-//             res.render('file_upload', {message: 'There is some error!'});
-//         }
-
-//     })
-
-// });
-
-// app.post('/chart/update', (req, res) => {
-
-//     var fs = require('fs');
-//     const formidable = require('formidable');
-
-//     if (req.url == '/chart/update') {
-//         var form = new formidable.IncomingForm();
-
-//         form.parse(req);
-
-//         form.on('fileBegin', function (name, file){
-//             file.path = path.join(__dirname , '../views/assets/uploads/covid_19_india.csv');
-//         });
-
-//         form.on('file', function (name, file){
-//             res.render('file_upload', {message : 'File Uploaded'});
-//         });
-//     }
-// });
-
 // var myObj;
 // app.post('/post_data', function(req, res) {
 //     myObj = {
