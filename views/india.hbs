@@ -84,10 +84,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 <!-- Page Loader -->
-<div class="page-loader-wrapper">
+{{!-- <div class="page-loader-wrapper">
     <div class="loader">
     </div>
-</div>
+</div> --}}
 
 <div id="main_content">
 
@@ -327,6 +327,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </div>
                         <div class="card-body">
                             <h5 class="number mb-0 font-28">{{total.confirmed}}  <p style="color: rgb(120, 160, 41); font-size: 20px">+{{total.deltaconfirmed}}</p></h5>
+                            <div class="table-responsive">
+                                <canvas id="canvas1" style="height:100px;" class="chartjs-render-monitor"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -337,6 +340,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </div>
                         <div class="card-body">
                             <h5 class="number mb-0 font-28">{{total.deaths}}  <p style="color: red; font-size: 20px">+{{total.deltadeaths}}</p></h5>
+                            <div class="table-responsive">
+                                <canvas id="canvas3" style="height:100px;" class="chartjs-render-monitor"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -347,6 +353,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </div>
                         <div class="card-body">
                             <h5 class="number mb-0 font-28">{{total.recovered}}  <p style="color: green; font-size: 20px">+{{total.deltarecovered}}</p></h5>
+                            <div class="table-responsive">
+                                <canvas id="canvas2" style="height:100px;" class="chartjs-render-monitor"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -431,6 +440,165 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
 <script defer src="assets/js/core.js"></script>
+<script>
+
+    var confirmed = [],
+        recovered = [],
+        deceased = [],
+        xlables1 = [],
+        color = Chart.helpers.color;
+
+    async function timeSeries1() {
+        var a = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv');
+        var b = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv');
+        var c = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
+        let t = (await a.text()).split("\n");
+        let u = (await b.text()).split("\n");
+        let v = (await c.text()).split("\n");
+        xlables1 = t[0].split(",").splice(4);
+        let d,seco,thir,
+            o = 0,
+            s = (t = t.splice(1)).length - 1;
+        for (; o <= s; ) {
+            let e = t[(d = Math.floor((o + s) / 2))].split(",");
+            if ("India" == e[1]) break;
+            e[1] < "India" ? (o = d + 1) : (s = d - 1);
+        }
+
+        o = 0;
+        s = (u = u.splice(1)).length - 1;
+        for (; o <= s; ) {
+            let e = u[(seco = Math.floor((o + s) / 2))].split(",");
+            if ("India" == e[1]) break;
+            e[1] < "India" ? (o = seco + 1) : (s = seco - 1);
+        }
+
+        o = 0;
+        s = (v = v.splice(1)).length - 1;
+        for (; o <= s; ) {
+            let e = v[(thir = Math.floor((o + s) / 2))].split(",");
+            if ("India" == e[1]) break;
+            e[1] < "India" ? (o = thir + 1) : (s = thir - 1);
+        }
+
+        let temp1 = [],
+            temp2 = [],
+            temp3 = [];
+        temp1 = t[d].split(",").splice(4);
+        temp2 = u[seco].split(",").splice(4);
+        temp3 = v[thir].split(",").splice(4);
+        let len = temp1.length;
+        for(let i=0; i<len; ++i) {
+            if(!i) {
+                confirmed[i] = parseInt(temp1[i]);
+                recovered[i] = parseInt(temp2[i]);
+                deceased[i] = parseInt(temp3[i]);
+                continue;
+            }
+            confirmed[i] = parseInt(temp1[i]) - parseInt(temp1[i-1]);
+            recovered[i] = parseInt(temp2[i]) - parseInt(temp2[i-1]);
+            deceased[i] = parseInt(temp3[i]) - parseInt(temp3[i-1]);
+        }
+        confirmed = confirmed.splice(len - 30);
+        recovered = recovered.splice(len - 30);
+        deceased = deceased.splice(len - 30);
+        xlables1 = xlables1.splice(len - 30);
+    }
+
+    function getConfirmed1() {
+        let config1 = {
+            type: "line",
+            data: { labels: xlables1, datasets: [{ backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(), borderColor: window.chartColors.blue, pointRadius: 1, fill: !1, data: confirmed }] },
+            options: {
+                legend: {
+                    display: false
+                },
+                responsive: !0,
+                maintainAspectRatio: !1,
+                title: { display: !1 },
+                scales: { xAxes: [{ display: !1 }], yAxes: [{ display: !1 }] },
+                tooltips: {
+                    intersect: !1,
+                    mode: "index",
+                    callbacks: {
+                        label: function (e, a) {
+                            var t = a.datasets[e.datasetIndex].label || "";
+                            return t && (t += ": "), (t += e.value);
+                        },
+                    },
+                },
+            },
+        };
+        var e = document.getElementById("canvas1").getContext("2d");
+        window.myLine1 = new Chart(e, config1);
+    }
+
+    function getConfirmed2() {
+        let config1 = {
+            type: "line",
+            data: { labels: xlables1, datasets: [{ backgroundColor: color(window.chartColors.green).alpha(0.2).rgbString(), borderColor: window.chartColors.green, pointRadius: 1, fill: !1, data: recovered }] },
+            options: {
+                legend: {
+                    display: false
+                },
+                responsive: !0,
+                maintainAspectRatio: !1,
+                title: { display: !1 },
+                scales: { xAxes: [{ display: !1 }], yAxes: [{ display: !1 }] },
+                tooltips: {
+                    intersect: !1,
+                    mode: "index",
+                    callbacks: {
+                        label: function (e, a) {
+                            var t = a.datasets[e.datasetIndex].label || "";
+                            return t && (t += ": "), (t += e.value);
+                        },
+                    },
+                },
+            },
+        };
+        var e = document.getElementById("canvas2").getContext("2d");
+        window.myLine2 = new Chart(e, config1);
+    }
+
+    function getConfirmed3() {
+        let config1 = {
+            type: "line",
+            data: { labels: xlables1, datasets: [{ backgroundColor: color(window.chartColors.red).alpha(0.2).rgbString(), borderColor: window.chartColors.red, pointRadius: 1, fill: !1, data: deceased }] },
+            options: {
+                legend: {
+                    display: false
+                },
+                responsive: !0,
+                maintainAspectRatio: !1,
+                title: { display: !1 },
+                scales: { xAxes: [{ display: !1 }], yAxes: [{ display: !1 }] },
+                tooltips: {
+                    intersect: !1,
+                    mode: "index",
+                    callbacks: {
+                        label: function (e, a) {
+                            var t = a.datasets[e.datasetIndex].label || "";
+                            return t && (t += ": "), (t += e.value);
+                        },
+                    },
+                },
+            },
+        };
+        var e = document.getElementById("canvas3").getContext("2d");
+        window.myLine3 = new Chart(e, config1);
+    }
+
+    timeSeries1().then(() => {
+        getConfirmed1();
+        getConfirmed2();
+        getConfirmed3();
+    })
+    .catch((e) => {
+        console.log(e);
+    });
+</script>
+
 </body>
 
 <!-- soccer/project/app-calendar.html  07 Jan 2020 03:40:20 GMT -->

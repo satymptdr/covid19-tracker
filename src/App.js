@@ -42,7 +42,7 @@ app.use(express.static("public", {
     lastModified: true,
     setHeaders: (res, path) => {
 
-        if (path.match(/\.(css|png|jpg|jpeg|gif|ico|svg)$/)) {
+        if (path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg)$/)) {
             const date = new Date();
             date.setFullYear(date.getFullYear() + 1);
             res.setHeader("Expires", date.toUTCString());
@@ -56,7 +56,7 @@ app.use('/', express.static("views", {
     lastModified: true,
     setHeaders: (res, path) => {
 
-        if (path.match(/\.(css|png|jpg|jpeg|gif|ico|svg|woff)$/)) {
+        if (path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff)$/)) {
             const date = new Date();
             date.setFullYear(date.getFullYear() + 1);
             res.setHeader("Expires", date.toUTCString());
@@ -240,7 +240,6 @@ app.get('/', (req, res) => {
                     return b.TotalCases > a.TotalCases;
                 });
             }).then(function() {
-                console.log(arr[0]);
                 res.render('index', {main : arr, report : arr4, cont: results,  update: arrUpdate});
                 client.setex('world_data', 21600, JSON.stringify(arr));
             });
