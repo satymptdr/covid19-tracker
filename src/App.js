@@ -42,7 +42,13 @@ app.use(express.static("public", {
     lastModified: true,
     setHeaders: (res, path) => {
 
-        if (path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg)$/)) {
+        if (path.match(/\.(css|png|jpg|jpeg|gif|ico|svg)$/)) {
+            const date = new Date();
+            date.setFullYear(date.getFullYear() + 1);
+            res.setHeader("Expires", date.toUTCString());
+            res.setHeader("Cache-Control", "public, max-age=345600, immutable");
+        }
+        if (path.match(/\.(js)$/)) {
             const date = new Date();
             date.setFullYear(date.getFullYear() + 1);
             res.setHeader("Expires", date.toUTCString());
@@ -56,7 +62,13 @@ app.use('/', express.static("views", {
     lastModified: true,
     setHeaders: (res, path) => {
 
-        if (path.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg|woff)$/)) {
+        if (path.match(/\.(css|png|jpg|jpeg|gif|ico|svg|woff)$/)) {
+            const date = new Date();
+            date.setFullYear(date.getFullYear() + 1);
+            res.setHeader("Expires", date.toUTCString());
+            res.setHeader("Cache-Control", "public, max-age=345600, immutable");
+        }
+        if (path.match(/\.(js)$/)) {
             const date = new Date();
             date.setFullYear(date.getFullYear() + 1);
             res.setHeader("Expires", date.toUTCString());

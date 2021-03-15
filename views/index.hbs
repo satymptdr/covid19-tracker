@@ -740,16 +740,39 @@
 <script>
     function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"Country: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),$(function(){setInterval(()=>{var t=moment();$("#date").html(t.format("dddd")+" - "+t.format("DD MMMM, YYYY")),$("#time").html(t.format("hh:mm:ss A"))},100)}),window.onload=init;
     if('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('../sw.js')
-            .then(function() { console.log("Service Worker Registered"); })
-            .catch(function(e) { console.log(e) });
+        navigator.serviceWorker.register('../sw.js')
+        .then(() => { console.log('SW registered')})
+        .catch(e => {
+            console.log('service worker error!');
+            console.log(e);
+        });
     }
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
 <script defer src="assets/js/core.js"></script>
+
+<script>
+    if(sessionStorage.numTimes) {
+        sessionStorage.setItem("numTimes", "1");
+    }
+    else {
+        sessionStorage.setItem("numTimes", "0");
+    }   
+    async function prepare() {
+        await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv');
+        await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv');
+        await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv');
+        await fetch('https://api.covid19india.org/v4/min/timeseries.min.json');
+    }
+    var z = sessionStorage.getItem("numTimes");
+    if(z == 0 || z == "0") {
+        prepare().then(() => {
+            sessionStorage.setItem("numTimes", "1");
+        });
+    }
+</script>
 
 </body>
 </html>
