@@ -6,8 +6,6 @@ self.addEventListener('install', function(e) {
    caches.open('covidFiles').then(function(cache) {
 
      return cache.addAll([
-       '/',
-       '/india',
        '/chart',
        '/news',
        '/assets/css/main.css',
