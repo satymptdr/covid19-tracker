@@ -45,7 +45,7 @@ self.addEventListener('fetch', function(event) {
       })
     );
   }
-  else if(request.url.includes('/') || request.url.includes('/india') || request.url.includes('/chart')) {
+  else if(request.url.includes('/') || request.url.includes('/india') || request.url.includes('/chart') || request.url.includes('/news')) {
     event.respondWith(
       caches.match(request).then(response => {
         if(isValidFront(response)) {
