@@ -5,6 +5,7 @@ var config,
     ydata1 = [],
     ydata2 = [],
     ydata3 = [],
+    ydata4 = [],
     india_time = [],
     state_name = "GJ",
     color = Chart.helpers.color,
@@ -27,14 +28,20 @@ async function getData() {
     ydata1.length = 0;
     ydata2.length = 0;
     ydata3.length = 0;
+    ydata4.length = 0;
 
+    var a,b,c;
     Object.keys(data[state_name]).map(i => {
         xlables.forEach(ele => {
-            ydata1.push(data[state_name][i][ele]['total']['confirmed']);
-            ydata2.push(data[state_name][i][ele]['total']['recovered']);
-            ydata3.push(data[state_name][i][ele]['total']['deceased']);
+            a = data[state_name][i][ele]['total']['confirmed'] || !1;
+            b = data[state_name][i][ele]['total']['recovered'] || !1;
+            c = data[state_name][i][ele]['total']['deceased'] || !1;
+            ydata1.push(a);
+            ydata2.push(b);
+            ydata3.push(c);
+            ydata4.push(a - b - c);
         });
-    })
+    });
 }
 async function timeSeries(e = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv") {
     var a = await fetch(e);
@@ -65,7 +72,7 @@ function getChart() {
             responsive: !0,
             maintainAspectRatio: !1,
             title: { display: !0, text: "Corona Virus Cases Visualization" },
-            scales: { xAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Date" } }], yAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Number of Cases" } }] },
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5 }, display: !0, scaleLabel: { display: !0, labelString: "Date" } }], yAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Number of Cases" } }] },
             tooltips: {
                 intersect: !1,
                 mode: "index",
@@ -89,7 +96,7 @@ function getConfirmed() {
             responsive: !0,
             maintainAspectRatio: !1,
             title: { display: !0, text: "India's Cases" },
-            scales: { xAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Date" } }], yAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Number of " + series_label } }] },
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5 }, display: !0, scaleLabel: { display: !0, labelString: "Date" } }], yAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Number of " + series_label } }] },
             tooltips: {
                 intersect: !1,
                 mode: "index",
