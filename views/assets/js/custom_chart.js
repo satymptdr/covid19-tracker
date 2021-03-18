@@ -5,6 +5,7 @@ var config,
     ydata1 = [],
     ydata2 = [],
     ydata3 = [],
+    ydata4 = [],
     india_time = [],
     state_name = "GJ",
     color = Chart.helpers.color,
@@ -12,9 +13,9 @@ var config,
     bg = color(window.chartColors.blue).alpha(0.5).rgbString(),
     border = window.chartColors.blue;
 
-var push_confirm = { id: "confirm_cases", label: "Confirmed Cases", backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(), borderColor: window.chartColors.blue, pointRadius: 1, fill: !1, data: ydata1 };
-var push_recovered = { id: "recovered_cases", label: "Recovered Cases", backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(), borderColor: window.chartColors.yellow, pointRadius: 1, fill: !1, data: ydata2 };
-var push_death = { id: "death", label: "Deaths Cases", backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(), borderColor: window.chartColors.red, pointRadius: 1, fill: !1, data: ydata3 };
+// var push_confirm = { id: "confirm_cases", label: "Confirmed Cases", backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(), borderColor: window.chartColors.blue, pointRadius: 1, fill: !1, data: ydata1 };
+// var push_recovered = { id: "recovered_cases", label: "Recovered Cases", backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(), borderColor: window.chartColors.yellow, pointRadius: 1, fill: !1, data: ydata2 };
+// var push_death = { id: "death", label: "Deaths Cases", backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(), borderColor: window.chartColors.red, pointRadius: 1, fill: !1, data: ydata3 };
 var temp = { label: series_label, backgroundColor: bg, borderColor: border, pointRadius: 1, fill: !0, data: india_time };
 
 async function getData() {
@@ -27,12 +28,18 @@ async function getData() {
     ydata1.length = 0;
     ydata2.length = 0;
     ydata3.length = 0;
+    ydata4.length = 0;
 
+    var a,b,c;
     Object.keys(data[state_name]).map(i => {
         xlables.forEach(ele => {
-            ydata1.push(data[state_name][i][ele]['total']['confirmed']);
-            ydata2.push(data[state_name][i][ele]['total']['recovered']);
-            ydata3.push(data[state_name][i][ele]['total']['deceased']);
+            a = data[state_name][i][ele]['total']['confirmed'] || !0;
+            b = data[state_name][i][ele]['total']['recovered'] || !0;
+            c = data[state_name][i][ele]['total']['deceased'] || !0;
+            ydata1.push(a);
+            ydata2.push(b);
+            ydata3.push(c);
+            ydata4.push(a-b-c);
         });
     })
 }
@@ -56,9 +63,10 @@ function getChart() {
         data: {
             labels: xlables,
             datasets: [
-                { id: "confirm_cases", label: "Confirmed Cases", backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(), borderColor: window.chartColors.blue, pointRadius: 1, fill: !1, data: ydata1 },
-                { id: "recovered_cases", label: "Recovered Cases", backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(), borderColor: window.chartColors.yellow, pointRadius: 1, fill: !1, data: ydata2 },
-                { id: "death", label: "Deaths Cases", backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(), borderColor: window.chartColors.red, pointRadius: 1, fill: !1, data: ydata3 },
+                { id: "confirm_cases", label: "Confirm", backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(), borderColor: window.chartColors.red, pointRadius: 1, fill: !1, data: ydata1 },
+                { id: "recovered_cases", label: "Recovered", backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(), borderColor: window.chartColors.green, pointRadius: 1, fill: !1, data: ydata2 },
+                { id: "death", label: "Deceased", backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(), borderColor: window.chartColors.grey, pointRadius: 1, fill: !1, data: ydata3 },
+                { id: "active", label: "Active", backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(), borderColor: window.chartColors.blue, pointRadius: 1, fill: !1, data: ydata4 },
             ],
         },
         options: {
@@ -130,6 +138,7 @@ function select_operation() {
     ydata1.length = 0;
     ydata2.length = 0;
     ydata3.length = 0;
+    ydata4.length = 0;
 	
     state_name = document.getElementById('states').value;
 
@@ -138,6 +147,7 @@ function select_operation() {
         window.myLine.data.datasets[0].data = ydata1;
         window.myLine.data.datasets[1].data = ydata2;
         window.myLine.data.datasets[2].data = ydata3;
+        window.myLine.data.datasets[3].data = ydata4;
         window.myLine.update();
     });
 }
@@ -166,139 +176,139 @@ download_img1 = function (e) {
     e.href = a;
 };
 
-document.getElementById('show_confirm_cases').addEventListener('click', function() {
-    let available = false;
-    for(var i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'confirm_cases') {
-            available = true;
-        }
-    }
+// document.getElementById('show_confirm_cases').addEventListener('click', function() {
+//     let available = false;
+//     for(var i = 0; i < config.data.datasets.length; i++) {
+//         if(config.data.datasets[i].id == 'confirm_cases') {
+//             available = true;
+//         }
+//     }
     
-    if(available == false) {
-        config.data.datasets.push(push_confirm);
+//     if(available == false) {
+//         config.data.datasets.push(push_confirm);
 
-        if(config.data.datasets.length == 1) {
-            config.data.datasets[0].fill = true;
-        }
+//         if(config.data.datasets.length == 1) {
+//             config.data.datasets[0].fill = true;
+//         }
 
-        if(config.data.datasets.length > 1) {
-            for(var i=0; i<config.data.datasets.length; i++) {
-                config.data.datasets[i].fill = false;
-            }
-        }
+//         if(config.data.datasets.length > 1) {
+//             for(var i=0; i<config.data.datasets.length; i++) {
+//                 config.data.datasets[i].fill = false;
+//             }
+//         }
 
-        window.myLine.update();
-        document.getElementById('hide_confirm_cases').disabled = false;
-        document.getElementById('show_confirm_cases').disabled = true;
-    }
-});
+//         window.myLine.update();
+//         document.getElementById('hide_confirm_cases').disabled = false;
+//         document.getElementById('show_confirm_cases').disabled = true;
+//     }
+// });
 
-document.getElementById('show_recovered_cases').addEventListener('click', function() {
-    var available = false;
-    for(var i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'recovered_cases') {
-            available = true;
-        }
-    }
+// document.getElementById('show_recovered_cases').addEventListener('click', function() {
+//     var available = false;
+//     for(var i = 0; i < config.data.datasets.length; i++) {
+//         if(config.data.datasets[i].id == 'recovered_cases') {
+//             available = true;
+//         }
+//     }
     
-    if(available == false) {
-        config.data.datasets.push(push_recovered);
+//     if(available == false) {
+//         config.data.datasets.push(push_recovered);
 
-        if(config.data.datasets.length == 1) {
-            config.data.datasets[0].fill = true;
-        }
+//         if(config.data.datasets.length == 1) {
+//             config.data.datasets[0].fill = true;
+//         }
 
-        if(config.data.datasets.length > 1) {
-            for(var i=0; i<config.data.datasets.length; i++) {
-                config.data.datasets[i].fill = false;
-            }
-        }
+//         if(config.data.datasets.length > 1) {
+//             for(var i=0; i<config.data.datasets.length; i++) {
+//                 config.data.datasets[i].fill = false;
+//             }
+//         }
 
-        window.myLine.update();
-        document.getElementById('hide_recovered_cases').disabled = false;
-        document.getElementById('show_recovered_cases').disabled = true;
-    }
+//         window.myLine.update();
+//         document.getElementById('hide_recovered_cases').disabled = false;
+//         document.getElementById('show_recovered_cases').disabled = true;
+//     }
     
-});
+// });
 
-document.getElementById('show_death').addEventListener('click', function() {
-    var available = false;
-    for(var i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'death') {
-            available = true;
-        }
-    }
+// document.getElementById('show_death').addEventListener('click', function() {
+//     var available = false;
+//     for(var i = 0; i < config.data.datasets.length; i++) {
+//         if(config.data.datasets[i].id == 'death') {
+//             available = true;
+//         }
+//     }
     
-    if(available == false) {
-        config.data.datasets.push(push_death);
+//     if(available == false) {
+//         config.data.datasets.push(push_death);
 
-        if(config.data.datasets.length == 1) {
-            config.data.datasets[0].fill = true;
-        }
+//         if(config.data.datasets.length == 1) {
+//             config.data.datasets[0].fill = true;
+//         }
 
-        if(config.data.datasets.length > 1) {
-            for(var i=0; i<config.data.datasets.length; i++) {
-                config.data.datasets[i].fill = false;
-            }
-        }
+//         if(config.data.datasets.length > 1) {
+//             for(var i=0; i<config.data.datasets.length; i++) {
+//                 config.data.datasets[i].fill = false;
+//             }
+//         }
 
-        window.myLine.update();
-        document.getElementById('hide_death').disabled = false;
-        document.getElementById('show_death').disabled = true;
-    } 
-});
+//         window.myLine.update();
+//         document.getElementById('hide_death').disabled = false;
+//         document.getElementById('show_death').disabled = true;
+//     } 
+// });
 
-document.getElementById('hide_confirm_cases').addEventListener('click', function() {
-    var i;
-    for(i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'confirm_cases') {
-            break;
-        }
-    }
-    config.data.datasets.splice(i, 1);
+// document.getElementById('hide_confirm_cases').addEventListener('click', function() {
+//     var i;
+//     for(i = 0; i < config.data.datasets.length; i++) {
+//         if(config.data.datasets[i].id == 'confirm_cases') {
+//             break;
+//         }
+//     }
+//     config.data.datasets.splice(i, 1);
 
-    if(config.data.datasets.length == 1) {
-        config.data.datasets[0].fill = true;
-    }
+//     if(config.data.datasets.length == 1) {
+//         config.data.datasets[0].fill = true;
+//     }
 
-    window.myLine.update();
-    document.getElementById('hide_confirm_cases').disabled = true;
-    document.getElementById('show_confirm_cases').disabled = false;
-});
+//     window.myLine.update();
+//     document.getElementById('hide_confirm_cases').disabled = true;
+//     document.getElementById('show_confirm_cases').disabled = false;
+// });
 
-document.getElementById('hide_recovered_cases').addEventListener('click', function() {
-    var i;
-    for(i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'recovered_cases') {
-            break;
-        }
-    }
+// document.getElementById('hide_recovered_cases').addEventListener('click', function() {
+//     var i;
+//     for(i = 0; i < config.data.datasets.length; i++) {
+//         if(config.data.datasets[i].id == 'recovered_cases') {
+//             break;
+//         }
+//     }
     
-    config.data.datasets.splice(i, 1);
+//     config.data.datasets.splice(i, 1);
 
-    if(config.data.datasets.length == 1) {
-        config.data.datasets[0].fill = true;
-    }
+//     if(config.data.datasets.length == 1) {
+//         config.data.datasets[0].fill = true;
+//     }
 
-    window.myLine.update();
-    document.getElementById('hide_recovered_cases').disabled = true;
-    document.getElementById('show_recovered_cases').disabled = false;
-});
+//     window.myLine.update();
+//     document.getElementById('hide_recovered_cases').disabled = true;
+//     document.getElementById('show_recovered_cases').disabled = false;
+// });
 
-document.getElementById('hide_death').addEventListener('click', function() {
-    var i;
-    for(i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'death') {
-            break;
-        }
-    }
-    config.data.datasets.splice(i, 1);
+// document.getElementById('hide_death').addEventListener('click', function() {
+//     var i;
+//     for(i = 0; i < config.data.datasets.length; i++) {
+//         if(config.data.datasets[i].id == 'death') {
+//             break;
+//         }
+//     }
+//     config.data.datasets.splice(i, 1);
 
-    if(config.data.datasets.length == 1) {
-        config.data.datasets[0].fill = true;
-    }
+//     if(config.data.datasets.length == 1) {
+//         config.data.datasets[0].fill = true;
+//     }
 
-    window.myLine.update();
-    document.getElementById('hide_death').disabled = true;
-    document.getElementById('show_death').disabled = false;
-});
+//     window.myLine.update();
+//     document.getElementById('hide_death').disabled = true;
+//     document.getElementById('show_death').disabled = false;
+// });
