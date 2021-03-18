@@ -33,9 +33,9 @@ async function getData() {
     var a,b,c;
     Object.keys(data[state_name]).map(i => {
         xlables.forEach(ele => {
-            a = data[state_name][i][ele]['total']['confirmed'] || !0;
-            b = data[state_name][i][ele]['total']['recovered'] || !0;
-            c = data[state_name][i][ele]['total']['deceased'] || !0;
+            a = data[state_name][i][ele]['total']['confirmed'] || !1;
+            b = data[state_name][i][ele]['total']['recovered'] || !1;
+            c = data[state_name][i][ele]['total']['deceased'] || !1;
             ydata1.push(a);
             ydata2.push(b);
             ydata3.push(c);

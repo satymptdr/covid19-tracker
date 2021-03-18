@@ -96,6 +96,14 @@ hbs.registerHelper('getDayMonth', function (timestamp, format) {
     return moment.unix(timestamp).format(format);
 });
 
+hbs.registerHelper('calculate', function (confirm, deceased, recover) {
+    let z = confirm - deceased - recover
+    if(z > 0) {
+        return '+' + z;
+    }
+    return z;
+});
+
 hbs.registerHelper('filterZero', (value) => {
     if(value == '0' || value == 0) {
         return '';
