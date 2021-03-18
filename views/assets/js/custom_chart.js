@@ -6,8 +6,6 @@ var config,config1,config2,config3,config4,config5,config6;
     ydata2 = [],
     ydata3 = [],
     ydata4 = [],
-    ydata5 = [],
-    ydata6 = [],
     india_time = [],
     state_name = "GJ",
     color = Chart.helpers.color,
@@ -31,23 +29,17 @@ async function getData() {
     ydata2.length = 0;
     ydata3.length = 0;
     ydata4.length = 0;
-    ydata5.length = 0;
-    ydata6.length = 0;
 
-    var a,b,c,d,e;
+    var a,b,c;
     Object.keys(data[state_name]).map(i => {
         xlables.forEach(ele => {
             a = data[state_name][i][ele]['total']['confirmed'] || !1;
             b = data[state_name][i][ele]['total']['recovered'] || !1;
             c = data[state_name][i][ele]['total']['deceased'] || !1;
-            d = data[state_name][i][ele]['total']['tested'] || !1;
-            e = data[state_name][i][ele]['total']['vaccinated'] || !1;
             ydata1.push(a);
             ydata2.push(b);
             ydata3.push(c);
             ydata4.push(a - b - c);
-            ydata5.push(d);
-            ydata6.push(e);
         });
     });
 }
@@ -181,64 +173,6 @@ function getChart3() {
     window.myLine4 = new Chart(e, config4);
 } 
 
-function getChart4() {
-    config5 = {
-        type: "line",
-        data: {
-            labels: xlables,
-            datasets: [
-                { id: "Tested", label: "Tested",  backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(), borderColor: window.chartColors.purple, pointRadius: 1, fill: !1, data: ydata5 }
-            ],
-        },
-        options: {
-            responsive: !0,
-            maintainAspectRatio: !1,
-            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10  }, display: !1 }], yAxes: [{ display: !0 }] },
-            tooltips: {
-                intersect: !1,
-                mode: "index",
-                callbacks: {
-                    label: function (e, a) {
-                        var t = a.datasets[e.datasetIndex].label || "";
-                        return t && (t += ": "), (t += e.value);
-                    },
-                },
-            },
-        },
-    };
-    var e = document.getElementById("tested").getContext("2d");
-    window.myLine5 = new Chart(e, config5);
-}
-
-function getChart5() {
-    config6 = {
-        type: "line",
-        data: {
-            labels: xlables,
-            datasets: [
-                { id: "Vaccinated", label: "Vaccine doses administered",  backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(), borderColor: window.chartColors.yellow, pointRadius: 1, fill: !1, data: ydata6 }
-            ],
-        },
-        options: {
-            responsive: !0,
-            maintainAspectRatio: !1,
-            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10 }, display: !1 }], yAxes: [{ display: !0 }] },
-            tooltips: {
-                intersect: !1,
-                mode: "index",
-                callbacks: {
-                    label: function (e, a) {
-                        var t = a.datasets[e.datasetIndex].label || "";
-                        return t && (t += ": "), (t += e.value);
-                    },
-                },
-            },
-        },
-    };
-    var e = document.getElementById("vaccinated").getContext("2d");
-    window.myLine6 = new Chart(e, config6);
-}
-
 function getConfirmed() {
     config1 = {
         type: "line",
@@ -289,8 +223,6 @@ function select_operation() {
     ydata2.length = 0;
     ydata3.length = 0;
     ydata4.length = 0;
-    ydata5.length = 0;
-    ydata6.length = 0;
 	
     state_name = document.getElementById('states').value;
 
@@ -299,20 +231,14 @@ function select_operation() {
         window.myLine2.data.labels = xlables;
         window.myLine3.data.labels = xlables;
         window.myLine4.data.labels = xlables;
-        window.myLine5.data.labels = xlables;
-        window.myLine6.data.labels = xlables;
         window.myLine.data.datasets[0].data = ydata1;
         window.myLine2.data.datasets[0].data = ydata2;
         window.myLine3.data.datasets[0].data = ydata3;
         window.myLine4.data.datasets[0].data = ydata4;
-        window.myLine5.data.datasets[0].data = ydata5;
-        window.myLine6.data.datasets[0].data = ydata6;
         window.myLine.update();
         window.myLine2.update();
         window.myLine3.update();
         window.myLine4.update();
-        window.myLine5.update();
-        window.myLine6.update();
     });
 }
 
@@ -321,8 +247,6 @@ getData().then(() => {
     getChart1();
     getChart2();
     getChart3();
-    getChart4();
-    getChart5();
 })
 .catch((e) => {
     console.error(e);
