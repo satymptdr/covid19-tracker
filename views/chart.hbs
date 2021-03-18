@@ -455,6 +455,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"Country: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),window.onload=init;
 </script>
 
+<script src="../public/assets/js/util.js"></script>
 <script src="assets/js/custom_chart.js"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
 <script src="assets/js/core.js"></script>

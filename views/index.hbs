@@ -414,42 +414,42 @@
                 <div class="mb-4">
                     <div class="row clearfix row-deck">
                         <div class="col-lg-3 col-6 mb-2">
-                            <div class="card border-primary" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                                <div class="card-header" style="background-color: tan;">
-                                    <h3 class="card-title"><b>Total Cases</b></h3>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="number mb-0 font-23">{{main.0.TotalCases}}  <span style="color: rgb(120, 160, 41); font-size: 18px">{{main.0.NewCases}}</span></h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-6 mb-2">
                             <div class="card border-danger" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                                <div class="card-header" style="background-color: #DD4B39;">
-                                    <h3 class="card-title"><b>Total Death</b></h3>
+                                <div class="card-header" style="background-color: rgb(255, 110, 142);">
+                                    <h3 class="card-title"><b>Confirmed</b></h3>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="number mb-0 font-23">{{main.0.TotalDeaths}}  <span style="color: red; font-size: 18px">{{main.0.NewDeaths}}</span></h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-6 mb-2">
-                            <div class="card border-info" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                                <div class="card-header" style="background-color: #F39C12;">
-                                    <h3 class="card-title"><b>Death Rate</b></h3>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="number mb-0 font-23">{{main.0.DeathRate}}</h5> out of 1 Million Population 
+                                    <h5 class="number mb-0 font-23">{{main.0.TotalCases}}  <span style="color: rgb(255, 107, 138); font-size: 18px">{{main.0.NewCases}}</span></h5>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6 mb-2">
                             <div class="card border-success" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);"> 
-                                <div class="card-header" style="background-color: #00A65A;">
+                                <div class="card-header" style="background-color: rgb(127, 203, 144);">
                                     <h3 class="card-title"><b>Recovered</b></h3>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="number mb-0 font-23" style="color: rgb(120, 160, 41);">{{main.0.TotalRecovered}}</h5>
+                                    <h5 class="number mb-0 font-23" style="color: rgb(127, 203, 144);">{{main.0.TotalRecovered}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-info" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: rgb(168, 173, 178);">
+                                    <h3 class="card-title"><b>Deceased</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-23">{{main.0.TotalDeaths}}  <span style="color: rgb(168, 173, 178); font-size: 18px">{{main.0.NewDeaths}}</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-warning" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: #F39C12;">
+                                    <h3 class="card-title"><b>Death Rate</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-23">{{main.0.DeathRate}}</h5> out of 1 Million Population 
                                 </div>
                             </div>
                         </div>
