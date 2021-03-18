@@ -65,7 +65,7 @@ async function timeSeries(e = "https://raw.githubusercontent.com/CSSEGISandData/
     }
     (india_time.length = 0), (india_time = t[d].split(",").splice(4)), (temp.data = india_time);
 }
-async function getChart() {
+function getChart() {
     config = {
         type: "line",
         data: {
@@ -91,10 +91,10 @@ async function getChart() {
         },
     };
     var e = document.getElementById("confirmed").getContext("2d");
-    window.myLine = await new Chart(e, config);
+    window.myLine = new Chart(e, config);
 }   
 
-async function getChart1() {
+function getChart1() {
     config2 = {
         type: "line",
         data: {
@@ -120,10 +120,10 @@ async function getChart1() {
         },
     };
     var e = document.getElementById("recovered").getContext("2d");
-    window.myLine2 = await new Chart(e, config2);
+    window.myLine2 = new Chart(e, config2);
 } 
 
-async function getChart2() {
+function getChart2() {
     config3 = {
         type: "line",
         data: {
@@ -149,10 +149,10 @@ async function getChart2() {
         },
     };
     var e = document.getElementById("deceased").getContext("2d");
-    window.myLine3 = await new Chart(e, config3);
+    window.myLine3 = new Chart(e, config3);
 } 
 
-async function getChart3() {
+function getChart3() {
     config4 = {
         type: "line",
         data: {
@@ -178,10 +178,10 @@ async function getChart3() {
         },
     };
     var e = document.getElementById("active").getContext("2d");
-    window.myLine4 = await new Chart(e, config4);
+    window.myLine4 = new Chart(e, config4);
 } 
 
-async function getChart4() {
+function getChart4() {
     config5 = {
         type: "line",
         data: {
@@ -207,10 +207,10 @@ async function getChart4() {
         },
     };
     var e = document.getElementById("tested").getContext("2d");
-    window.myLine5 = await new Chart(e, config5);
+    window.myLine5 = new Chart(e, config5);
 }
 
-async function getChart5() {
+function getChart5() {
     config6 = {
         type: "line",
         data: {
@@ -236,7 +236,7 @@ async function getChart5() {
         },
     };
     var e = document.getElementById("vaccinated").getContext("2d");
-    window.myLine6 = await new Chart(e, config6);
+    window.myLine6 = new Chart(e, config6);
 }
 
 function getConfirmed() {
@@ -317,31 +317,12 @@ function select_operation() {
 }
 
 getData().then(() => {
-    getChart().then(() => {
-        getChart1().then(() => {
-            getChart2().then(() => {
-                getChart3().then(() => {
-                    getChart4().then(() => {
-                        getChart5().then(() => {
-                            console.log('Chart Loaded')
-                        }).catch(e => {
-                            console.log('Error chart vaccinated');
-                        });
-                    }).catch(e => {
-                        console.log('Error chart tested');
-                    });
-                }).catch(e => {
-                    console.log('Error chart active');
-                });
-            }).catch(e => {
-                console.log('Error chart deceased');
-            });
-        }).catch(e => {
-            console.log('Error chart recovered');
-        });
-    }).catch(e => {
-        console.log('Error chart confirmed');
-    });
+    getChart();
+    getChart1();
+    getChart2();
+    getChart3();
+    getChart4();
+    getChart5();
 })
 .catch((e) => {
     console.error(e);
