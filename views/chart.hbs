@@ -300,26 +300,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="section-body mt-3">
             <div class="container-fluid">
                 <center>
-                {{!-- <div class="row">
-                    <div class="col">
-                        <div class="btn-group">
-                            <button id="hide_confirm_cases" type="button" class="btn btn-outline-danger btn-sm btn-block" style="margin-left: 10px; margin-top: 8px">Hide Confirmed</button>
-                            <button id="hide_recovered_cases"type="button"  class="btn btn-outline-danger btn-sm btn-block" style="margin-left: 10px;">Hide Recovered</button>
-                            <button id="hide_death" type="button" class="btn btn-outline-danger btn-sm btn-block" style="margin-left: 10px;">Hide Death</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="btn-group">
-                            <button id="show_confirm_cases" type="button" class="btn btn-outline-success btn-sm btn-block" disabled style="margin-left: 10px; margin-top: 8px"> Show Confirm</button>
-                            <button id="show_recovered_cases" type="button" class="btn btn-outline-success btn-sm btn-block" disabled style="margin-left: 10px;">Show Recovered</button>
-                            <button id="show_death" type="button" class="btn btn-outline-success btn-sm btn-block" disabled style="margin-left: 10px;">Show Death</button>
-                        </div>
-                    </div>
-                </div> --}}
-                {{!-- <br> --}}
                 <b><label for="states">Select State : </label></b>
                 <select id="states" name="states" onchange="select_operation()">
                     <option value="select" disabled>Choose Option</option>
@@ -362,14 +342,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 </select>
                 </center>
-
-                {{!-- <button id="submit">Submit</button> --}}
-            </center>
-            <br>
-                <center>
-                    <div class="container">
-                        <div class="row">
-                            <div class="chart_main co-lg-12 col-xl-12" style="width:100%; height: 50%;">
+                <br>
+                <div class="section-body">
+                    <div class="container-fluid">    
+                        <div class="row clearfix">
+                            <div class="col-xl-6 col-lg-6 mb-3">
                                 <div class="chartjs-size-monitor">
                                     <div class="chartjs-size-monitor-expand">
                                         <div class=""></div>
@@ -379,22 +356,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <canvas id="canvas" style="min-height:350px;" class="chartjs-render-monitor"></canvas>
+                                    <canvas id="confirmed" style="min-height:200px;" class="chartjs-render-monitor"></canvas>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="col-xl-6 col-lg-6 mb-3">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <canvas id="recovered" style="min-height:200px;" class="chartjs-render-monitor"></canvas>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="col-xl-6 col-lg-6 mb-3">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <canvas id="deceased" style="min-height:200px;" class="chartjs-render-monitor"></canvas>
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="col-xl-6 col-lg-6 mb-3">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <canvas id="active" style="min-height:200px;" class="chartjs-render-monitor"></canvas>
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="col-xl-6 col-lg-6 mb-3">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <canvas id="tested" style="min-height:200px;" class="chartjs-render-monitor"></canvas>
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="col-xl-6 col-lg-6 mb-3">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <canvas id="vaccinated" style="min-height:200px;" class="chartjs-render-monitor"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </center>
+                </div>
                 <br>
             </div>            
         </div>
-        
-        <center>
-            <div class="btn-group">
-                <a id="download" class="btn btn-outline-danger btn-sm btn-block" download="abhay_covid_19.jpg" href="" onclick="download_img(this);">Click Here To Download Graph</a>
-            </div>
-        </center>
-        <br><br>
+        <br><br>    
 
         <hr>
         <center>
@@ -419,7 +463,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <canvas id="canvas1" style="min-height:350px" class="chartjs-render-monitor"></canvas>
+                            <canvas id="canvas1" style="min-height:300px" class="chartjs-render-monitor"></canvas>
                         </div>
                     </div>
                 </div>
@@ -458,6 +502,4 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
 <script src="assets/js/core.js"></script>
 </body>
-
-<!-- soccer/project/app-calendar.html  07 Jan 2020 03:40:20 GMT -->
 </html>

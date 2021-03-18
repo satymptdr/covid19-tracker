@@ -192,6 +192,7 @@ app.get('/', (req, res) => {
     client.get('report', (err, result) => {
         if(result) {
             arr4 = JSON.parse(result);
+
         }
         else {
             covid.plugins[0].situationReports().then((result) => {

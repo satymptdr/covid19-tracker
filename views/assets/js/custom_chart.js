@@ -1,11 +1,13 @@
-var config,
-    config1,
+var config,config1,config2,config3,config4,config5,config6;
+
     xlables = [],
     xlables1 = [],
     ydata1 = [],
     ydata2 = [],
     ydata3 = [],
     ydata4 = [],
+    ydata5 = [],
+    ydata6 = [],
     india_time = [],
     state_name = "GJ",
     color = Chart.helpers.color,
@@ -29,17 +31,23 @@ async function getData() {
     ydata2.length = 0;
     ydata3.length = 0;
     ydata4.length = 0;
+    ydata5.length = 0;
+    ydata6.length = 0;
 
-    var a,b,c;
+    var a,b,c,d,e;
     Object.keys(data[state_name]).map(i => {
         xlables.forEach(ele => {
             a = data[state_name][i][ele]['total']['confirmed'] || !1;
             b = data[state_name][i][ele]['total']['recovered'] || !1;
             c = data[state_name][i][ele]['total']['deceased'] || !1;
+            d = data[state_name][i][ele]['total']['tested'] || !1;
+            e = data[state_name][i][ele]['total']['vaccinated'] || !1;
             ydata1.push(a);
             ydata2.push(b);
             ydata3.push(c);
             ydata4.push(a - b - c);
+            ydata5.push(d);
+            ydata6.push(e);
         });
     });
 }
@@ -57,22 +65,19 @@ async function timeSeries(e = "https://raw.githubusercontent.com/CSSEGISandData/
     }
     (india_time.length = 0), (india_time = t[d].split(",").splice(4)), (temp.data = india_time);
 }
-function getChart() {
+async function getChart() {
     config = {
         type: "line",
         data: {
             labels: xlables,
             datasets: [
-                { id: "confirm_cases", label: "Confirmed Cases", backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(), borderColor: window.chartColors.blue, pointRadius: 1, fill: !1, data: ydata1 },
-                { id: "recovered_cases", label: "Recovered Cases", backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(), borderColor: window.chartColors.yellow, pointRadius: 1, fill: !1, data: ydata2 },
-                { id: "death", label: "Deaths Cases", backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(), borderColor: window.chartColors.red, pointRadius: 1, fill: !1, data: ydata3 },
+                { id: "confirm_cases", label: 'Confirmed Cases', backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(), borderColor: window.chartColors.red, pointRadius: 1, fill: !1, data: ydata1 }
             ],
         },
         options: {
             responsive: !0,
             maintainAspectRatio: !1,
-            title: { display: !0, text: "Corona Virus Cases Visualization" },
-            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5 }, display: !0, scaleLabel: { display: !0, labelString: "Date" } }], yAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Number of Cases" } }] },
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10  }, display: !1 }], yAxes: [{ display: !0 }] },
             tooltips: {
                 intersect: !1,
                 mode: "index",
@@ -85,9 +90,155 @@ function getChart() {
             },
         },
     };
-    var e = document.getElementById("canvas").getContext("2d");
-    window.myLine = new Chart(e, config);
+    var e = document.getElementById("confirmed").getContext("2d");
+    window.myLine = await new Chart(e, config);
 }   
+
+async function getChart1() {
+    config2 = {
+        type: "line",
+        data: {
+            labels: xlables,
+            datasets: [
+                { id: "Recovered Cases", label: "Recovered Cases",  backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(), borderColor: window.chartColors.green, pointRadius: 1, fill: !1, data: ydata2 }
+            ],
+        },
+        options: {
+            responsive: !0,
+            maintainAspectRatio: !1,
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10 }, display: !1 }], yAxes: [{ display: !0 }] },
+            tooltips: {
+                intersect: !1,
+                mode: "index",
+                callbacks: {
+                    label: function (e, a) {
+                        var t = a.datasets[e.datasetIndex].label || "";
+                        return t && (t += ": "), (t += e.value);
+                    },
+                },
+            },
+        },
+    };
+    var e = document.getElementById("recovered").getContext("2d");
+    window.myLine2 = await new Chart(e, config2);
+} 
+
+async function getChart2() {
+    config3 = {
+        type: "line",
+        data: {
+            labels: xlables,
+            datasets: [
+                { id: "Deceased Cases", label: "Deceased Cases",  backgroundColor: color(window.chartColors.grey).alpha(0.5).rgbString(), borderColor: window.chartColors.grey, pointRadius: 1, fill: !1, data: ydata3 }
+            ],
+        },
+        options: {
+            responsive: !0,
+            maintainAspectRatio: !1,
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10  }, display: !1}], yAxes: [{ display: !0 }] },
+            tooltips: {
+                intersect: !1,
+                mode: "index",
+                callbacks: {
+                    label: function (e, a) {
+                        var t = a.datasets[e.datasetIndex].label || "";
+                        return t && (t += ": "), (t += e.value);
+                    },
+                },
+            },
+        },
+    };
+    var e = document.getElementById("deceased").getContext("2d");
+    window.myLine3 = await new Chart(e, config3);
+} 
+
+async function getChart3() {
+    config4 = {
+        type: "line",
+        data: {
+            labels: xlables,
+            datasets: [
+                { id: "Active Cases", label: "Active Cases",  backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(), borderColor: window.chartColors.blue, pointRadius: 1, fill: !1, data: ydata4 }
+            ],
+        },
+        options: {
+            responsive: !0,
+            maintainAspectRatio: !1,
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10  }, display: !1 }], yAxes: [{ display: !0 }] },
+            tooltips: {
+                intersect: !1,
+                mode: "index",
+                callbacks: {
+                    label: function (e, a) {
+                        var t = a.datasets[e.datasetIndex].label || "";
+                        return t && (t += ": "), (t += e.value);
+                    },
+                },
+            },
+        },
+    };
+    var e = document.getElementById("active").getContext("2d");
+    window.myLine4 = await new Chart(e, config4);
+} 
+
+async function getChart4() {
+    config5 = {
+        type: "line",
+        data: {
+            labels: xlables,
+            datasets: [
+                { id: "Tested", label: "Tested",  backgroundColor: color(window.chartColors.purple).alpha(0.5).rgbString(), borderColor: window.chartColors.purple, pointRadius: 1, fill: !1, data: ydata5 }
+            ],
+        },
+        options: {
+            responsive: !0,
+            maintainAspectRatio: !1,
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10  }, display: !1 }], yAxes: [{ display: !0 }] },
+            tooltips: {
+                intersect: !1,
+                mode: "index",
+                callbacks: {
+                    label: function (e, a) {
+                        var t = a.datasets[e.datasetIndex].label || "";
+                        return t && (t += ": "), (t += e.value);
+                    },
+                },
+            },
+        },
+    };
+    var e = document.getElementById("tested").getContext("2d");
+    window.myLine5 = await new Chart(e, config5);
+}
+
+async function getChart5() {
+    config6 = {
+        type: "line",
+        data: {
+            labels: xlables,
+            datasets: [
+                { id: "Vaccinated", label: "Vaccine doses administered",  backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(), borderColor: window.chartColors.yellow, pointRadius: 1, fill: !1, data: ydata6 }
+            ],
+        },
+        options: {
+            responsive: !0,
+            maintainAspectRatio: !1,
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10 }, display: !1 }], yAxes: [{ display: !0 }] },
+            tooltips: {
+                intersect: !1,
+                mode: "index",
+                callbacks: {
+                    label: function (e, a) {
+                        var t = a.datasets[e.datasetIndex].label || "";
+                        return t && (t += ": "), (t += e.value);
+                    },
+                },
+            },
+        },
+    };
+    var e = document.getElementById("vaccinated").getContext("2d");
+    window.myLine6 = await new Chart(e, config6);
+}
+
 function getConfirmed() {
     config1 = {
         type: "line",
@@ -96,7 +247,7 @@ function getConfirmed() {
             responsive: !0,
             maintainAspectRatio: !1,
             title: { display: !0, text: "India's Cases" },
-            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5 }, display: !0, scaleLabel: { display: !0, labelString: "Date" } }], yAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Number of " + series_label } }] },
+            scales: { xAxes: [{ ticks: { autoSkip: true, maxTicksLimit: 5, maxRotation: 10, minRotation: 10  }, display: !1, scaleLabel: { display: !0, labelString: "Date" } }], yAxes: [{ display: !0, scaleLabel: { display: !0, labelString: "Number of " + series_label } }] },
             tooltips: {
                 intersect: !1,
                 mode: "index",
@@ -137,23 +288,64 @@ function select_operation() {
     ydata1.length = 0;
     ydata2.length = 0;
     ydata3.length = 0;
+    ydata4.length = 0;
+    ydata5.length = 0;
+    ydata6.length = 0;
 	
     state_name = document.getElementById('states').value;
 
     getData().then(() => {
         window.myLine.data.labels = xlables;
+        window.myLine2.data.labels = xlables;
+        window.myLine3.data.labels = xlables;
+        window.myLine4.data.labels = xlables;
+        window.myLine5.data.labels = xlables;
+        window.myLine6.data.labels = xlables;
         window.myLine.data.datasets[0].data = ydata1;
-        window.myLine.data.datasets[1].data = ydata2;
-        window.myLine.data.datasets[2].data = ydata3;
+        window.myLine2.data.datasets[0].data = ydata2;
+        window.myLine3.data.datasets[0].data = ydata3;
+        window.myLine4.data.datasets[0].data = ydata4;
+        window.myLine5.data.datasets[0].data = ydata5;
+        window.myLine6.data.datasets[0].data = ydata6;
         window.myLine.update();
+        window.myLine2.update();
+        window.myLine3.update();
+        window.myLine4.update();
+        window.myLine5.update();
+        window.myLine6.update();
     });
 }
 
 getData().then(() => {
-    getChart();
+    getChart().then(() => {
+        getChart1().then(() => {
+            getChart2().then(() => {
+                getChart3().then(() => {
+                    getChart4().then(() => {
+                        getChart5().then(() => {
+                            console.log('Chart Loaded')
+                        }).catch(e => {
+                            console.log('Error chart vaccinated');
+                        });
+                    }).catch(e => {
+                        console.log('Error chart tested');
+                    });
+                }).catch(e => {
+                    console.log('Error chart active');
+                });
+            }).catch(e => {
+                console.log('Error chart deceased');
+            });
+        }).catch(e => {
+            console.log('Error chart recovered');
+        });
+    }).catch(e => {
+        console.log('Error chart confirmed');
+    });
 })
 .catch((e) => {
     console.error(e);
+    console.log('Error getting data');
 });
 
 timeSeries().then(() => {
@@ -172,140 +364,3 @@ download_img1 = function (e) {
     var a = document.getElementById("canvas1").toDataURL("image/jpg");
     e.href = a;
 };
-
-document.getElementById('show_confirm_cases').addEventListener('click', function() {
-    let available = false;
-    for(var i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'confirm_cases') {
-            available = true;
-        }
-    }
-    
-    if(available == false) {
-        config.data.datasets.push(push_confirm);
-
-        if(config.data.datasets.length == 1) {
-            config.data.datasets[0].fill = true;
-        }
-
-        if(config.data.datasets.length > 1) {
-            for(var i=0; i<config.data.datasets.length; i++) {
-                config.data.datasets[i].fill = false;
-            }
-        }
-
-        window.myLine.update();
-        document.getElementById('hide_confirm_cases').disabled = false;
-        document.getElementById('show_confirm_cases').disabled = true;
-    }
-});
-
-document.getElementById('show_recovered_cases').addEventListener('click', function() {
-    var available = false;
-    for(var i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'recovered_cases') {
-            available = true;
-        }
-    }
-    
-    if(available == false) {
-        config.data.datasets.push(push_recovered);
-
-        if(config.data.datasets.length == 1) {
-            config.data.datasets[0].fill = true;
-        }
-
-        if(config.data.datasets.length > 1) {
-            for(var i=0; i<config.data.datasets.length; i++) {
-                config.data.datasets[i].fill = false;
-            }
-        }
-
-        window.myLine.update();
-        document.getElementById('hide_recovered_cases').disabled = false;
-        document.getElementById('show_recovered_cases').disabled = true;
-    }
-    
-});
-
-document.getElementById('show_death').addEventListener('click', function() {
-    var available = false;
-    for(var i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'death') {
-            available = true;
-        }
-    }
-    
-    if(available == false) {
-        config.data.datasets.push(push_death);
-
-        if(config.data.datasets.length == 1) {
-            config.data.datasets[0].fill = true;
-        }
-
-        if(config.data.datasets.length > 1) {
-            for(var i=0; i<config.data.datasets.length; i++) {
-                config.data.datasets[i].fill = false;
-            }
-        }
-
-        window.myLine.update();
-        document.getElementById('hide_death').disabled = false;
-        document.getElementById('show_death').disabled = true;
-    } 
-});
-
-document.getElementById('hide_confirm_cases').addEventListener('click', function() {
-    var i;
-    for(i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'confirm_cases') {
-            break;
-        }
-    }
-    config.data.datasets.splice(i, 1);
-
-    if(config.data.datasets.length == 1) {
-        config.data.datasets[0].fill = true;
-    }
-
-    window.myLine.update();
-    document.getElementById('hide_confirm_cases').disabled = true;
-    document.getElementById('show_confirm_cases').disabled = false;
-});
-
-document.getElementById('hide_recovered_cases').addEventListener('click', function() {
-    var i;
-    for(i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'recovered_cases') {
-            break;
-        }
-    }
-    
-    config.data.datasets.splice(i, 1);
-
-    if(config.data.datasets.length == 1) {
-        config.data.datasets[0].fill = true;
-    }
-
-    window.myLine.update();
-    document.getElementById('hide_recovered_cases').disabled = true;
-    document.getElementById('show_recovered_cases').disabled = false;
-});
-
-document.getElementById('hide_death').addEventListener('click', function() {
-    var i;
-    for(i = 0; i < config.data.datasets.length; i++) {
-        if(config.data.datasets[i].id == 'death') {
-            break;
-        }
-    }
-    config.data.datasets.splice(i, 1);
-
-    if(config.data.datasets.length == 1) {
-        config.data.datasets[0].fill = true;
-    }
-
-    window.myLine.update();
-    document.getElementById('hide_death').disabled = true;
-    document.getElementById('show_death').disabled = false;
-});
