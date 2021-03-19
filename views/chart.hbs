@@ -300,26 +300,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="section-body mt-3">
             <div class="container-fluid">
                 <center>
-                {{!-- <div class="row">
-                    <div class="col">
-                        <div class="btn-group">
-                            <button id="hide_confirm_cases" type="button" class="btn btn-outline-danger btn-sm btn-block" style="margin-left: 10px; margin-top: 8px">Hide Confirmed</button>
-                            <button id="hide_recovered_cases"type="button"  class="btn btn-outline-danger btn-sm btn-block" style="margin-left: 10px;">Hide Recovered</button>
-                            <button id="hide_death" type="button" class="btn btn-outline-danger btn-sm btn-block" style="margin-left: 10px;">Hide Death</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="btn-group">
-                            <button id="show_confirm_cases" type="button" class="btn btn-outline-success btn-sm btn-block" disabled style="margin-left: 10px; margin-top: 8px"> Show Confirm</button>
-                            <button id="show_recovered_cases" type="button" class="btn btn-outline-success btn-sm btn-block" disabled style="margin-left: 10px;">Show Recovered</button>
-                            <button id="show_death" type="button" class="btn btn-outline-success btn-sm btn-block" disabled style="margin-left: 10px;">Show Death</button>
-                        </div>
-                    </div>
-                </div> --}}
-                {{!-- <br> --}}
                 <b><label for="states">Select State : </label></b>
                 <select id="states" name="states" onchange="select_operation()">
                     <option value="select" disabled>Choose Option</option>
@@ -362,12 +342,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 </select>
                 </center>
-
-                {{!-- <button id="submit">Submit</button> --}}
             </center>
             <br>
                 <center>
-                    <p style="color: red;">* Click on the below labels (red, green, grey and blue) to show/hide the data from chart</p>
+                    <div id="myDIV">
+                        <button class="btn btn-outline-danger" onclick="changeData(0)">Confirm</button>
+                        <button class="btn btn-outline-success" onclick="changeData(1)">Recovered</button>
+                        <button class="btn btn-outline-info" onclick="changeData(2)">Active</button>
+                        <button class="btn btn-outline-secondary" onclick="changeData(3)">Deceased</button>
+                        <button class="btn btn-outline-primary" onclick="changeData(4)">Tested</button>
+                        <button class="btn btn-outline-warning" onclick="changeData(5)">Vaccinated</button>
+                    </div>
                     <div class="container">
                         <div class="row">
                             <div class="chart_main co-lg-12 col-xl-12" style="width:100%; height: 50%;">
