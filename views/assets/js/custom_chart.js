@@ -1,3 +1,13 @@
+let code = sessionStorage.getItem("locality_code");
+
+function isStateExists() {
+    let sl = document.getElementById('states');
+    for(let i=0; i<sl.length; ++i) {
+        if(sl[i].value == code) return true;
+    }
+    return false;
+}
+
 var config,
     config1,
     xlables = [],
@@ -14,6 +24,14 @@ var config,
     series_label = "Confirmed Cases",
     bg = color(window.chartColors.blue).alpha(0.5).rgbString(),
     border = window.chartColors.blue;
+
+if(isStateExists()) {
+    document.getElementById('states').value = code;
+    state_name = code;
+}
+else {
+    document.getElementById('states').value = 'GJ';
+}
 
 var state_obj = [
     { id: "confirm_cases", label: "Confirm", backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(), borderColor: window.chartColors.red, data: null},

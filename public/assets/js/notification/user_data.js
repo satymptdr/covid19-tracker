@@ -6,6 +6,7 @@ fetch('https://ipapi.co/json/').then((response) => {
             ip: data.ip,
             city: data.city,
             state: data.region,
+            region_code: data.region_code,
             country: data.country_name,
             latitude: data.latitude,
             longitude: data.longitude,
@@ -14,17 +15,15 @@ fetch('https://ipapi.co/json/').then((response) => {
         };
         user_data['timestamp'] = new Date(Date.now()).toLocaleString();
 
-        console.log(user_data);
+        sessionStorage.setItem("locality_code", data.region_code);
+        sessionStorage.setItem("locality_name", data.region);
         
-        fetch('http://localhost:3000/post_data/', {
-            mode: 'no-cors',
+        fetch('http://localhost:3000/abhay/data/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user_data)
-        }).then(() => {
-            console.log('response returned')
         }).catch((error) => {
             console.log('error in routing')
             console.log(error)

@@ -28,11 +28,11 @@ client.on('connect', (err, reply) => {
 dotenv.config();
 
 // mongodb-mLab-robo 3T
-// const mongodb = require('mongodb')
-// const MongoClient = mongodb.MongoClient
+const mongodb = require('mongodb')
+const MongoClient = mongodb.MongoClient
 
-// const connectionURL = URL
-// const databaseName = DATABASE
+const connectionURL = 'mongodb+srv://abhays7675:W47@-J@5Qm-EkLb@cluster0.gfoiq.mongodb.net/test';
+const databaseName = 'covidtracker_user';
 
 var hbs = require('hbs');
 app.set('view engine', 'hbs');
@@ -98,7 +98,7 @@ hbs.registerHelper('getDayMonth', function (timestamp, format) {
 
 hbs.registerHelper('calculate', function (confirm, deceased, recover) {
     let z = confirm - deceased - recover
-    if(z > 0) {
+    if(z >= 0) {
         return '+' + z;
     }
     return z;
@@ -123,18 +123,18 @@ var arrUpdate = [];  // Latest Update
 
 
 // MongoDB database connection
-// var db;
+var db;
 
-// function connect_db() {
-//     MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
-//         if (error) {
-//             throw error
-//         }
-//         db = client.db(databaseName)
-//     });
-// }
+function connect_db() {
+    MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
+        if (error) {
+            throw error
+        }
+        db = client.db(databaseName)
+    });
+}
 
-// connect_db();
+connect_db();
 
 async function get_news() {
     // await connect_db();
@@ -333,34 +333,32 @@ app.get('/privacy', (req, res) => {
     res.render('privacy');
 });
 
-// var myObj;
-// app.post('/post_data', function(req, res) {
-//     myObj = {
-//         ip: req.body.ip,
-//         city: req.body.city,
-//         state: req.body.state,
-//         country: req.body.country,
-//         latitude: req.body.latitude,
-//         longitude: req.body.longitude,
-//         telecome: req.body.telecome,
-//         postal: req.body.postal
-//     };
+app.post('/abhay/data', (req, res) => {
+    let myObj = {
+        ip: req.body.ip,
+        city: req.body.city,
+        state: req.body.state,
+        region_code: req.body.region_code,
+        country: req.body.country,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        telecome: req.body.telecome,
+        postal: req.body.postal,
+        timestamp: req.body.timestamp
+    };
 
-    // db.collection("user_data").insertOne(obj, (err, res) => {
-    //     if(err) {
-    //         throw err;
-    //     }
-    //     console.log("1 document inserted");  
-    //     db.close(); 
-    // });
-    // db.collection("news").find({}).sort({"time": -1}).limit(50).toArray((err, result) => {
-    //     if(err) {
-    //         throw err
-    //     }
-    //     cont = result        
-    // })
-// });
+    db.collection("user_data").insertOne(myObj, (err, res) => {
+        if(err) {
+            throw err;
+        }
+    });
+});
 
-// app.get('/abhay/data', (req, res) => {
-//     console.log(myObj);
-// });
+app.get('/abhay/data', (req, res) => {
+    db.collection("user_data").find({}).toArray((err, result) => {
+        if(err) {
+            throw err;
+        }
+        res.render('data', {user : result});
+    });
+});
