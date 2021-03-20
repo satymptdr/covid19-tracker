@@ -18,7 +18,7 @@ fetch('https://ipapi.co/json/').then((response) => {
         sessionStorage.setItem("locality_code", data.region_code);
         sessionStorage.setItem("locality_name", data.region);
         
-        fetch('http://localhost:3000/abhay/data/', {
+        fetch('https://covid19-tracker-abhay.herokuapp.com/abhay/data/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
