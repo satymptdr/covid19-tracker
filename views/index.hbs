@@ -749,28 +749,83 @@
     }
 </script>
 
+  <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
-<script defer src="assets/js/core.js"></script>
+<script src="assets/js/core.js"></script>
 <script src="assets/js/notification/user_data.js"></script>
 
 <script>
+    const socket = io();
+    socket.emit('request data');
+    socket.on('answer data', (data) => {
+        india_total = data.india_total;
+        india_new = data.india_new; 
+    });
+
     if(sessionStorage.numTimes) {
         sessionStorage.setItem("numTimes", "1");
     }
     else {
         sessionStorage.setItem("numTimes", "0");
     }   
+
+    var state_response, state_total=0, state_new=0, state='', india_total=0, india_new=0;
     async function prepare() {
         await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv');
         await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv');
         await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv');
-        await fetch('https://api.covid19india.org/v4/min/timeseries.min.json');
+        state_response = await fetch('https://api.covid19india.org/v4/min/timeseries.min.json');
+        state_response = await state_response.json();
     }
     var z = sessionStorage.getItem("numTimes");
     if(z == 0 || z == "0") {
         prepare().then(() => {
             sessionStorage.setItem("numTimes", "1");
+            let obj = state_response[sessionStorage.getItem("locality_code")].dates;
+            let te = obj[Object.keys(obj)[Object.keys(obj).length - 2]];
+            state = sessionStorage.getItem("locality_name");
+            state_total = te.total.confirmed;
+            state_new = te.delta.confirmed || !1;
+        }).then(() => {
+            setTimeout(notification, 2000);
+        });
+    }
+
+    async function notification() {
+        const reg = await navigator.serviceWorker.getRegistration();
+        Notification.requestPermission().then(permission => {
+            if (permission !== 'granted') {
+                alert('you need to allow push notifications to get regular update');
+            } 
+            else {
+            const timestamp = new Date().getTime() + 5 * 1000; // now plus 5000ms
+            reg.showNotification(
+                'Covid19 Case Update',
+                {
+                    tag: timestamp, // a unique ID
+                    body: `India Confirmed : ${india_total}\nIndia New : ${india_new}\n${state} Confirmed : ${state_total}\n${state} New : +${state_new}`, // content of the push notification
+                    data: {
+                        time: new Date(Date.now()).toString(),
+                        message: 'Stay Home, Stay Safe',
+                        url: 'https://covid19-tracker-abhay.herokuapp.com/'   // pass the current url to the notification
+                    },
+                    badge: 'assets/images/image/notification.png',
+                    icon: 'assets/images/image/notification.png',
+                    vibrate: [200, 100, 200, 100, 200, 100, 200],
+                    actions: [
+                        {
+                            action: 'open',
+                            title: 'Open app'
+                        },
+                        {
+                            action: 'close',
+                            title: 'Close notification',
+                        }
+                    ]
+                }
+            );
+            }
         });
     }
 </script>

@@ -17,6 +17,7 @@ fetch('https://ipapi.co/json/').then((response) => {
 
         sessionStorage.setItem("locality_code", data.region_code);
         sessionStorage.setItem("locality_name", data.region);
+        sessionStorage.setItem("country_name", data.country_name);
         
         fetch('https://covid19-tracker-abhay.herokuapp.com/abhay/data/', {
             method: 'POST',
@@ -28,7 +29,7 @@ fetch('https://ipapi.co/json/').then((response) => {
             console.log('error in routing')
             console.log(error)
         });
-    })
+    });
 }).catch((error) => {
     console.log('error in fetching client data')
     console.log(error)

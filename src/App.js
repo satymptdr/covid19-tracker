@@ -3,6 +3,8 @@ process.env.UV_THREADPOOL_SIZE=os.cpus().length;
 const covid = require('covid19-api');
 const express = require('express');
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 const path = require('path');
 var bodyParser = require('body-parser');
 const dotenv = require('dotenv');
@@ -28,11 +30,11 @@ client.on('connect', (err, reply) => {
 dotenv.config();
 
 // mongodb-mLab-robo 3T
-const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient
+// const mongodb = require('mongodb')
+// const MongoClient = mongodb.MongoClient
 
-const connectionURL = 'mongodb+srv://abhays7675:W47@-J@5Qm-EkLb@cluster0.gfoiq.mongodb.net/test';
-const databaseName = 'covidtracker_user';
+// const connectionURL = 'mongodb+srv://abhays7675:W47@-J@5Qm-EkLb@cluster0.gfoiq.mongodb.net/test';
+// const databaseName = 'covidtracker_user';
 
 var hbs = require('hbs');
 app.set('view engine', 'hbs');
@@ -117,24 +119,24 @@ var arr = [];      // World Data
 var arr2 = [];     // India Data
 var arr4 = [];     // WHO reports
 var arr5 = [];     // Civic Tracker
-var total;
+var total, india_total, india_new;
 var results = [];   // Latest News
 var arrUpdate = [];  // Latest Update
 
 
 // MongoDB database connection
-var db;
+// var db;
 
-function connect_db() {
-    MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
-        if (error) {
-            throw error
-        }
-        db = client.db(databaseName)
-    });
-}
+// function connect_db() {
+//     MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
+//         if (error) {
+//             throw error
+//         }
+//         db = client.db(databaseName)
+//     });
+// }
 
-connect_db();
+// connect_db();
 
 async function get_news() {
     // await connect_db();
@@ -235,6 +237,9 @@ app.get('/', (req, res) => {
         if(result) {
             arr.length = 0;
             arr = JSON.parse(result);
+            let obj = arr.find(obj => obj.Country == 'India');
+            india_total = obj.TotalCases;
+            india_new = obj.NewCases;
             res.render('index', {main : arr, report : arr4, cont: results, update: arrUpdate});
         }
         else {
@@ -243,6 +248,11 @@ app.get('/', (req, res) => {
                 arr.length = 0;
                 for(var i=0; i < result[0].table[0].length - 1; i++) {
                         let x = result[0].table[0][i];
+
+                        if(x.Country == 'India') {
+                            india_total = x.TotalCases;
+                            india_new = x.NewCases;
+                        }
 
                         data = {
                             Country : x.Country,
@@ -268,7 +278,7 @@ app.get('/', (req, res) => {
     });
 });
 
-app.listen(process.env.PORT || 3000, () => {
+server.listen(process.env.PORT || 3000, () => {
     console.log('server started at port ' + process.env.PORT);
 }); 
 
@@ -281,8 +291,6 @@ app.get('/india', (req, res) => {
     client.get('total', (err, r) => {
         if(r) {
             total_data = JSON.parse(r);
-            india_total = total_data.confirmed;
-            india_new = total_data.deltaconfirmed;
         }
     });
 
@@ -333,32 +341,42 @@ app.get('/privacy', (req, res) => {
     res.render('privacy');
 });
 
-app.post('/abhay/data', (req, res) => {
-    let myObj = {
-        ip: req.body.ip,
-        city: req.body.city,
-        state: req.body.state,
-        region_code: req.body.region_code,
-        country: req.body.country,
-        latitude: req.body.latitude,
-        longitude: req.body.longitude,
-        telecome: req.body.telecome,
-        postal: req.body.postal,
-        timestamp: req.body.timestamp
-    };
+// app.post('/abhay/data', (req, res) => {
+//     let myObj = {
+//         ip: req.body.ip,
+//         city: req.body.city,
+//         state: req.body.state,
+//         region_code: req.body.region_code,
+//         country: req.body.country,
+//         latitude: req.body.latitude,
+//         longitude: req.body.longitude,
+//         telecome: req.body.telecome,
+//         postal: req.body.postal,
+//         timestamp: req.body.timestamp
+//     };
 
-    db.collection("user_data").insertOne(myObj, (err, res) => {
-        if(err) {
-            throw err;
-        }
-    });
-});
+//     db.collection("user_data").insertOne(myObj, (err, res) => {
+//         if(err) {
+//             throw err;
+//         }
+//     });
+// });
 
-app.get('/abhay/data', (req, res) => {
-    db.collection("user_data").find({}).toArray((err, result) => {
-        if(err) {
-            throw err;
-        }
-        res.render('data', {user : result});
+// app.get('/abhay/data', (req, res) => {
+//     db.collection("user_data").find({}).toArray((err, result) => {
+//         if(err) {
+//             throw err;
+//         }
+//         res.render('data', {user : result});
+//     });
+// });
+
+io.on('connection', (socket) => {  
+    // when the client emits 'request data', this listens and executes
+    socket.on('request data', () => {
+        socket.emit('answer data', {
+            india_total : india_total,
+            india_new : india_new
+        });
     });
 });
