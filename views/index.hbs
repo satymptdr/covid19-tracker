@@ -739,14 +739,7 @@
 
 <script>
     function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"Country: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),$(function(){setInterval(()=>{var t=moment();$("#date").html(t.format("dddd")+" - "+t.format("DD MMMM, YYYY")),$("#time").html(t.format("hh:mm:ss A"))},100)}),window.onload=init;
-    if('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('../sw.js')
-        .then(() => { console.log('SW registered')})
-        .catch(e => {
-            console.log('service worker error!');
-            console.log(e);
-        });
-    }
+    "serviceWorker"in navigator&&navigator.serviceWorker.register("../sw.js").then(()=>{console.log("SW registered")}).catch(e=>{console.log("service worker error!"),console.log(e)});
 </script>
 
   <script src="/socket.io/socket.io.js"></script>
@@ -756,78 +749,7 @@
 <script src="assets/js/notification/user_data.js"></script>
 
 <script>
-    const socket = io();
-    socket.emit('request data');
-    socket.on('answer data', (data) => {
-        india_total = data.india_total;
-        india_new = data.india_new; 
-    });
-
-    if(sessionStorage.numTimes) {
-        sessionStorage.setItem("numTimes", "1");
-    }
-    else {
-        sessionStorage.setItem("numTimes", "0");
-    }   
-
-    var state_response, state_total=0, state_new=0, state='', india_total=0, india_new=0;
-    async function prepare() {
-        await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv');
-        await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv');
-        await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv');
-        state_response = await fetch('https://api.covid19india.org/v4/min/timeseries.min.json');
-        state_response = await state_response.json();
-    }
-    var z = sessionStorage.getItem("numTimes");
-    if(z == 0 || z == "0") {
-        prepare().then(() => {
-            sessionStorage.setItem("numTimes", "1");
-            let obj = state_response[sessionStorage.getItem("locality_code")].dates;
-            let te = obj[Object.keys(obj)[Object.keys(obj).length - 2]];
-            state = sessionStorage.getItem("locality_name");
-            state_total = te.total.confirmed;
-            state_new = te.delta.confirmed || !1;
-        }).then(() => {
-            setTimeout(notification, 2000);
-        });
-    }
-
-    async function notification() {
-        const reg = await navigator.serviceWorker.getRegistration();
-        Notification.requestPermission().then(permission => {
-            if (permission !== 'granted') {
-                alert('you need to allow push notifications to get regular update');
-            } 
-            else {
-            const timestamp = new Date().getTime() + 5 * 1000; // now plus 5000ms
-            reg.showNotification(
-                'Covid19 Case Update',
-                {
-                    tag: timestamp, // a unique ID
-                    body: `India Confirmed : ${india_total}\nIndia New : ${india_new}\n${state} Confirmed : ${state_total}\n${state} New : +${state_new}`, // content of the push notification
-                    data: {
-                        time: new Date(Date.now()).toString(),
-                        message: 'Stay Home, Stay Safe',
-                        url: 'https://covid19-tracker-abhay.herokuapp.com/'   // pass the current url to the notification
-                    },
-                    badge: 'assets/images/image/notification.png',
-                    icon: 'assets/images/image/notification.png',
-                    vibrate: [200, 100, 200, 100, 200, 100, 200],
-                    actions: [
-                        {
-                            action: 'open',
-                            title: 'Open app'
-                        },
-                        {
-                            action: 'close',
-                            title: 'Close notification',
-                        }
-                    ]
-                }
-            );
-            }
-        });
-    }
+    const socket=io();socket.emit("request data"),socket.on("answer data",e=>{india_total=e.india_total,india_new=e.india_new}),sessionStorage.numTimes?sessionStorage.setItem("numTimes","1"):sessionStorage.setItem("numTimes","0");var state_response,state_total=0,state_new=0,state="",india_total=0,india_new=0;async function prepare(){await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"),await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"),await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"),state_response=await fetch("https://api.covid19india.org/v4/min/timeseries.min.json"),state_response=await state_response.json()}var z=sessionStorage.getItem("numTimes");async function notification(){const e=await navigator.serviceWorker.getRegistration();Notification.requestPermission().then(t=>{if("granted"!==t)alert("you need to allow push notifications to get regular update");else{const t=(new Date).getTime()+5e3;e.showNotification("Covid19 Case Update",{tag:t,body:`India Confirmed : ${india_total}\nIndia New : ${india_new}\n${state} Confirmed : ${state_total}\n${state} New : +${state_new}`,data:{time:new Date(Date.now()).toString(),message:"Stay Home, Stay Safe",url:"https://covid19-tracker-abhay.herokuapp.com/"},badge:"assets/images/image/notification.png",icon:"assets/images/image/notification.png",vibrate:[200,100,200,100,200,100,200],actions:[{action:"open",title:"Open app"},{action:"close",title:"Close notification"}]})}})}0!=z&&"0"!=z||prepare().then(()=>{sessionStorage.setItem("numTimes","1");let e=state_response[sessionStorage.getItem("locality_code")].dates,t=e[Object.keys(e)[Object.keys(e).length-2]];state=sessionStorage.getItem("locality_name"),state_total=t.total.confirmed,state_new=t.delta.confirmed||!1}).then(()=>{setTimeout(notification,2e3)});
 </script>
 
 </body>
