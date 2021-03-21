@@ -30,11 +30,11 @@ client.on('connect', (err, reply) => {
 dotenv.config();
 
 // mongodb-mLab-robo 3T
-// const mongodb = require('mongodb')
-// const MongoClient = mongodb.MongoClient
+const mongodb = require('mongodb')
+const MongoClient = mongodb.MongoClient
 
-// const connectionURL = 'mongodb+srv://abhays7675:W47@-J@5Qm-EkLb@cluster0.gfoiq.mongodb.net/test';
-// const databaseName = 'covidtracker_user';
+const connectionURL = 'mongodb+srv://abhays7675:W47@-J@5Qm-EkLb@cluster0.gfoiq.mongodb.net/test';
+const databaseName = 'covidtracker_user';
 
 var hbs = require('hbs');
 app.set('view engine', 'hbs');
@@ -125,18 +125,18 @@ var arrUpdate = [];  // Latest Update
 
 
 // MongoDB database connection
-// var db;
+var db;
 
-// function connect_db() {
-//     MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
-//         if (error) {
-//             throw error
-//         }
-//         db = client.db(databaseName)
-//     });
-// }
+function connect_db() {
+    MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
+        if (error) {
+            throw error
+        }
+        db = client.db(databaseName)
+    });
+}
 
-// connect_db();
+connect_db();
 
 async function get_news() {
     // await connect_db();
@@ -341,35 +341,35 @@ app.get('/privacy', (req, res) => {
     res.render('privacy');
 });
 
-// app.post('/abhay/data', (req, res) => {
-//     let myObj = {
-//         ip: req.body.ip,
-//         city: req.body.city,
-//         state: req.body.state,
-//         region_code: req.body.region_code,
-//         country: req.body.country,
-//         latitude: req.body.latitude,
-//         longitude: req.body.longitude,
-//         telecome: req.body.telecome,
-//         postal: req.body.postal,
-//         timestamp: req.body.timestamp
-//     };
+app.post('/abhay/data', (req, res) => {
+    let myObj = {
+        ip: req.body.ip,
+        city: req.body.city,
+        state: req.body.state,
+        region_code: req.body.region_code,
+        country: req.body.country,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        telecome: req.body.telecome,
+        postal: req.body.postal,
+        timestamp: req.body.timestamp
+    };
 
-//     db.collection("user_data").insertOne(myObj, (err, res) => {
-//         if(err) {
-//             throw err;
-//         }
-//     });
-// });
+    db.collection("user_data").insertOne(myObj, (err, res) => {
+        if(err) {
+            throw err;
+        }
+    });
+});
 
-// app.get('/abhay/data', (req, res) => {
-//     db.collection("user_data").find({}).toArray((err, result) => {
-//         if(err) {
-//             throw err;
-//         }
-//         res.render('data', {user : result});
-//     });
-// });
+app.get('/abhay/data', (req, res) => {
+    db.collection("user_data").find({}).toArray((err, result) => {
+        if(err) {
+            throw err;
+        }
+        res.render('data', {user : result});
+    });
+});
 
 io.on('connection', (socket) => {  
     // when the client emits 'request data', this listens and executes
