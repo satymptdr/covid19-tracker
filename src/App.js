@@ -239,7 +239,7 @@ app.get('/', (req, res) => {
             arr = JSON.parse(result);
             let obj = arr.find(obj => obj.Country == 'India');
             india_total = obj.TotalCases;
-            india_new = obj.NewCases;
+            india_new = obj.NewCases == '' ? '+0' : obj.NewCases;
             res.render('index', {main : arr, report : arr4, cont: results, update: arrUpdate});
         }
         else {
