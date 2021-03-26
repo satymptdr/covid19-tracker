@@ -31,6 +31,8 @@
 <link defer rel="stylesheet" href="assets/css/buttons.dataTables.min.css">
 
 <script defer src="assets/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js" defer></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js" defer></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-icons@1.0.1/foundation-icons.css" defer>
 
 {{!-- Chart Js --}}
@@ -438,7 +440,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
-    function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"State: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),$(function(){setInterval(()=>{var t=moment();$("#date").html(t.format("dddd")+" - "+t.format("DD MMMM, YYYY")),$("#time").html(t.format("hh:mm:ss A"))},100)}),window.onload=init;
+    function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({dom: 'Bfrtip',buttons: ['print'],lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"State: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),$(function(){setInterval(()=>{var t=moment();$("#date").html(t.format("dddd")+" - "+t.format("DD MMMM, YYYY")),$("#time").html(t.format("hh:mm:ss A"))},100)}),window.onload=init;
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
