@@ -499,6 +499,70 @@
                             </div>
                         </div>                
                     </div>
+
+                    {{!-- News From DailyHunt --}}
+                    <div class="col-12 col-sm-12 mb-2">
+                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Latest News</h3>
+                            </div>
+                            <div class="card-body" style="height: 1100px; overflow-y:scroll;">
+                                {{#each cont}}
+                                    <div id="news-{{@index}}" style="height: 90px; left: 0px; position: relative; top: 0px; width: 100%;">
+                                        <div style="float: left; padding-right: 10px">
+                                            <a href="{{this.uri}}" target="_blank">
+                                                <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="{{this.img}}" alt="" style="width: 80px; height: 80px;">
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 12px; margin-bottom: 5px">
+                                                {{#if this.type_given}}
+                                                    <p style="float: left; color: red; margin-right: 10px">{{this.type}}</p>
+                                                {{/if}}
+                                                <p>{{formatNewsTime time 'DD MMMM YYYY, hh:mm:ss a'}}</p>
+                                            </div>
+
+                                            <div style="position: inherit;">
+                                                <a href="{{this.uri}}" target="_blank" style="color: black"><p style="height: 60px; max-height: 60px; overflow: hidden; line-height: 1.4em; font-size: 14px">{{this.title}}</p></a>
+                                            </div>
+                                        </div>
+                                    </div><hr>
+                                {{/each}}
+                            </div>
+                            <div class="card-footer">
+                                <center><a href="https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732" target="_blank" class="btn btn-outline-success">Read More</a></center>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12 mb-3">
+                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Live Updates</h3>
+                            </div>
+                            <div class="card-body" style="height: 400; overflow-y:scroll;">
+                                <div class="container">
+                                    <div class="item">
+                                        <div id="timeline">
+                                            <div>
+                                                {{#each update}}
+                                                <section class="year">
+                                                    <h3>{{getDayMonth this.timestamp 'D MMM'}}</h3>
+                                                    <section>
+                                                        <ul>
+                                                        <li><span style="font-weight: bold;">{{this.update}}</span></li>
+                                                        <li><span style="color: #888; font-weight: 400; font-size: small;">{{getTime this.timestamp}}</span></li>
+                                                        </ul>
+                                                    </section>
+                                                </section>     
+                                                {{/each}}                                           
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="col-xl-6 col-lg-6 mb-2">
                         <div class="card mb-4" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
@@ -642,77 +706,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{!-- Live Updates --}}
-                    <div class="col-12 col-sm-12 mb-3">
-                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                            <div class="card-header" style="background-color: #283041;">
-                                <h3 class="card-title" style="color: white; font-weight: 500;">Live Updates</h3>
-                            </div>
-                            <div class="card-body" style="height: 400; overflow-y:scroll;">
-                                <div class="container">
-                                    <div class="item">
-                                        <div id="timeline">
-                                            <div>
-                                                {{#each update}}
-                                                <section class="year">
-                                                    <h3>{{getDayMonth this.timestamp 'D MMM'}}</h3>
-                                                    <section>
-                                                        <ul>
-                                                        <li><span style="font-weight: bold;">{{this.update}}</span></li>
-                                                        <li><span style="color: #888; font-weight: 400; font-size: small;">{{getTime this.timestamp}}</span></li>
-                                                        </ul>
-                                                    </section>
-                                                </section>     
-                                                {{/each}}                                           
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        {{!-- News From DailyHunt --}}
-        <div class="section-body">
-            <div class="container-fluid">    
-                <div class="row clearfix">
-                    <div class="col-12 col-sm-12 mb-2">
-                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                            <div class="card-header" style="background-color: #283041;">
-                                <h3 class="card-title" style="color: white; font-weight: 500;">Latest News</h3>
-                            </div>
-                            <div class="card-body" style="height: 1100px; overflow-y:scroll;">
-                                {{#each cont}}
-                                    <div id="news-{{@index}}" style="height: 90px; left: 0px; position: relative; top: 0px; width: 100%;">
-                                        <div style="float: left; padding-right: 10px">
-                                            <a href="{{this.uri}}" target="_blank">
-                                                <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="{{this.img}}" alt="" style="width: 80px; height: 80px;">
-                                            </a>
-                                        </div>
-                                        <div>
-                                            <div style="font-size: 12px; margin-bottom: 5px">
-                                                {{#if this.type_given}}
-                                                    <p style="float: left; color: red; margin-right: 10px">{{this.type}}</p>
-                                                {{/if}}
-                                                <p>{{formatNewsTime time 'DD MMMM YYYY, hh:mm:ss a'}}</p>
-                                            </div>
-
-                                            <div style="position: inherit;">
-                                                <a href="{{this.uri}}" target="_blank" style="color: black"><p style="height: 60px; max-height: 60px; overflow: hidden; line-height: 1.4em; font-size: 14px">{{this.title}}</p></a>
-                                            </div>
-                                        </div>
-                                    </div><hr>
-                                {{/each}}
-                            </div>
-                            <div class="card-footer">
-                                <center><a href="https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732" target="_blank" class="btn btn-outline-success">Read More</a></center>
                             </div>
                         </div>
                     </div>
