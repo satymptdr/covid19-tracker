@@ -98,6 +98,10 @@ hbs.registerHelper('getDayMonth', function (timestamp, format) {
     return moment.unix(timestamp).format(format);
 });
 
+hbs.registerHelper('percent', function (cases, total) {
+    return ((cases / total) * 100).toFixed(1) + '%';
+});
+
 hbs.registerHelper('calculate', function (confirm, deceased, recover) {
     let z = confirm - deceased - recover
     if(z >= 0) {
@@ -309,8 +313,8 @@ app.get('/india', (req, res) => {
                 });
             }).then(function() {
                 res.render('india', {india : arr2, total : total});
-                client.setex('india_data', 3600, JSON.stringify(arr2));
-                client.setex('total', 3600, JSON.stringify(total));
+                client.setex('india_data', 900, JSON.stringify(arr2));
+                client.setex('total', 900, JSON.stringify(total));
             });
         }
     });

@@ -29,10 +29,14 @@
 <link defer rel="stylesheet" href="assets/css/theme1.css"/>
 
 <link defer rel="stylesheet" href="assets/css/buttons.dataTables.min.css">
+<link defer rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.2.7/css/rowReorder.dataTables.min.css">
+<link defer rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css">
 
 <script defer src="assets/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js" defer></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js" defer></script>
+<script src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js" defer></script>
+<script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js" defer></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-icons@1.0.1/foundation-icons.css" defer>
 
 {{!-- Chart Js --}}
@@ -387,7 +391,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <div class="card-body">
                                 <div class="d-sm-flex justify-content-between">
                                     <div class="table-responsive">
-                                        <table id="example" class="table table-striped table-bordered" style="width:100%;">
+                                        <table id="example" class="table table-striped table-bordered display" style="width:100%;">
                                             <thead>
                                                 <tr>
                                                     <th>State</th>
@@ -395,6 +399,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                                     <th>Recovered Cases</th>
                                                     <th>Total Deaths</th>
                                                     <th>Active Cases</th>
+                                                    <th>Other<span class="fi-info" data-toggle="tooltip" data-placement="bottom" title="Migrated cases or non-COVID deaths"></span></th>
+                                                    <th>Active Ratio</th>
+                                                    <th>Recovery Ratio</th>
+                                                    <th>Case Fatality Ratio</th>
                                                     <th>Last Updated</th>
                                                 </tr>
                                             </thead>
@@ -406,7 +414,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                                         <td style="color: green; font-weight: 600">{{this.recovered}} <p></p><span style="color: green; font-weight: 300">{{filterZero this.deltarecovered}}</span></td>
                                                         <td style="color: black; font-weight: 600">{{this.deaths}} <p></p><span style="color: black; font-weight: 300">{{filterZero this.deltadeaths}}</span></td>
                                                         <td style="color: blue">{{this.active}}</td>
-                                                        {{!-- <td>{{this.lastupdatedtime}}</td> --}}
+                                                        <td>{{this.migratedother}}</td>
+                                                        <td>{{percent active confirmed}}</td>
+                                                        <td>{{percent recovered confirmed}}</td>
+                                                        <td>{{percent deaths confirmed}}</td>
                                                         <td>{{formatIndiaCasesTime lastupdatedtime 'DD/MM/YYYY HH:mm:ss'}}</td>
                                                     </tr>
                                                 {{/each}}
@@ -440,263 +451,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
-    function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({dom: 'Bfrtip',buttons: ['print'],lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"State: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),$(function(){setInterval(()=>{var t=moment();$("#date").html(t.format("dddd")+" - "+t.format("DD MMMM, YYYY")),$("#time").html(t.format("hh:mm:ss A"))},100)}),window.onload=init;
+    function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({dom:"Bfrtip",buttons:["print"],lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],rowReorder:{selector:"td:nth-child(2)"},responsive:!0,paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"State: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),$(function(){setInterval(()=>{var t=moment();$("#date").html(t.format("dddd")+" - "+t.format("DD MMMM, YYYY")),$("#time").html(t.format("hh:mm:ss A"))},100)}),window.onload=init;
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
 <script defer src="assets/js/core.js"></script>
 <script>
-var confirmed = [],
-        recovered = [],
-        deceased = [],
-        active = [],
-        xlables1 = [],
-        color = Chart.helpers.color;
-
-    async function timeSeries1() {
-        var a = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv');
-        var b = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv');
-        var c = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
-        let t = (await a.text()).split("\n");
-        let u = (await b.text()).split("\n");
-        let v = (await c.text()).split("\n");
-        xlables1 = t[0].split(",").splice(4);
-        let d,seco,thir,
-            o = 0,
-            s = (t = t.splice(1)).length - 1;
-        for (; o <= s; ) {
-            let e = t[(d = Math.floor((o + s) / 2))].split(",");
-            if ("India" == e[1]) break;
-            e[1] < "India" ? (o = d + 1) : (s = d - 1);
-        }
-
-        o = 0;
-        s = (u = u.splice(1)).length - 1;
-        for (; o <= s; ) {
-            let e = u[(seco = Math.floor((o + s) / 2))].split(",");
-            if ("India" == e[1]) break;
-            e[1] < "India" ? (o = seco + 1) : (s = seco - 1);
-        }
-
-        o = 0;
-        s = (v = v.splice(1)).length - 1;
-        for (; o <= s; ) {
-            let e = v[(thir = Math.floor((o + s) / 2))].split(",");
-            if ("India" == e[1]) break;
-            e[1] < "India" ? (o = thir + 1) : (s = thir - 1);
-        }
-
-        let temp1 = [],
-            temp2 = [],
-            temp3 = [],
-            j=0;
-        temp1 = t[d].split(",").splice(4);
-        temp2 = u[seco].split(",").splice(4);
-        temp3 = v[thir].split(",").splice(4);
-
-        let len = temp1.length;
-
-        for(let i=len-30; i<len; ++i) {
-            confirmed[j] = parseInt(temp1[i]) - parseInt(temp1[i-1]);
-            recovered[j] = parseInt(temp2[i]) - parseInt(temp2[i-1]);
-            deceased[j] = parseInt(temp3[i]) - parseInt(temp3[i-1]);
-            active[j] = confirmed[j] - recovered[j] - deceased[j];
-            j+=1;
-        }
-        xlables1 = xlables1.splice(len - 30);
-        if((confirmed[29] - confirmed[28]) == 0) {
-            confirmed.splice(29); recovered.splice(29); deceased.splice(29); active.splice(29); xlables1.splice(29);
-        }
-    }
-
-    function getConfirmed1() {
-        let config1 = {
-            type: "line",
-            data: { labels: xlables1, 
-                    datasets: [{ 
-                        backgroundColor: color(window.chartColors.red).alpha(0.2).rgbString(), 
-                        borderColor: window.chartColors.red,
-                        pointRadius: function(context) {
-                            var index = context.dataIndex;
-                            return index == 29 ? 4 : 1;
-                        },
-                        fill: !1,
-                        data: confirmed,
-                        pointBackgroundColor: function(context) {
-                            var index = context.dataIndex;
-                            return index == 29 ? 'red' : '';
-                        } 
-                    }]
-                   },
-            options: {
-                legend: {
-                    display: false
-                },
-                responsive: !0,
-                maintainAspectRatio: !1,
-                title: { display: !1 },
-                scales: { xAxes: [{ display: !1 }], yAxes: [{ display: !1 }] },
-                tooltips: {
-                    intersect: !1,
-                    mode: "index",
-                    callbacks: {
-                        label: function (e, a) {
-                            var t = a.datasets[e.datasetIndex].label || "";
-                            return t && (t += ": "), (t += e.value);
-                        },
-                    },
-                },
-            },
-        };
-        var e = document.getElementById("canvas1").getContext("2d");
-        window.myLine1 = new Chart(e, config1);
-    }
-
-    function getConfirmed2() {
-        let config1 = {
-            type: "line",
-            data: { 
-                labels: xlables1, 
-                datasets: [{ 
-                    backgroundColor: color(window.chartColors.green).alpha(0.2).rgbString(), 
-                    borderColor: window.chartColors.green, 
-                    pointRadius: function(context) {
-                        var index = context.dataIndex;
-                        return index == 29 ? 4 : 1;
-                    },
-                    fill: !1, 
-                    data: recovered,
-                    pointBackgroundColor: function(context) {
-                        var index = context.dataIndex;
-                        return index == 29 ? 'green' : '';
-                    } 
-                }] 
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                responsive: !0,
-                maintainAspectRatio: !1,
-                title: { display: !1 },
-                scales: { xAxes: [{ display: !1 }], yAxes: [{ display: !1 }] },
-                tooltips: {
-                    intersect: !1,
-                    mode: "index",
-                    callbacks: {
-                        label: function (e, a) {
-                            var t = a.datasets[e.datasetIndex].label || "";
-                            return t && (t += ": "), (t += e.value);
-                        },
-                    },
-                },
-            },
-        };
-        var e = document.getElementById("canvas2").getContext("2d");
-        window.myLine2 = new Chart(e, config1);
-    }
-
-    function getConfirmed3() {
-        let config1 = {
-            type: "line",
-            data: { 
-                labels: xlables1, 
-                datasets: [{ 
-                    backgroundColor: color(window.chartColors.grey).alpha(0.2).rgbString(), 
-                    borderColor: window.chartColors.grey, 
-                    pointRadius: function(context) {
-                        var index = context.dataIndex;
-                        return index == 29 ? 4 : 1;
-                    }, 
-                    fill: !1, 
-                    data: deceased,
-                    pointBackgroundColor: function(context) {
-                        var index = context.dataIndex;
-                        return index == 29 ? 'black' : '';
-                    }
-                }] 
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                responsive: !0,
-                maintainAspectRatio: !1,
-                title: { display: !1 },
-                scales: { xAxes: [{ display: !1 }], yAxes: [{ display: !1 }] },
-                tooltips: {
-                    intersect: !1,
-                    mode: "index",
-                    callbacks: {
-                        label: function (e, a) {
-                            var t = a.datasets[e.datasetIndex].label || "";
-                            return t && (t += ": "), (t += e.value);
-                        },
-                    },
-                },
-            },
-        };
-        var e = document.getElementById("canvas3").getContext("2d");
-        window.myLine3 = new Chart(e, config1);
-    }
-
-    function getConfirmed4() {
-        let config1 = {
-            type: "line",
-            data: { 
-                labels: xlables1, 
-                datasets: [{ 
-                    backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(), 
-                    borderColor: window.chartColors.blue, 
-                    pointRadius: function(context) {
-                        var index = context.dataIndex;
-                        return index == 29 ? 4 : 1;
-                    }, 
-                    fill: !1, 
-                    data: active,
-                    pointBackgroundColor: function(context) {
-                        var index = context.dataIndex;
-                        return index == 29 ? 'blue' : '';
-                    }
-                }] 
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                responsive: !0,
-                maintainAspectRatio: !1,
-                title: { display: !1 },
-                scales: { xAxes: [{ display: !1 }], yAxes: [{ display: !1 }] },
-                tooltips: {
-                    intersect: !1,
-                    mode: "index",
-                    callbacks: {
-                        label: function (e, a) {
-                            var t = a.datasets[e.datasetIndex].label || "";
-                            return t && (t += ": "), (t += e.value);
-                        },
-                    },
-                },
-            },
-        };
-        var e = document.getElementById("canvas4").getContext("2d");
-        window.myLine4 = new Chart(e, config1);
-    }
-
-    timeSeries1().then(() => {
-        getConfirmed1();
-        getConfirmed2();
-        getConfirmed3();
-        getConfirmed4();
-    })
-    .catch((e) => {
-        console.log(e);
-    });
+    var confirmed=[],recovered=[],deceased=[],active=[],xlables1=[],color=Chart.helpers.color;async function timeSeries1(){var e=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"),t=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"),a=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv");let n=(await e.text()).split("\n"),i=(await t.text()).split("\n"),o=(await a.text()).split("\n");xlables1=n[0].split(",").splice(4);let l,s,r,d=0,c=(n=n.splice(1)).length-1;for(;d<=c;){let e=n[l=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=l+1:c=l-1}for(d=0,c=(i=i.splice(1)).length-1;d<=c;){let e=i[s=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=s+1:c=s-1}for(d=0,c=(o=o.splice(1)).length-1;d<=c;){let e=o[r=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=r+1:c=r-1}let p=[],u=[],g=[],b=0;p=n[l].split(",").splice(4),u=i[s].split(",").splice(4),g=o[r].split(",").splice(4);let f=p.length;for(let e=f-30;e<f;++e)confirmed[b]=parseInt(p[e])-parseInt(p[e-1]),recovered[b]=parseInt(u[e])-parseInt(u[e-1]),deceased[b]=parseInt(g[e])-parseInt(g[e-1]),active[b]=confirmed[b]-recovered[b]-deceased[b],b+=1;xlables1=xlables1.splice(f-30),confirmed[29]-confirmed[28]==0&&(confirmed.splice(29),recovered.splice(29),deceased.splice(29),active.splice(29),xlables1.splice(29))}function getConfirmed1(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.red).alpha(.2).rgbString(),borderColor:window.chartColors.red,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:confirmed,pointBackgroundColor:function(e){return 29==e.dataIndex?"red":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("canvas1").getContext("2d");window.myLine1=new Chart(t,e)}function getConfirmed2(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.green).alpha(.2).rgbString(),borderColor:window.chartColors.green,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:recovered,pointBackgroundColor:function(e){return 29==e.dataIndex?"green":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("canvas2").getContext("2d");window.myLine2=new Chart(t,e)}function getConfirmed3(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.grey).alpha(.2).rgbString(),borderColor:window.chartColors.grey,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:deceased,pointBackgroundColor:function(e){return 29==e.dataIndex?"black":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("canvas3").getContext("2d");window.myLine3=new Chart(t,e)}function getConfirmed4(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.blue).alpha(.2).rgbString(),borderColor:window.chartColors.blue,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:active,pointBackgroundColor:function(e){return 29==e.dataIndex?"blue":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("canvas4").getContext("2d");window.myLine4=new Chart(t,e)}timeSeries1().then(()=>{getConfirmed1(),getConfirmed2(),getConfirmed3(),getConfirmed4()}).catch(e=>{console.log(e)});
 </script>
 
 </body>
-
-<!-- soccer/project/app-calendar.html  07 Jan 2020 03:40:20 GMT -->
 </html>
