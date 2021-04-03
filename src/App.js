@@ -83,7 +83,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: 'application/*+json' }));
 
 hbs.registerHelper('formatIndiaCasesTime', function (date, format) {
-    return moment(date, format).utcOffset(-330).fromNow();
+    return moment.unix(parseInt(moment(date, format).format("X")) - 330*60).fromNow();
 });
 
 hbs.registerHelper('formatNewsTime', function (date, format) {
