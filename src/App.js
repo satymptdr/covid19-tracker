@@ -12,12 +12,12 @@ var compression = require('compression');
 const redis = require('redis');
 const fetch = require('node-fetch')
 const cheerio = require('cheerio')
-var moment = require('moment')
+var moment = require('moment');
 
-var client = redis.createClient({
-    port      : 12050,
-    host      : 'ec2-3-225-27-164.compute-1.amazonaws.com',
-    password  : 'pfe00506882af5d935c448c90c140e0d8815c4ade659def8d76e50b13cda729f4'
+const client = redis.createClient({
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    password: process.env.REDIS_PASS
 });
 
 client.on('connect', (err, reply) => {
@@ -185,8 +185,6 @@ const getAllHTMLDailyHunt = async () => {
     .then(htmls => getPostsDailyHunt(htmls))
 }
 
-get_news();
-
 async function getUpdate() {
     var res = await fetch('https://api.covid19india.org/updatelog/log.json');
     var d = await res.json();
@@ -203,6 +201,9 @@ getUpdate().then(res => {
 
 // Routing
 app.get('/', (req, res) => {
+    get_news().then(() => {
+        console.log('News loaded');
+    });
     client.get('report', (err, result) => {
         if(result) {
             arr4 = JSON.parse(result);
@@ -274,6 +275,7 @@ app.get('/', (req, res) => {
                 arr.sort((a, b) => {
                     return b.TotalCases > a.TotalCases;
                 });
+
             }).then(function() {
                 res.render('index', {main : arr, report : arr4, cont: results,  update: arrUpdate});
                 client.setex('world_data', 21600, JSON.stringify(arr));
@@ -301,6 +303,7 @@ app.get('/india', (req, res) => {
     client.get('india_data', (err, result) => {
         if(result) {
             result = JSON.parse(result);
+            result.pop();
             res.render('india', {india : result, total : total_data});
         }
         else {
@@ -311,6 +314,7 @@ app.get('/india', (req, res) => {
                 arr2.sort((a, b) => {
                     return b.confirmed - a.confirmed;
                 });
+                arr2.pop();
             }).then(function() {
                 res.render('india', {india : arr2, total : total});
                 client.setex('india_data', 900, JSON.stringify(arr2));
