@@ -149,11 +149,6 @@ function connect_db() {
 
 connect_db();
 
-async function get_news() {
-    // await connect_db();
-    await getAllHTMLDailyHunt();
-}
-
 // Web Scrapping for news
 const getPostsDailyHunt = (html) => {
     let $ = cheerio.load(html)
@@ -176,9 +171,7 @@ const getPostsDailyHunt = (html) => {
                 time: timeline,
                 type_given: true
             }
-        if(obj.title != '' ) {
-            results.push(obj)
-        }
+        results.push(obj)
     })
 }
 
@@ -189,15 +182,25 @@ const getPageHTMLDailyHunt = () =>
 const getAllHTMLDailyHunt = async () => {
   getPageHTMLDailyHunt()
     .then(htmls => getPostsDailyHunt(htmls))
+    .then(() => {
+        server.listen(process.env.PORT || 3000, () => {
+            console.log('server started at port ' + process.env.PORT);
+        });
+    })
 }
+
+async function get_news() {
+    // await connect_db();
+    await getAllHTMLDailyHunt();
+}
+
+get_news();
 
 async function getUpdate() {
     var res = await fetch('https://api.covid19india.org/updatelog/log.json');
     var d = await res.json();
     return d;
 }
-
-get_news();
 
 getUpdate().then(res => {
     arrUpdate = [];
@@ -288,10 +291,6 @@ app.get('/', (req, res) => {
         }
     });
 });
-
-server.listen(process.env.PORT || 3000, () => {
-    console.log('server started at port ' + process.env.PORT);
-}); 
 
 app.get('/app-calendar', (req, res) => {
     res.render('app-calendar');
@@ -393,3 +392,7 @@ io.on('connection', (socket) => {
         });
     });
 });
+
+// server.listen(process.env.PORT || 3000, () => {
+//     console.log('server started at port ' + process.env.PORT);
+// }); 
