@@ -15,9 +15,12 @@ const cheerio = require('cheerio')
 var moment = require('moment');
 
 const client = redis.createClient({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
-    password: process.env.REDIS_PASS
+    port: 13880,
+    host: 'ec2-3-95-110-113.compute-1.amazonaws.com',
+    password: 'pd35a3062f2ccc06e894dd20af37a5d25dfb04f7a21fe98193032b09acc4340ba',
+    tls: {
+        rejectUnauthorized: false
+    }
 });
 
 client.on('connect', (err, reply) => {
@@ -27,13 +30,17 @@ client.on('connect', (err, reply) => {
     console.log('redis connected');
 });
 
+client.on('error', (err) => {
+    console.log('Error: ' + err);
+});
+
 dotenv.config();
 
 // mongodb-mLab-robo 3T
 const mongodb = require('mongodb')
 const MongoClient = mongodb.MongoClient
 
-const connectionURL = 'mongodb+srv://abhays7675:W47@-J@5Qm-EkLb@cluster0.gfoiq.mongodb.net/test';
+const connectionURL = process.env.MONGODB_URI;
 const databaseName = 'covidtracker_user';
 
 var hbs = require('hbs');
@@ -147,7 +154,6 @@ async function get_news() {
     await getAllHTMLDailyHunt();
 }
 
-
 // Web Scrapping for news
 const getPostsDailyHunt = (html) => {
     let $ = cheerio.load(html)
@@ -191,6 +197,8 @@ async function getUpdate() {
     return d;
 }
 
+get_news();
+
 getUpdate().then(res => {
     arrUpdate = [];
     arrUpdate = res;
@@ -201,9 +209,6 @@ getUpdate().then(res => {
 
 // Routing
 app.get('/', (req, res) => {
-    get_news().then(() => {
-        console.log('News loaded');
-    });
     client.get('report', (err, result) => {
         if(result) {
             arr4 = JSON.parse(result);
