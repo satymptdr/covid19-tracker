@@ -14,7 +14,10 @@ const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 var moment = require('moment');
 
-const client = redis.createClient(process.env.REDIS_URL, {
+const client = redis.createClient({
+    port: 13880,
+    host: 'ec2-3-95-110-113.compute-1.amazonaws.com',
+    password: 'pd35a3062f2ccc06e894dd20af37a5d25dfb04f7a21fe98193032b09acc4340ba',
     tls: {
         rejectUnauthorized: false
     }
