@@ -183,10 +183,6 @@ const getPostsDailyHunt = (html) => {
     })
 }
 
-// const getPageHTMLDailyHunt = () =>
-//   fetch('https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732')
-//     .then(resp => resp.text())   //Promise
-
 const getAllHTMLDailyHunt = async () => {
     fetch('https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732')
         .then(resp => resp.text()) 
