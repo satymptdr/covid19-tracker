@@ -547,7 +547,11 @@
                                             <div>
                                                 {{#each update}}
                                                 <section class="year">
+                                                    {{#if (check this.timestamp)}}
+                                                    <h3 style="color: red; font-weight: bolder">{{getDayMonth this.timestamp 'D MMM'}}</h3>
+                                                    {{else}}
                                                     <h3>{{getDayMonth this.timestamp 'D MMM'}}</h3>
+                                                    {{/if}}
                                                     <section>
                                                         <ul>
                                                         <li><span style="font-weight: bold;">{{this.update}}</span></li>

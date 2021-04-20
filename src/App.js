@@ -101,6 +101,14 @@ hbs.registerHelper('getTime', function (timestamp) {
     return moment.unix(timestamp).fromNow();
 });
 
+hbs.registerHelper('check', function (timestamp) {
+    if(moment.unix(timestamp).format('D') === moment().format('D')) {
+        return true;
+    }
+    return false;
+    // console.log(moment.unix(timestamp).format('D'));
+});
+
 hbs.registerHelper('getDayMonth', function (timestamp, format) {
     return moment.unix(timestamp).format(format);
 });
@@ -175,18 +183,14 @@ const getPostsDailyHunt = (html) => {
     })
 }
 
-const getPageHTMLDailyHunt = () =>
-  fetch('https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732')
-    .then(resp => resp.text())   //Promise
+// const getPageHTMLDailyHunt = () =>
+//   fetch('https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732')
+//     .then(resp => resp.text())   //Promise
 
 const getAllHTMLDailyHunt = async () => {
-  getPageHTMLDailyHunt()
-    .then(htmls => getPostsDailyHunt(htmls))
-    .then(() => {
-        server.listen(process.env.PORT || 3000, () => {
-            console.log('server started at port ' + process.env.PORT);
-        });
-    })
+    fetch('https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732')
+        .then(resp => resp.text()) 
+        .then(htmls => getPostsDailyHunt(htmls))
 }
 
 async function get_news() {
@@ -393,6 +397,6 @@ io.on('connection', (socket) => {
     });
 });
 
-// server.listen(process.env.PORT || 3000, () => {
-//     console.log('server started at port ' + process.env.PORT);
-// }); 
+server.listen(process.env.PORT || 3000, () => {
+    console.log('server started at port ' + process.env.PORT);
+}); 

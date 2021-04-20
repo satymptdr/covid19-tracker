@@ -127,6 +127,21 @@ function getChart() {
                     }
                 }]
             },
+            plugins: {
+                zoom: {
+                    // Container for pan options
+                    pan: {
+                        enabled: true,
+                        mode: 'xy'
+                    },
+    
+                    // Container for zoom options
+                    zoom: {
+                        enabled: true,
+                        mode: 'xy',
+                    }
+                }
+            },
             tooltips: {
                 intersect: !1,
                 mode: "index",
@@ -179,6 +194,21 @@ function getConfirmed() {
                         labelString: "Number of " + series_label
                     }
                 }]
+            },
+            plugins: {
+                zoom: {
+                    // Container for pan options
+                    pan: {
+                        enabled: true,
+                        mode: 'yx'
+                    },
+    
+                    // Container for zoom options
+                    zoom: {
+                        enabled: true,
+                        mode: 'yx',
+                    }
+                }
             },
             tooltips: {
                 intersect: !1,
@@ -254,4 +284,11 @@ getData().then(() => {
 }, download_img1 = function(e) {
     var a = document.getElementById("canvas1").toDataURL("image/jpg");
     e.href = a
+};
+
+window.resetZoom1 = function() {
+    window.myLine.resetZoom();
+};
+window.resetZoom2 = function() {
+    window.myLine1.resetZoom();
 };
