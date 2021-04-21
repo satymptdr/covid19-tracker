@@ -106,7 +106,6 @@ hbs.registerHelper('check', function (timestamp) {
         return true;
     }
     return false;
-    // console.log(moment.unix(timestamp).format('D'));
 });
 
 hbs.registerHelper('getDayMonth', function (timestamp, format) {
@@ -179,7 +178,9 @@ const getPostsDailyHunt = (html) => {
                 time: timeline,
                 type_given: true
             }
-        results.push(obj)
+        if(obj.title != '') {
+            results.push(obj);   
+        }
     })
 }
 

@@ -46,7 +46,7 @@
         display: flex;
         flex: auto;
         flex-direction: column;
-        max-height: 400px;
+        max-height: 550px;
     }
 
     div.item {
@@ -506,7 +506,7 @@
                             <div class="card-header" style="background-color: #283041;">
                                 <h3 class="card-title" style="color: white; font-weight: 500;">Latest News</h3>
                             </div>
-                            <div class="card-body" style="height: 1100px; overflow-y:scroll;">
+                            <div class="card-body" style="height: 900px; overflow-y:scroll;">
                                 {{#each cont}}
                                     <div id="news-{{@index}}" style="height: 90px; left: 0px; position: relative; top: 0px; width: 100%;">
                                         <div style="float: left; padding-right: 10px">
@@ -535,12 +535,12 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-12 mb-3">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3">
                         <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
                             <div class="card-header" style="background-color: #283041;">
-                                <h3 class="card-title" style="color: white; font-weight: 500;">Live Updates</h3>
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Live Case Updates</h3>
                             </div>
-                            <div class="card-body" style="height: 400; overflow-y:scroll;">
+                            <div class="card-body" style="height: 550px; overflow-y:scroll;">
                                 <div class="container">
                                     <div class="item">
                                         <div id="timeline">
@@ -564,6 +564,17 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3">
+                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Local and health authorities on Twitter</h3>
+                            </div>
+                            <div class="card-body" style="height: 550px; overflow-y:scroll;">
+                                <a class="twitter-timeline" href="https://twitter.com/MoHFW_INDIA?ref_src=twsrc%5Etfw">Tweets by MoHFW_INDIA</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                             </div>
                         </div>
                     </div>
@@ -685,7 +696,7 @@
                             </div>
                             <div class="card-body" style="height: 300px; overflow-y:scroll;">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                                    <table class="table table-hover table-striped table-vcenter mb-0">
                                         <thead>
                                             <tr>
                                                 <th style="font-weight: bolder;">#</th>
