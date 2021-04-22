@@ -374,7 +374,8 @@ app.post('/userContact', (req, res) => {
         name: req.body.name,
         email: req.body.email,
         subject: req.body.subject,
-        message: req.body.text
+        message: req.body.text,
+        timestamp: new Date(Date.now()).toLocaleString()
     };
 
     var mailOptions = {
@@ -400,6 +401,15 @@ app.post('/userContact', (req, res) => {
     });
     res.render('contactus');
 })
+
+app.get('/abhay/contact', (req, res) => {
+    db.collection("userContact").find({}).toArray((err, result) => {
+        if(err) {
+            throw err;
+        }
+        res.render('contact', {message : result});
+    });
+});
 
 app.post('/abhay/data', (req, res) => {
     let myObj = {
