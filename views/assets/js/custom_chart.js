@@ -127,21 +127,6 @@ function getChart() {
                     }
                 }]
             },
-            plugins: {
-                zoom: {
-                    // Container for pan options
-                    pan: {
-                        enabled: true,
-                        mode: 'xy'
-                    },
-    
-                    // Container for zoom options
-                    zoom: {
-                        enabled: true,
-                        mode: 'xy',
-                    }
-                }
-            },
             tooltips: {
                 intersect: !1,
                 mode: "index",
@@ -195,21 +180,6 @@ function getConfirmed() {
                     }
                 }]
             },
-            plugins: {
-                zoom: {
-                    // Container for pan options
-                    pan: {
-                        enabled: true,
-                        mode: 'yx'
-                    },
-    
-                    // Container for zoom options
-                    zoom: {
-                        enabled: true,
-                        mode: 'yx',
-                    }
-                }
-            },
             tooltips: {
                 intersect: !1,
                 mode: "index",
@@ -233,6 +203,7 @@ function addData(e, a, t) {
 }
 
 function Select_Type() {
+    document.getElementById('Cumulative1').checked = true;
     india_time.length = 0;
     let e = document.getElementById("type").value;
     "confirmed_global.csv" == e.substring(130) ? (temp.label = "Confirmed Cases", temp.backgroundColor = color(window.chartColors.blue).alpha(.5).rgbString(), temp.borderColor = window.chartColors.blue) : "recovered_global.csv" == e.substring(130) ? (temp.label = "Recovered Cases", temp.backgroundColor = color(window.chartColors.yellow).alpha(.5).rgbString(), temp.borderColor = window.chartColors.yellow) : (temp.label = "Death Cases", temp.backgroundColor = color(window.chartColors.red).alpha(.5).rgbString(), temp.borderColor = window.chartColors.red), timeSeries(e).then(() => {
@@ -270,6 +241,25 @@ function daily() {
         e.label = state_obj[g_idx].label, e.data = a, e.borderColor = state_obj[g_idx].borderColor, e.backgroundColor = state_obj[g_idx].backgroundColor
     }), window.myLine.update()
 }
+
+function cumulative1() {
+    window.myLine1.data.datasets.forEach(function(e) {
+        e.data = india_time
+    }), window.myLine1.update()
+}
+
+function daily1() {
+    let e = india_time,
+        a = [];
+    for (let t = 1; t < e.length - 1; ++t) {
+        a[t] = e[t] - e[t - 1];
+        if(a[t] < 0) a[t]=0;
+    }
+    window.myLine1.data.datasets.forEach(function(e) {
+        e.data = a
+    }), window.myLine1.update()
+}
+
 getData().then(() => {
     getChart()
 }).catch(e => {
@@ -284,11 +274,4 @@ getData().then(() => {
 }, download_img1 = function(e) {
     var a = document.getElementById("canvas1").toDataURL("image/jpg");
     e.href = a
-};
-
-window.resetZoom1 = function() {
-    window.myLine.resetZoom();
-};
-window.resetZoom2 = function() {
-    window.myLine1.resetZoom();
 };

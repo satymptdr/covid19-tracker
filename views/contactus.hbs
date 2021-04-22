@@ -9,8 +9,8 @@
 
 <link rel="icon" href="image/virus.png" type="image/x-icon"/>
 
-<title>Charts</title>
-<meta name="title" content="COVID-19 DATA Charts">
+<title>COVID-19 DATA</title>
+<meta name="title" content="COVID-19 DATA INDIA">
 <meta name="description" content="Live statistics and coronavirus tracking the number of confirmed cases, recovered patients, tests, and death toll in the india due to the COVID-19 coronavirus from Wuhan, China. Coronavirus counter with new cases updates, deaths, and number of tests per 1 Million population. Historical data and info. Daily charts, graphs and updates">
 <meta name="keywords" content="coronavirus map, Corona virus cases india, cases india, state, india, Confirmed cases, recovered cases, total deaths, active cases, last updated, Maharashtra, kerala, karnataka, andhra pradesh, tamil nadu, delhi, uttar pradesh, west bengal, odisha, rajasthan, chhattisgarh, telangana, gujarat, haryana, madhya pradesh, bihar, assam, punjab, jammu and kashmir, jharkhand, uttrakhand, himachal pradesh, goa, puducherry, tripura, manipur, chandigarh, arunachal pradesh, meghalaya, nagaland, sikkim, ladakh, mizoram, lakshadweep"/>
 
@@ -21,71 +21,58 @@
 
 <script src="assets/js/jquery.min.js"></script>
 
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/css/jquery.dataTables.min.css">
+<link defer rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+{{!-- Font Awesome Icons --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
 
 <!-- Core css -->
-<link rel="stylesheet" href="assets/css/main.css"/>
-<link rel="stylesheet" href="assets/css/theme1.css"/>
-
-<link rel="stylesheet" href="assets/css/buttons.dataTables.min.css">
-
-<script defer src="assets/js/jquery.dataTables.min.js"></script>
+<link defer rel="stylesheet" href="assets/css/main.css"/>
+<link defer rel="stylesheet" href="assets/css/theme1.css"/>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-icons@1.0.1/foundation-icons.css" defer>
 
 {{!-- Chart Js --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script src="assets/js/util.js"></script>
-<script data-ad-client="ca-pub-2399701684105400" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+{{!-- Contact Us CSS --}}
+<link rel='stylesheet' id='compiled.css-css'  href='https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/css/compiled-4.19.2.min.css?ver=4.19.2' type='text/css' media='all' />
 
 <style>
     .change {
-        background-color: wheat;
-    }
-
-    .dataTables_wrapper .dataTables_filter {
-        color: black;
+        background-color: #283041;
     }
 
     .text-green, .text-info, .text-success, .text-danger, .text-primary, .text-warning, .mail-star.active, .page-title {
         color: white !important;
     }
 
-    canvas {
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
+    div .page {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    } 
+
+    .map-container-section {
+        overflow:hidden;
+        padding-bottom:56.25%;
+        position:relative;
+        height:0;
     }
-
-    @keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}
-            .chartjs-render-monitor{animation:chartjs-render-animation 1ms}
-            .chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}
-            .chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}
-            .chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}
+    .map-container-section iframe {
+        left:0;
+        top:0;
+        height:100%;
+        width:100%;
+        position:absolute;
+    }
+ 
 </style>
-
-{{!-- Google Ads --}}
-{{!-- <script data-ad-client="ca-pub-4345624537988512" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> --}}
-
-
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KP4WHLQ');</script>
-<!-- End Google Tag Manager -->
-
 </head>
 
 <body class="font-roboto">
-
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KP4WHLQ"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
 
 <!-- Page Loader -->
 {{!-- <div class="page-loader-wrapper">
@@ -272,15 +259,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h5 class="brand-name">COVID-19 <a href="javascript:void(0)" class="menu_option float-right"><i class="fi-thumbnails toggle" data-toggle="tooltip" data-placement="left" title="Grid & List Toggle"></i></a></h5>
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul class="metismenu">
-               <li class="g_heading">Project</li>
+                <li class="g_heading">Project</li>
                 <li><a href="/"><svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M384 1152q0-53-37.5-90.5t-90.5-37.5-90.5 37.5-37.5 90.5 37.5 90.5 90.5 37.5 90.5-37.5 37.5-90.5zm192-448q0-53-37.5-90.5t-90.5-37.5-90.5 37.5-37.5 90.5 37.5 90.5 90.5 37.5 90.5-37.5 37.5-90.5zm428 481l101-382q6-26-7.5-48.5t-38.5-29.5-48 6.5-30 39.5l-101 382q-60 5-107 43.5t-63 98.5q-20 77 20 146t117 89 146-20 89-117q16-60-6-117t-72-91zm660-33q0-53-37.5-90.5t-90.5-37.5-90.5 37.5-37.5 90.5 37.5 90.5 90.5 37.5 90.5-37.5 37.5-90.5zm-640-640q0-53-37.5-90.5t-90.5-37.5-90.5 37.5-37.5 90.5 37.5 90.5 90.5 37.5 90.5-37.5 37.5-90.5zm448 192q0-53-37.5-90.5t-90.5-37.5-90.5 37.5-37.5 90.5 37.5 90.5 90.5 37.5 90.5-37.5 37.5-90.5zm320 448q0 261-141 483-19 29-54 29h-1402q-35 0-54-29-141-221-141-483 0-182 71-348t191-286 286-191 348-71 348 71 286 191 191 286 71 348z"/></svg><span style="margin-left: 13px;">Dashboard</span></a></li>                        
                 <li class="g_heading">App</li>
                 <li><a href="/india"><img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/india.png" alt="India" style="margin-right: 13px;"><span>India</span></a></li>
-                <li class="active"><a href="/chart"><svg width="18" height="18" viewBox="0 0 2048 1792" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M2048 1536v128h-2048v-1536h128v1408h1920zm-384-1024l256 896h-1664v-576l448-576 576 576z"/></svg><span style="margin-left: 13px;">Charts</span></a></li>
+                <li><a href="/chart"><svg width="18" height="18" viewBox="0 0 2048 1792" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M2048 1536v128h-2048v-1536h128v1408h1920zm-384-1024l256 896h-1664v-576l448-576 576 576z"/></svg><span style="margin-left: 13px;">Charts</span></a></li>
                 <li><a href="/news"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20" id="entypo-globe" width="18" height="18" fill="currentColor"><g><path d="M10 .4C4.705.4.399 4.707.399 10c0 5.293 4.306 9.6 9.601 9.6 5.293 0 9.6-4.307 9.6-9.6 0-5.293-4.307-9.6-9.6-9.6zm8.188 9.6c0 1.873-.636 3.6-1.696 4.98-.3-.234-.619-.867-.319-1.523.303-.66.382-2.188.312-2.783-.066-.594-.375-2.025-1.214-2.039-.838-.012-1.413-.289-1.911-1.283-1.033-2.068 1.939-2.465.906-3.609-.289-.322-1.783 1.322-2.002-.869-.014-.157.135-.392.336-.636 3.244 1.09 5.588 4.157 5.588 7.762zM8.875 1.893c-.196.382-.713.537-1.027.824-.684.619-.978.533-1.346 1.127-.371.594-1.567 1.449-1.567 1.879s.604.936.906.838c.302-.1 1.099-.094 1.567.07.469.166 3.914.332 2.816 3.244-.348.926-1.873.77-2.279 2.303-.061.225-.272 1.186-.285 1.5-.025.486.344 2.318-.125 2.318-.471 0-1.738-1.639-1.738-1.936 0-.297-.328-1.338-.328-2.23 0-.891-1.518-.877-1.518-2.062 0-1.068.823-1.6.638-2.113-.181-.51-1.627-.527-2.23-.59a8.213 8.213 0 0 1 6.516-5.172zM7.424 17.77c.492-.26.542-.596.988-.613.51-.023.925-.199 1.5-.326.51-.111 1.423-.629 2.226-.695.678-.055 2.015.035 2.375.689a8.159 8.159 0 0 1-7.089.945z"/></g></svg><span style="margin-left: 13px;">Civic Freedom Tracker</span></a></li>
                 
                 <li class="g_heading">Support</li>
-                <li><a href="/contactus"><svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M1265 1238q0-57-5.5-107t-21-100.5-39.5-86-64-58-91-22.5q-6 4-33.5 20.5t-42.5 24.5-40.5 20-49 17-46.5 5-46.5-5-49-17-40.5-20-42.5-24.5-33.5-20.5q-51 0-91 22.5t-64 58-39.5 86-21 100.5-5.5 107q0 73 42 121.5t103 48.5h576q61 0 103-48.5t42-121.5zm-173-594q0-108-76.5-184t-183.5-76-183.5 76-76.5 184q0 107 76.5 183t183.5 76 183.5-76 76.5-183zm636 540v192q0 14-9 23t-23 9h-96v224q0 66-47 113t-113 47h-1216q-66 0-113-47t-47-113v-1472q0-66 47-113t113-47h1216q66 0 113 47t47 113v224h96q14 0 23 9t9 23v192q0 14-9 23t-23 9h-96v128h96q14 0 23 9t9 23v192q0 14-9 23t-23 9h-96v128h96q14 0 23 9t9 23z"/></svg><span style="margin-left: 13px;">Contact Us</span></a></li>
+                <li class="active"><a href="/contactus"><svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M1265 1238q0-57-5.5-107t-21-100.5-39.5-86-64-58-91-22.5q-6 4-33.5 20.5t-42.5 24.5-40.5 20-49 17-46.5 5-46.5-5-49-17-40.5-20-42.5-24.5-33.5-20.5q-51 0-91 22.5t-64 58-39.5 86-21 100.5-5.5 107q0 73 42 121.5t103 48.5h576q61 0 103-48.5t42-121.5zm-173-594q0-108-76.5-184t-183.5-76-183.5 76-76.5 184q0 107 76.5 183t183.5 76 183.5-76 76.5-183zm636 540v192q0 14-9 23t-23 9h-96v224q0 66-47 113t-113 47h-1216q-66 0-113-47t-47-113v-1472q0-66 47-113t113-47h1216q66 0 113 47t47 113v224h96q14 0 23 9t9 23v192q0 14-9 23t-23 9h-96v128h96q14 0 23 9t9 23v192q0 14-9 23t-23 9h-96v128h96q14 0 23 9t9 23z"/></svg><span style="margin-left: 13px;">Contact Us</span></a></li>
                 <li><a href="/privacy"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-book-lock" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V4A2,2 0 0,0 18,2M18,20H10V16H11V15A3,3 0 0,1 14,12A3,3 0 0,1 17,15V16H18V20M15,15V16H13V15A1,1 0 0,1 14,14A1,1 0 0,1 15,15Z"/></svg><span style="margin-left: 13px;">Privacy Policy</span></a></li>
             </ul>
         </nav>        
@@ -291,184 +278,161 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="container-fluid">
                 <div class="page-header">
                     <div class="left">
-                        <a href="javascript:void(0)" class="icon menu_toggle mr-3"><i class="fi-list"></i></a>
-                        <h1 class="page-title" style="color: rgb(255, 255, 255);">Charts</h1>
+                        <a href="javascript:void(0)" class="icon menu_toggle mr-3"><i class="fi-list" style="color: white; font-size: large"></i></a>
+                        <h1 class="page-title" style="color: rgb(255, 255, 255);">Contact Us</h1>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><br>
 
         <div class="section-body mt-3">
             <div class="container-fluid">
-                <center>
-                <h3><span class="badge badge-secondary">Covid19 Statewise Statistics</span></h3><br>
-                <b><label for="states">Select State : </label></b>
-                <select id="states" name="states" onchange="select_operation()">
-                    <option value="select" disabled>Choose Option</option>
-                    <option value="AN">Andaman and Nicobar Islands</option>
-                    <option value="AP">Andhra Pradesh</option>
-                    <option value="AR">Arunachal Pradesh</option>
-                    <option value="AS">Assam</option>
-                    <option value="BR">Bihar</option>
-                    <option value="CH">Chandigarh</option>
-                    <option value="CT">Chhattisgarh</option>
-                    <option value="DN">Dadar Nagar Haveli</option>
-                    <option value="DL">Delhi</option>
-                    <option value="GA">Goa</option>
-                    <option value="GJ" selected>Gujarat</option>
-                    <option value="HR">Haryana</option>
-                    <option value="HP">Himachal Pradesh</option>
-                    <option value="JK">Jammu and Kashmir</option>
-                    <option value="JH">Jharkhand</option>
-                    <option value="KA">Karnataka</option>
-                    <option value="KL">Kerala</option>
-                    <option value="LA">Ladakh</option>
-                    <option value="LD">Lakshadweep</option>
-                    <option value="MP">Madhya Pradesh</option>
-                    <option value="MH">Maharashtra</option>
-                    <option value="MN">Manipur</option>
-                    <option value="ML">Meghalaya</option>
-                    <option value="MZ">Mizoram</option>
-                    <option value="NL">Nagaland</option>
-                    <option value="OR">Odisha</option>
-                    <option value="PY">Puducherry</option>
-                    <option value="PB">Punjab</option>
-                    <option value="RJ">Rajasthan</option>
-                    <option value="SK">Sikkim</option>
-                    <option value="TN">Tamil Nadu</option>
-                    <option value="TG">Telangana</option>
-                    <option value="TR">Tripura</option>
-                    <option value="UP">Uttar Pradesh</option>
-                    <option value="UT">Uttarakhand</option>
-                    <option value="WB">West Bengal</option>
+                <div class="row clearfix row-deck">
+                    <div class="col-lg-12 col-md-12">
+                        <section>
+                        <!-- Section heading -->
+                        <h2 class="h1-responsive font-weight-bold text-center">Contact us</h2>
+                        <!-- Section description -->
+                        <p class="text-center w-responsive mx-auto pb-5">Do you have any questions? Please do not hesitate to contact us directly. I will come back to you within
+                                    a matter of hours to help you.</p>
 
-                </select>
-                </center>
-            </center>
-            <br>
-                <center>
-                    <div id="myDIV">
-                        <button class="btn btn-outline-danger" onclick="changeData(0)">Confirm</button>
-                        <button class="btn btn-outline-success" onclick="changeData(1)">Recovered</button>
-                        <button class="btn btn-outline-info" onclick="changeData(2)">Active</button>
-                        <button class="btn btn-outline-secondary" onclick="changeData(3)">Deceased</button>
-                        <button class="btn btn-outline-primary" onclick="changeData(4)">Tested</button>
-                        <button class="btn btn-outline-warning" onclick="changeData(5)">Vaccinated</button>
-                    </div>
-                    <div id="caseType" style="margin: 15px">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions1" onclick="cumulative()" id="Cumulative" value="Cumulative" checked>
-                            <label class="form-check-label" for="inlineRadioOptions1">Cumulative</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions1" onclick="daily()" id="Daily" value="Daily">
-                            <label class="form-check-label" for="inlineRadioOptions1">Daily</label>
-                        </div>
-                    </div>
-
-                    <div class="container">
+                        <!-- Grid row -->
                         <div class="row">
-                            <div class="chart_main co-lg-12 col-xl-12" style="width:100%; height: 50%;">
-                                <div class="chartjs-size-monitor">
-                                    <div class="chartjs-size-monitor-expand">
-                                        <div class=""></div>
-                                    </div>
-                                    <div class="chartjs-size-monitor-shrink">
-                                        <div class=""></div>
-                                    </div>
+
+                            <!-- Grid column -->
+                            <div class="col-lg-12 mb-lg-12 mb-4">
+
+                            <!-- Form with header -->
+                            <div class="card">
+                                <div class="card-body">
+
+                                <form action="/userContact" method="post">
+                                <!-- Header -->
+                                <div class="form-header blue accent-1">
+                                    <h3 class="mt-2"><i class="fas fa-envelope"></i> Write to us:</h3>
                                 </div>
-                                <div class="table-responsive">
-                                    <canvas id="canvas" style="min-height:350px;" class="chartjs-render-monitor"></canvas>
+                                <p class="dark-grey-text">We'll write rarely, but only the best content.</p>
+                                <!-- Body -->
+                                <div class="md-form">
+                                    <i class="fas fa-user prefix grey-text"></i>
+                                    <input type="text" id="form-name" name="name" class="form-control" placeholder="Your name" required>
+                                </div>
+                                <div class="md-form">
+                                    <i class="fas fa-envelope prefix grey-text"></i>
+                                    <input type="email" id="form-email" name="email" class="form-control" placeholder="Your email" required>                                    
+                                </div>
+                                <div class="md-form">
+                                    <i class="fas fa-tag prefix grey-text"></i>
+                                    <input type="text" id="form-Subject" name="subject" class="form-control" placeholder="Subject" required>
+                                </div>
+                                <div class="md-form">
+                                    <i class="fas fa-pencil-alt prefix grey-text"></i>
+                                    <textarea id="form-text" name="text" class="form-control md-textarea" rows="3" placeholder="Send message" required></textarea>
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-light-blue">Submit</button>
+                                </div>
+                                </form>
                                 </div>
                             </div>
+                            <!-- Form with header -->
+
+                            </div>
+                            <!-- Grid column -->
+
+                            <!-- Grid column -->
+                            {{!-- <div class="col-lg-7"> --}}
+
+                            <!--Google map-->
+                            {{!-- <div id="map-container-section" class="z-depth-1-half map-container-section mb-4" style="height: 400px">
+                                <iframe style="border:none; width:100%; margin:0 auto; display:block;" height="500px" allowfullscreen src="https://www.embed-leaflet.com/map?center=21.170240,72.831062&zoom=13&style=&marker=true&popup=false&title=Marker&enhancedScroll=true"></iframe>
+                            </div> --}}
+                            <!-- Buttons-->
+                            {{!-- <div class="row text-center">
+                                <div class="col-md-4">
+                                <a class="btn-floating blue accent-1">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </a>
+                                <p>Surat, 395010</p>
+                                <p class="mb-md-0">India</p>
+                                </div>
+                                <div class="col-md-4">
+                                <a class="btn-floating blue accent-1">
+                                    <i class="fas fa-phone"></i>
+                                </a>
+                                <p>+ 91 814 095 3758</p>
+                                <p class="mb-md-0">Sat - Sun, 8:00-20:00</p>
+                                </div>
+                                <div class="col-md-4">
+                                <a class="btn-floating blue accent-1">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <p><a href="mailto:abhaysardhara7675@gmail.com">abhays7675@gmail.com</a></p>
+                                </div>
+                            </div> --}}
+
+                            {{!-- Temp Code --}}
+                            <div class="col-lg-12">
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                <a class="btn-floating blue accent-1">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </a>
+                                <p>Surat, 395010</p>
+                                <p class="mb-md-0">India</p>
+                                </div>
+                                <div class="col-md-4">
+                                <a class="btn-floating blue accent-1">
+                                    <i class="fas fa-phone"></i>
+                                </a>
+                                <p>+ 91 814 095 3758</p>
+                                <p class="mb-md-0">Sat - Sun, 8:00-20:00</p>
+                                </div>
+                                <div class="col-md-4">
+                                <a class="btn-floating blue accent-1">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <p><a href="mailto:abhaysardhara7675@gmail.com">abhays7675@gmail.com</a></p>
+                                </div>
+                            </div>
+
+                            </div>
+                            <!-- Grid column -->
+
                         </div>
+                        <!-- Grid row -->
+
+                        </section>
+                        <!-- Section: Contact v.1 -->
                     </div>
-                </center>
-                <br>
-            </div>            
+                </div>
+            </div>
         </div>
-        
-        <center>
-            <div class="btn-group">
-                <a id="download" class="btn btn-outline-danger btn-sm btn-block" download="abhay_covid_19.jpg" href="" onclick="download_img(this);">Click Here To Download Graph</a>
-            </div>
-        </center>
-        <br><br>
-
-        <hr>
-        <center>
-            <h3><span class="badge badge-secondary">Covid19 India Statistics</span></h3><br>
-            <b><label for="type">Select type: </label></b>
-            <select id="type" name="type" onchange="Select_Type()">
-                <option value="select" disabled>Choose Option</option>
-                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv">Confirmed Cases</option>
-                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv">Recovered Cases</option>
-                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv">Death Cases</option>
-            </select>
-
-            <div id="caseType" style="margin: 15px">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions2" onclick="cumulative1()" id="Cumulative1" value="Cumulative1" checked>
-                    <label class="form-check-label" for="inlineRadioOptions2">Cumulative</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions2" onclick="daily1()" id="Daily1" value="Daily1">
-                    <label class="form-check-label" for="inlineRadioOptions2">Daily</label>
-                </div>
-            </div>
-        </center>
-        <center>
-            <div class="container">
-                <div class="row">
-                    <div class="chart_main co-lg-12 col-xl-12" style="width:100%; height: 50%;">
-                        <div class="chartjs-size-monitor">
-                            <div class="chartjs-size-monitor-expand">
-                                <div class=""></div>
-                            </div>
-                            <div class="chartjs-size-monitor-shrink">
-                                <div class=""></div>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <canvas id="canvas1" style="min-height:350px" class="chartjs-render-monitor"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div><br>
-            <div class="btn-group">
-                <a id="download" class="btn btn-outline-danger btn-sm btn-block" download="abhay_covid_19.jpg" href="" onclick="download_img1(this);">Click Here To Download Graph</a>
-            </div>
-        </center>
-
-        <br><br>
         <div class="section-body">
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-6 col-12">
+                        <div class="col-md-6 col-sm-12">
                             <a href="https://www.instagram.com/_abhay_sardhara_/" target="_blank"><i class="fi-social-instagram" style="font-size: 35px;" title="Instagram"></i></a>&nbsp;&nbsp;
                             <a href="https://www.facebook.com/abhay.sardhara.52" target="_blank"><i class="fi-social-facebook" style="font-size: 35px;" title="Facebook"></i></a>&nbsp;&nbsp;
                             <a href="https://github.com/Abhaysardhara" target="_blank"><i class="fi-social-github" style="font-size: 35px;" style="Github"></i></a>
                         </div>
-                        <div class="col-lg-6 col-12">
-                            <p style="font-weight: bolder; font-size: 15px;">MADE BY ABHAY SARDHARA</p>
+                        <div class="col-md-6 col-sm-12">
+                            <p style="float: right; font-weight: bolder; font-size: 15px;">MADE BY ABHAY SARDHARA</p>
                         </div>
-                        <div id="temp"></div>
                     </div>
                 </div>
             </footer>
         </div>
     </div>
 </div>
-
 <script>
-    function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))}$(document).ready(function(){$.fn.dataTable.isDataTable("#example")?table=$("#example").DataTable():table=$("#example").DataTable({lengthMenu:[[10,50,100,-1],[10,50,100,"All"]],paging:!0,bSort:!1,info:!0,oLanguage:{sSearch:"Country: "}}),$("body").bind("cut copy paste",function(t){t.preventDefault(),alert("Sorry we can't let you copy in this page :)")}),$("body").on("contextmenu",function(t){return alert("Sorry we can't let you copy or inspect in this page :)"),!1})}),window.onload=init;
+    function init(){for(var t=document.getElementsByTagName("img"),e=0;e<t.length;e++)t[e].getAttribute("data-src")&&t[e].setAttribute("src",t[e].getAttribute("data-src"))};
+    window.onload=init;
 </script>
 
-<script src="assets/js/custom_chart.js"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
-<script src="assets/js/core.js"></script>
-</body>
+<script defer src="assets/js/core.js"></script>
 
-<!-- soccer/project/app-calendar.html  07 Jan 2020 03:40:20 GMT -->
+</body>
 </html>

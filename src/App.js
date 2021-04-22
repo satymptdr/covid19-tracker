@@ -14,6 +14,17 @@ const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 var moment = require('moment');
 
+// Node Mailer
+const nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'abhaysardharaa@gmail.com',
+      pass: 'whehdvztzfgnpigp'
+    }
+  });
+
 const client = redis.createClient({
     port: 13880,
     host: 'ec2-3-95-110-113.compute-1.amazonaws.com',
@@ -353,6 +364,42 @@ app.get('/news', (req, res) => {
 app.get('/privacy', (req, res) => {
     res.render('privacy');
 });
+
+app.get('/contactus', (req, res) => {
+    res.render('contactus');
+});
+
+app.post('/userContact', (req, res) => {
+    let myObj = {
+        name: req.body.name,
+        email: req.body.email,
+        subject: req.body.subject,
+        message: req.body.text
+    };
+
+    var mailOptions = {
+        from: req.body.email,
+        to: 'abhaysardharaa@gmail.com',
+        subject: req.body.subject,
+        text: req.body.text + ' sended by ' + req.body.email
+    };
+      
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+    db.collection("userContact").insertOne(myObj, (err, res) => {
+        if(err) {
+            throw err;
+        }
+        console.log(res);
+    });
+    res.render('contactus');
+})
 
 app.post('/abhay/data', (req, res) => {
     let myObj = {
