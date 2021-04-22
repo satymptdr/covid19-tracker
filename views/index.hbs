@@ -27,7 +27,7 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js" defer></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js" defer></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-icons@1.0.1/foundation-icons.css" defer>
-<script data-ad-client="ca-pub-2399701684105400" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" defer>
 
 <style>
     .change {   
@@ -159,6 +159,42 @@
     #timeline section.year section ul li span.price {
         color: mediumturquoise;
         font-weight: 500;
+    }
+    #button {
+        display: inline-block;
+        background-color: #FF9800;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        border-radius: 4px;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        transition: background-color .3s, 
+            opacity .5s, visibility .5s;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 1000;
+    }
+    #button::after {
+        content: "\f077";
+        font-family: FontAwesome;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 2em;
+        line-height: 50px;
+        color: #fff;
+    }
+    #button:hover {
+        cursor: pointer;
+        background-color: #333;
+    }
+    #button:active {
+        background-color: #555;
+    }
+    #button.show {
+        opacity: 1;
+        visibility: visible;
     }
 </style>
 
@@ -728,6 +764,9 @@
             </div>
         </div>
 
+        <!-- Back to top button -->
+        <a id="button" title="Back To Top"></a>
+
         <div class="section-body">
             <footer class="footer">
                 <div class="container-fluid">
@@ -756,5 +795,21 @@
 <script src="assets/js/core.js"></script>
 <script src="assets/js/notification/user_data.js"></script>
 <script src="assets/js/utility_pre.js"></script>
+<script>
+    var btn = $('#button');
+
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > 300) {
+            btn.addClass('show');
+        } else {
+            btn.removeClass('show');
+        }
+    });
+
+    btn.on('click', function(e) {
+        e.preventDefault();
+        $('html, body').animate({scrollTop:0}, '300');
+    });
+</script>
 </body>
 </html>

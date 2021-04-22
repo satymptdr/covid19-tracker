@@ -42,7 +42,6 @@
 {{!-- Chart Js --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script src="assets/js/util.js"></script>
-<script data-ad-client="ca-pub-2399701684105400" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
 <style>
     .change {
@@ -66,30 +65,9 @@
     }
 
 </style>
-
-{{!-- Google Ads --}}
-{{!-- <script data-ad-client="ca-pub-4345624537988512" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> --}}
-
-
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-KP4WHLQ');</script>
-    <!-- End Google Tag Manager -->
-
 </head>
 
 <body class="font-roboto">
-
-
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KP4WHLQ"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-
 <!-- Page Loader -->
 {{!-- <div class="page-loader-wrapper">
     <div class="loader">
@@ -324,63 +302,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <div class="section-body mt-3">
             <div class="container-fluid">
-
                 <div class="mb-4">
-            <div class="row clearfix row-deck">
-                <div class="col-lg-3 col-6 mb-2">
-                    <div class="card border-danger" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                        <div class="card-header" style="background-color: rgb(255, 110, 142);">
-                            <h3 class="card-title"><b>Confirmed</b></h3>
+                    <div class="row clearfix row-deck">
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-danger" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: rgb(255, 110, 142);">
+                                    <h3 class="card-title"><b>Confirmed</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-28">{{total.confirmed}}  <p style="color: rgb(255, 107, 138); font-size: 20px">+{{total.deltaconfirmed}}</p></h5>
+                                    <div class="table-responsive">
+                                        <canvas id="canvas1" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <h5 class="number mb-0 font-28">{{total.confirmed}}  <p style="color: rgb(255, 107, 138); font-size: 20px">+{{total.deltaconfirmed}}</p></h5>
-                            <div class="table-responsive">
-                                <canvas id="canvas1" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-info" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: rgb(148, 197, 250);">
+                                    <h3 class="card-title"><b>Active</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-28">{{total.active}} <p style="color: rgb(148, 197, 250);; font-size: 20px;">{{calculate total.deltaconfirmed total.deltarecovered total.deltadeaths}}</p></h5>
+                                    <div class="table-responsive">
+                                        <canvas id="canvas4" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-success" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);"> 
+                                <div class="card-header" style="background-color: rgb(127, 203, 144);">
+                                    <h3 class="card-title"><b>Recovered</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-28">{{total.recovered}}  <p style="color: rgb(127, 203, 144); font-size: 20px">+{{total.deltarecovered}}</p></h5>
+                                    <div class="table-responsive">
+                                        <canvas id="canvas2" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6 mb-2">
+                            <div class="card border-secondary" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: rgb(168, 173, 178);">
+                                    <h3 class="card-title"><b>Deceased</b></h3>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="number mb-0 font-28">{{total.deaths}}  <p style="color: rgb(168, 173, 178); font-size: 20px">+{{total.deltadeaths}}</p></h5>
+                                    <div class="table-responsive">
+                                        <canvas id="canvas3" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-6 mb-2">
-                    <div class="card border-info" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                        <div class="card-header" style="background-color: rgb(148, 197, 250);">
-                            <h3 class="card-title"><b>Active</b></h3>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="number mb-0 font-28">{{total.active}} <p style="color: rgb(148, 197, 250);; font-size: 20px;">{{calculate total.deltaconfirmed total.deltarecovered total.deltadeaths}}</p></h5>
-                            <div class="table-responsive">
-                                <canvas id="canvas4" style="height:80px;" class="chartjs-render-monitor"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6 mb-2">
-                    <div class="card border-success" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);"> 
-                        <div class="card-header" style="background-color: rgb(127, 203, 144);">
-                            <h3 class="card-title"><b>Recovered</b></h3>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="number mb-0 font-28">{{total.recovered}}  <p style="color: rgb(127, 203, 144); font-size: 20px">+{{total.deltarecovered}}</p></h5>
-                            <div class="table-responsive">
-                                <canvas id="canvas2" style="height:80px;" class="chartjs-render-monitor"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6 mb-2">
-                    <div class="card border-secondary" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                        <div class="card-header" style="background-color: rgb(168, 173, 178);">
-                            <h3 class="card-title"><b>Deceased</b></h3>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="number mb-0 font-28">{{total.deaths}}  <p style="color: rgb(168, 173, 178); font-size: 20px">+{{total.deltadeaths}}</p></h5>
-                            <div class="table-responsive">
-                                <canvas id="canvas3" style="height:80px;" class="chartjs-render-monitor"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
                 <div class="row clearfix row-deck">
                     <div class="col-lg-12 col-md-12">
@@ -431,12 +408,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
             </div>
         </div>
+
         <div class="section-body">
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
-                                                        <a href="https://www.instagram.com/_abhay_sardhara_/" target="_blank"><i class="fi-social-instagram" style="font-size: 35px;" title="Instagram"></i></a>&nbsp;&nbsp;
+                            <a href="https://www.instagram.com/_abhay_sardhara_/" target="_blank"><i class="fi-social-instagram" style="font-size: 35px;" title="Instagram"></i></a>&nbsp;&nbsp;
                             <a href="https://www.facebook.com/abhay.sardhara.52" target="_blank"><i class="fi-social-facebook" style="font-size: 35px;" title="Facebook"></i></a>&nbsp;&nbsp;
                             <a href="https://github.com/Abhaysardhara" target="_blank"><i class="fi-social-github" style="font-size: 35px;" title="Github"></i></a>&nbsp;&nbsp;
                             <a href="https://www.linkedin.com/in/abhaysardhara7675/" target="_blank"><i class="fi-social-linkedin" style="font-size: 35px;" title="Linkein"></i></a>
