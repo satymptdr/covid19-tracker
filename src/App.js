@@ -13,7 +13,6 @@ const redis = require('redis');
 const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 var moment = require('moment');
-
 dotenv.config();
 
 // Node Mailer
@@ -27,7 +26,10 @@ var transporter = nodemailer.createTransport({
     }
   });
 
-const client = redis.createClient(process.env.REDIS_URL , {
+const client = redis.createClient({
+    port: 18330,
+    host: 'ec2-23-23-195-230.compute-1.amazonaws.com',
+    password: 'pd35a3062f2ccc06e894dd20af37a5d25dfb04f7a21fe98193032b09acc4340ba',
     tls: {
         rejectUnauthorized: false
     }
