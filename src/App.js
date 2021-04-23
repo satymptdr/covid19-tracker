@@ -14,6 +14,8 @@ const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 var moment = require('moment');
 
+dotenv.config();
+
 // Node Mailer
 const nodemailer = require('nodemailer');
 
@@ -25,10 +27,7 @@ var transporter = nodemailer.createTransport({
     }
   });
 
-const client = redis.createClient({
-    port: 13880,
-    host: 'ec2-3-95-110-113.compute-1.amazonaws.com',
-    password: 'pd35a3062f2ccc06e894dd20af37a5d25dfb04f7a21fe98193032b09acc4340ba',
+const client = redis.createClient(process.env.REDIS_URL , {
     tls: {
         rejectUnauthorized: false
     }
@@ -44,8 +43,6 @@ client.on('connect', (err, reply) => {
 client.on('error', (err) => {
     console.log('Error: ' + err);
 });
-
-dotenv.config();
 
 // mongodb-mLab-robo 3T
 const mongodb = require('mongodb')
