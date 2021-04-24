@@ -96,7 +96,7 @@ hbs.registerHelper('formatIndiaCasesTime', function (date, format) {
 });
 
 hbs.registerHelper('formatNewsTime', function (date, format) {
-    return moment(date, format).utcOffset(330).fromNow();
+    return moment(date, format).fromNow();
 });
 
 hbs.registerHelper('getTime', function (timestamp) {
@@ -161,17 +161,13 @@ connect_db();
 // Web Scrapping for news
 const getPostsDailyHunt = (html) => {
     let $ = cheerio.load(html)
-    $('li.lang_en').each(function() {
-        let a = $(this).children().children('.img')
-        let left = a.children()
-            let news_uri = left.attr('href')
-            let news_img = left.children().attr('src')
-        let right = a.next()
-            let news_type = right.children('span').text()
-            let news_title = right.children('span').next().children().text()
-            let timeline = right.children('div.resource').children().children().next().text()
-            let splitted = timeline.split(" ")
-            timeline = moment().subtract(splitted[0], 'minutes').format('DD MMMM YYYY, h:mm:ss a')
+    $('div.topicstry').each(function() {
+        let a = $(this).children().next()
+        let news_uri = 'https://economictimes.indiatimes.com' + a.attr('href')
+        let news_img  = a.children().next().attr('data-original')
+        let news_type = 'Covid News'
+        let news_title = a.children().next().next().next().text()
+        let timeline = a.next().text().substring(0,22)
         let obj = {
                 title: news_title,
                 uri: news_uri,
@@ -187,7 +183,7 @@ const getPostsDailyHunt = (html) => {
 }
 
 const getAllHTMLDailyHunt = async () => {
-    fetch('https://m.dailyhunt.in/news/india/english/corona+virus-topics-26732')
+    fetch('https://economictimes.indiatimes.com/topic/covid')
         .then(resp => resp.text()) 
         .then(htmls => getPostsDailyHunt(htmls))
 }
