@@ -215,7 +215,9 @@ function select_operation() {
     xlables.length = 0, ydata1.length = 0, ydata2.length = 0, ydata3.length = 0, ydata4.length = 0, ydata5.length = 0, ydata6.length = 0, state_name = document.getElementById("states").value, getData().then(() => {
         window.myLine.data.labels = xlables, window.myLine.data.datasets[0].data = ydata1, window.myLine.data.datasets[0].label = state_obj[0].label, window.myLine.data.datasets[0].backgroundColor = state_obj[0].backgroundColor, window.myLine.data.datasets[0].borderColor = state_obj[0].borderColor, window.myLine.update()
     })
-    g_idx = 0; document.getElementById('Cumulative').checked=true;
+    g_idx = 0; 
+    document.getElementById("caseType").style.display = "block";
+    document.getElementById('Cumulative').checked=true;
 }
 
 function changeData(e) {

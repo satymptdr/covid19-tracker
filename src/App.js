@@ -18,14 +18,6 @@ dotenv.config();
 // Node Mailer
 const nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'abhaysardharaa@gmail.com',
-      pass: 'whehdvztzfgnpigp'
-    }
-  });
-
 const client = redis.createClient({
     port: 18330,
     host: 'ec2-23-23-195-230.compute-1.amazonaws.com',
@@ -369,6 +361,13 @@ app.get('/contactus', (req, res) => {
 });
 
 app.post('/userContact', (req, res) => {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'abhaysardharaa@gmail.com',
+          pass: 'whehdvztzfgnpigp'
+        }
+    });
     let myObj = {
         name: req.body.name,
         email: req.body.email,
