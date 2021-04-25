@@ -104,14 +104,14 @@ hbs.registerHelper('getTime', function (timestamp) {
 });
 
 hbs.registerHelper('check', function (timestamp) {
-    if(moment.unix(timestamp).format('D') === moment().format('D')) {
+    if(moment.unix((parseInt(timestamp) + 330*60)).format('D') === moment().format('D')) {
         return true;
     }
     return false;
 });
 
 hbs.registerHelper('getDayMonth', function (timestamp, format) {
-    return moment.unix(timestamp + 330*60).format(format);
+    return moment.unix((parseInt(timestamp) + 330*60)).format(format);
 });
 
 hbs.registerHelper('percent', function (cases, total) {
