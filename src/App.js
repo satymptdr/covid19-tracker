@@ -111,7 +111,7 @@ hbs.registerHelper('check', function (timestamp) {
 });
 
 hbs.registerHelper('getDayMonth', function (timestamp, format) {
-    return moment.unix(timestamp).format(format);
+    return moment.unix(timestamp + 330*60).format(format);
 });
 
 hbs.registerHelper('percent', function (cases, total) {
@@ -198,16 +198,10 @@ get_news();
 async function getUpdate() {
     var res = await fetch('https://api.covid19india.org/updatelog/log.json');
     var d = await res.json();
-    return d;
+    arrUpdate = d.reverse();
 }
 
-getUpdate().then(res => {
-    arrUpdate = [];
-    arrUpdate = res;
-    arrUpdate.reverse();
-}).catch(e => {
-    console.log(e);
-});
+getUpdate();
 
 // Routing
 app.get('/', (req, res) => {
