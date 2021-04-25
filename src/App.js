@@ -279,7 +279,7 @@ app.get('/', (req, res) => {
 
             }).then(function() {
                 res.render('index', {main : arr, report : arr4, cont: results,  update: arrUpdate});
-                client.setex('world_data', 21600, JSON.stringify(arr));
+                client.setex('world_data', 3600, JSON.stringify(arr));
             });
         }
     });
@@ -314,8 +314,8 @@ app.get('/india', (req, res) => {
                 arr2.pop();
             }).then(function() {
                 res.render('india', {india : arr2, total : total});
-                client.setex('india_data', 900, JSON.stringify(arr2));
-                client.setex('total', 900, JSON.stringify(total));
+                client.setex('india_data', 600, JSON.stringify(arr2));
+                client.setex('total', 600, JSON.stringify(total));
             });
         }
     });
