@@ -12,7 +12,9 @@ var compression = require('compression');
 const redis = require('redis');
 const fetch = require('node-fetch')
 const cheerio = require('cheerio')
-var moment = require('moment');
+var moment = require('moment-timezone');
+moment.tz.add("Asia/Calcutta|HMT BURT IST IST|-5R.k -6u -5u -6u|01232|-18LFR.k 1unn.k HB0 7zX0");
+moment.tz.link("Asia/Calcutta|Asia/Kolkata");
 dotenv.config();
 
 // Node Mailer
@@ -46,6 +48,7 @@ const connectionURL = process.env.MONGODB_URI;
 const databaseName = 'covidtracker_user';
 
 var hbs = require('hbs');
+const { request } = require('http');
 app.set('view engine', 'hbs');
 app.use(compression());
 app.use(express.static("public", {
@@ -104,7 +107,7 @@ hbs.registerHelper('getTime', function (timestamp) {
 });
 
 hbs.registerHelper('check', function (timestamp) {
-    if(moment.unix((parseInt(timestamp) + 330*60)).format('D') === moment().format('D')) {
+    if(moment.unix(timestamp).format('D') === moment().format('D')) {
         return true;
     }
     return false;
@@ -161,29 +164,27 @@ connect_db();
 // Web Scrapping for news
 const getPostsDailyHunt = (html) => {
     let $ = cheerio.load(html)
-    $('div.topicstry').each(function() {
-        let a = $(this).children().next()
-        let news_uri = 'https://economictimes.indiatimes.com' + a.attr('href')
-        let news_img  = a.children().next().attr('data-original')
+    $('div.listtostory').each(function() {
+        let left = $(this).children()
+        let news_uri = 'https://www.livemint.com' + left.children().attr('href')
+        let news_img  = left.children().children().attr('src')
         let news_type = 'Covid News'
-        let news_title = a.children().next().next().next().text()
-        let timeline = a.next().text().substring(0,22)
+        let a = left.next().children().children().text().replace(/^\s+|\s+$/gm,'').split('\n')
         let obj = {
-                title: news_title,
+                title: a[0],
                 uri: news_uri,
                 img: news_img,
                 type: news_type,
-                time: timeline,
-                type_given: true
+                time: a[1].split('.')[1].slice(0,8)
             }
         if(obj.title != '') {
-            results.push(obj);   
+            results.push(obj);
         }
     })
 }
 
 const getAllHTMLDailyHunt = async () => {
-    fetch('https://economictimes.indiatimes.com/topic/covid')
+    fetch('https://www.livemint.com/Search/Link/Keyword/covid')
         .then(resp => resp.text()) 
         .then(htmls => getPostsDailyHunt(htmls))
 }
