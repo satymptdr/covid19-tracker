@@ -194,7 +194,7 @@ async function get_news() {
     await getAllHTMLDailyHunt();
 }
 
-get_news();
+setTimeout(get_news, 1000 * 60 * 15);
 
 async function getUpdate() {
     var res = await fetch('https://api.covid19india.org/updatelog/log.json');
@@ -202,7 +202,7 @@ async function getUpdate() {
     arrUpdate = d.reverse();
 }
 
-getUpdate();
+setTimeout(getUpdate, 1000 * 60 * 15);
 
 // Routing
 app.get('/', (req, res) => {
