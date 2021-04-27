@@ -191,17 +191,21 @@ const getAllHTMLDailyHunt = async () => {
 
 async function get_news() {
     // await connect_db();
+    results.length = 0;
     await getAllHTMLDailyHunt();
 }
 
+get_news();
 setInterval(get_news, 1000 * 60 * 15);
 
 async function getUpdate() {
+    arrUpdate.length = 0;
     var res = await fetch('https://api.covid19india.org/updatelog/log.json');
     var d = await res.json();
     arrUpdate = d.reverse();
 }
 
+getUpdate();
 setInterval(getUpdate, 1000 * 60 * 15);
 
 // Routing
