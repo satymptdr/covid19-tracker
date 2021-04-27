@@ -98,9 +98,9 @@ hbs.registerHelper('formatIndiaCasesTime', function (date, format) {
     return moment.unix(parseInt(moment(date, format).format("X")) - 330*60).fromNow();
 });
 
-hbs.registerHelper('formatNewsTime', function (date, format) {
-    return moment(date, format).fromNow();
-});
+// hbs.registerHelper('formatNewsTime', function (date, format) {
+//     return moment(date, format).fromNow();
+// });
 
 hbs.registerHelper('getTime', function (timestamp) {
     return moment.unix(timestamp).fromNow();
