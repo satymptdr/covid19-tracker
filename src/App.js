@@ -11,6 +11,7 @@ const dotenv = require('dotenv');
 var compression = require('compression');
 const redis = require('redis');
 const fetch = require('node-fetch')
+const axios = require('axios').default
 const cheerio = require('cheerio')
 var moment = require('moment-timezone');
 moment.tz.add("Asia/Calcutta|HMT BURT IST IST|-5R.k -6u -5u -6u|01232|-18LFR.k 1unn.k HB0 7zX0");
@@ -330,18 +331,44 @@ app.get('/chart', (req, res) => {
     res.render('chart');
 })
 
+// Scrapping Civiv Freedom Tracker
+const civicFreedomTracker = async() =>{
+    const res = await fetch('https://www.icnl.org/covid19tracker/')
+    const body = await res.text();
+    const $ = cheerio.load(body);
+    
+    const promises = [];
+  
+    $('div#entries div.entry').each((index, element) =>{
+      const $element = $(element);
+      const country = $element.find('div.entrypretitle').text().trim();
+      const title = $element.find('h3').text().trim();
+      let type = $element.find('span.order').text().trim();
+      const date = $element.find('span.date').text().trim().substr(11);
+      const issue = $element.find('span.issue').text().trim().substr(10);
+      const description = $element.find('p').text().trim().split("\n")[0];
+  
+      promises.push({country , title , description , type , date, issue});
+    });
+  
+    const table = [{table: promises}];
+  
+    return Promise.all(table);
+};
+
 app.get('/news', (req, res) => {
-    client.get('news', (err, result) => {
+    client.get('civic', (err, result) => {
         if(result) {
             result = JSON.parse(result);
             res.render('news', {news : result});
         }
         else {
-            covid.plugins[0].civicFreedomTracker().then((r) => {
+            civicFreedomTracker().then((r) => {
+                arr5.length = 0;
                 arr5 = r[0].table;
             }).then(function() {
                 res.render('news', {news : arr5});
-                client.setex('news', 864000, JSON.stringify(arr5));
+                client.setex('civic', 432000, JSON.stringify(arr5));
             });
         }
     });
@@ -446,4 +473,4 @@ io.on('connection', (socket) => {
 
 server.listen(process.env.PORT || 3000, () => {
     console.log('server started at port ' + process.env.PORT);
-}); 
+});
