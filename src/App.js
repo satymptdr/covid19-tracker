@@ -21,10 +21,27 @@ dotenv.config();
 // Node Mailer
 const nodemailer = require('nodemailer');
 
+/**  Normalize a port into a number, string, or false. */
+ function normalizePort(val) {
+    var port = parseInt(val, 10);
+  
+    if (isNaN(port)) {
+      // named pipe
+      return val;
+    }
+  
+    if (port >= 0) {
+      // port number
+      return port;
+    }
+  
+    return false;
+  }
+
 const client = redis.createClient({
-    port: 18330,
-    host: 'ec2-23-23-195-230.compute-1.amazonaws.com',
-    password: 'pd35a3062f2ccc06e894dd20af37a5d25dfb04f7a21fe98193032b09acc4340ba',
+    port: normalizePort(process.env.REDIS_PORT),
+    host: process.env.REDIS_HOST,
+    password: process.env.REDIS_PASS,
     tls: {
         rejectUnauthorized: false
     }
@@ -45,8 +62,7 @@ client.on('error', (err) => {
 const mongodb = require('mongodb')
 const MongoClient = mongodb.MongoClient
 
-const connectionURL = process.env.MONGODB_URI;
-const databaseName = 'covidtracker_user';
+const databaseName = process.env.MONGODB_URI;
 
 var hbs = require('hbs');
 const { request } = require('http');
@@ -99,10 +115,6 @@ hbs.registerHelper('formatIndiaCasesTime', function (date, format) {
     return moment.unix(parseInt(moment(date, format).format("X")) - 330*60).fromNow();
 });
 
-// hbs.registerHelper('formatNewsTime', function (date, format) {
-//     return moment(date, format).fromNow();
-// });
-
 hbs.registerHelper('getTime', function (timestamp) {
     return moment.unix(timestamp).fromNow();
 });
@@ -152,11 +164,11 @@ var arrUpdate = [];  // Latest Update
 var db;
 
 function connect_db() {
-    MongoClient.connect(process.env.MONGODB_URI || connectionURL, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
+    MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
         if (error) {
             throw error
         }
-        db = client.db(databaseName)
+        db = client.db('covidtracker_user')
     });
 }
 
@@ -357,6 +369,7 @@ const civicFreedomTracker = async() =>{
 };
 
 app.get('/news', (req, res) => {
+    const mySet = new Set()
     client.get('civic', (err, result) => {
         if(result) {
             result = JSON.parse(result);

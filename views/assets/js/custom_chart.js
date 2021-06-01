@@ -206,7 +206,7 @@ function Select_Type() {
     document.getElementById('Cumulative1').checked = true;
     india_time.length = 0;
     let e = document.getElementById("type").value;
-    "confirmed_global.csv" == e.substring(130) ? (temp.label = "Confirmed Cases", temp.backgroundColor = color(window.chartColors.blue).alpha(.5).rgbString(), temp.borderColor = window.chartColors.blue) : "recovered_global.csv" == e.substring(130) ? (temp.label = "Recovered Cases", temp.backgroundColor = color(window.chartColors.yellow).alpha(.5).rgbString(), temp.borderColor = window.chartColors.yellow) : (temp.label = "Death Cases", temp.backgroundColor = color(window.chartColors.red).alpha(.5).rgbString(), temp.borderColor = window.chartColors.red), timeSeries(e).then(() => {
+    "confirmed_global.csv" == e.substring(130) ? (temp.label = "Confirmed Cases", temp.backgroundColor = color(window.chartColors.red).alpha(.5).rgbString(), temp.borderColor = window.chartColors.red) : "recovered_global.csv" == e.substring(130) ? (temp.label = "Recovered Cases", temp.backgroundColor = color(window.chartColors.green).alpha(.5).rgbString(), temp.borderColor = window.chartColors.green) : (temp.label = "Death Cases", temp.backgroundColor = color(window.chartColors.grey).alpha(.5).rgbString(), temp.borderColor = window.chartColors.grey), timeSeries(e).then(() => {
         window.myLine1.data.datasets.splice(0), window.myLine1.options.scales.yAxes[0].scaleLabel.labelString = "Number of " + temp.label, window.myLine1.data.datasets.push(temp), window.myLine1.update()
     })
 }
