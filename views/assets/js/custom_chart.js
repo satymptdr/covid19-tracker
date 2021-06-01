@@ -19,8 +19,8 @@ var config, config1, g_idx = 0,
     state_name = "GJ",
     color = Chart.helpers.color,
     series_label = "Confirmed Cases",
-    bg = color(window.chartColors.blue).alpha(.5).rgbString(),
-    border = window.chartColors.blue;
+    bg = color(window.chartColors.red).alpha(.5).rgbString(),
+    border = window.chartColors.red;
 isStateExists() ? (document.getElementById("states").value = code, state_name = code) : "UK" == code ? (document.getElementById("states").value = "UT", state_name = "UT") : "TS" == code ? (document.getElementById("states").value = "TG", state_name = "TG") : "OD" == code ? (document.getElementById("states").value = "OR", state_name = "OR") : "CG" == code ? (document.getElementById("states").value = "CT", state_name = "CT") : "AD" == code ? (document.getElementById("states").value = "AP", state_name = "AP") : document.getElementById("states").value = "GJ";
 var state_obj = [{
         id: "confirm_cases",
