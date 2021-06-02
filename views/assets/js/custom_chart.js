@@ -15,8 +15,10 @@ var config, config1, g_idx = 0,
     ydata4 = [],
     ydata5 = [],
     ydata6 = [],
+    ydata1_last, ydata2_last, ydata4_last,
     india_time = [],
     state_name = "GJ",
+    country = "India",
     color = Chart.helpers.color,
     series_label = "Confirmed Cases",
     bg = color(window.chartColors.red).alpha(.5).rgbString(),
@@ -75,17 +77,37 @@ async function getData() {
             e = n[state_name][d][r].total.confirmed || !1, a = n[state_name][d][r].total.recovered || !1, t = n[state_name][d][r].total.deceased || !1, o = n[state_name][d][r].total.tested || !1, l = n[state_name][d][r].total.vaccinated || !1, ydata1.push(e), ydata2.push(a), ydata3.push(t), ydata5.push(o), ydata6.push(l), ydata4.push(e - a - t)
         })
     }), state_obj[0].data = ydata1, state_obj[1].data = ydata2, state_obj[2].data = ydata4, state_obj[3].data = ydata3, state_obj[4].data = ydata5, state_obj[5].data = ydata6
+    let index = xlables.length;
+    ydata1_last = ydata1[index - 1], ydata2_last = ydata2[index - 1], ydata4_last = ydata4[index - 1];
 }
-async function timeSeries(e = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv") {
-    var a = await fetch(e);
+
+async function timeSeries(e = 0, c) {
+    var a;
+    if(e == 0) {
+        a = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv');
+    }
+    else if(e == 1) {
+        a = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv');
+    }
+    else {
+        a = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv');
+    }
     let t = (await a.text()).split("\n");
+
+    let tmk = []
+    t.forEach(e => {
+        tmk.push(e.split(",")[1]);
+    })
+    console.log(new Set(tmk))
+
     xlables1 = t[0].split(",").splice(4);
     let o, l = 0,
         d = (t = t.splice(1)).length - 1;
     for (; l <= d;) {
         let e = t[o = Math.floor((l + d) / 2)].split(",");
-        if ("India" == e[1]) break;
-        e[1] < "India" ? l = o + 1 : d = o - 1
+        console.log(e[1]);
+        if (c.localeCompare(e[1]) == 0) break;
+        c.localeCompare(e[1]) > 0 ? l = o + 1 : d = o - 1
     }
     india_time.length = 0, india_time = t[o].split(",").splice(4), temp.data = india_time
 }
@@ -160,10 +182,6 @@ function getConfirmed() {
         options: {
             responsive: !0,
             maintainAspectRatio: !1,
-            title: {
-                display: !0,
-                text: "India's Cases"
-            },
             scales: {
                 xAxes: [{
                     display: !0,
@@ -196,24 +214,75 @@ function getConfirmed() {
     window.myLine1 = new Chart(e, config1)
 }
 
+function getBarChart() {
+    var ctx = document.getElementById("bar_chart_states");
+    let last_index = ydata1.length-1;
+    window.bar_chart_states = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Confirmed", "Recovered", "Active", "Deceased"],
+            datasets: [{
+                label: '# of Cases',
+                data: [ydata1[last_index], ydata2[last_index], ydata4[last_index], ydata1[last_index] - ydata2[last_index] - ydata4[last_index]],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: !0,
+            maintainAspectRatio: !1,
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        offsetGridLines: true
+                    },
+                    display: !0,
+                    scaleLabel: {
+                        display: !0,
+                        labelString: "Category"
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    display: !0,
+                    scaleLabel: {
+                        display: !0,
+                        labelString: "Number of cases"
+                    }
+                }]
+            }
+        }
+    });
+}
+
 function addData(e, a, t) {
     e.data.labels.push(a), e.data.datasets.forEach(e => {
         e.data.push(t)
     }), e.update()
 }
 
-function Select_Type() {
-    document.getElementById('Cumulative1').checked = true;
-    india_time.length = 0;
-    let e = document.getElementById("type").value;
-    "confirmed_global.csv" == e.substring(130) ? (temp.label = "Confirmed Cases", temp.backgroundColor = color(window.chartColors.red).alpha(.5).rgbString(), temp.borderColor = window.chartColors.red) : "recovered_global.csv" == e.substring(130) ? (temp.label = "Recovered Cases", temp.backgroundColor = color(window.chartColors.green).alpha(.5).rgbString(), temp.borderColor = window.chartColors.green) : (temp.label = "Death Cases", temp.backgroundColor = color(window.chartColors.grey).alpha(.5).rgbString(), temp.borderColor = window.chartColors.grey), timeSeries(e).then(() => {
-        window.myLine1.data.datasets.splice(0), window.myLine1.options.scales.yAxes[0].scaleLabel.labelString = "Number of " + temp.label, window.myLine1.data.datasets.push(temp), window.myLine1.update()
-    })
+function updateBarChart() {
+    window.bar_chart_states.data.datasets[0].data = [ydata1_last, ydata2_last, ydata4_last, ydata1_last - ydata2_last - ydata4_last]
+    window.bar_chart_states.update();
 }
 
 function select_operation() {
     xlables.length = 0, ydata1.length = 0, ydata2.length = 0, ydata3.length = 0, ydata4.length = 0, ydata5.length = 0, ydata6.length = 0, state_name = document.getElementById("states").value, getData().then(() => {
         window.myLine.data.labels = xlables, window.myLine.data.datasets[0].data = ydata1, window.myLine.data.datasets[0].label = state_obj[0].label, window.myLine.data.datasets[0].backgroundColor = state_obj[0].backgroundColor, window.myLine.data.datasets[0].borderColor = state_obj[0].borderColor, window.myLine.update()
+        updateBarChart();
     })
     g_idx = 0; 
     document.getElementById("caseType").style.display = "block";
@@ -244,6 +313,27 @@ function daily() {
     }), window.myLine.update()
 }
 
+function Select_Country() {
+    document.getElementById('Cumulative1').checked = true;
+    country = document.getElementById('type').value;
+    india_time.length = 0;
+
+    timeSeries(0, country).then(() => {
+        temp.label = "Confirmed Cases", temp.backgroundColor = color(window.chartColors.red).alpha(.5).rgbString(), temp.borderColor = window.chartColors.red
+        window.myLine1.data.datasets.splice(0), window.myLine1.options.scales.yAxes[0].scaleLabel.labelString = "Number of " + temp.label, window.myLine1.data.datasets.push(temp), window.myLine1.update()
+    }).catch(e => {
+        console.log(e)
+    })
+}
+
+function changeDataType(e) {
+    document.getElementById('Cumulative1').checked = true;
+    india_time.length = 0;
+    e == 0 ? (temp.label = "Confirmed Cases", temp.backgroundColor = color(window.chartColors.red).alpha(.5).rgbString(), temp.borderColor = window.chartColors.red) : e == 1 ? (temp.label = "Recovered Cases", temp.backgroundColor = color(window.chartColors.green).alpha(.5).rgbString(), temp.borderColor = window.chartColors.green) : (temp.label = "Death Cases", temp.backgroundColor = color(window.chartColors.grey).alpha(.5).rgbString(), temp.borderColor = window.chartColors.grey), timeSeries(e, country).then(() => {
+        window.myLine1.data.datasets.splice(0), window.myLine1.options.scales.yAxes[0].scaleLabel.labelString = "Number of " + temp.label, window.myLine1.data.datasets.push(temp), window.myLine1.update()
+    })
+}
+
 function cumulative1() {
     window.myLine1.data.datasets.forEach(function(e) {
         e.data = india_time
@@ -264,9 +354,11 @@ function daily1() {
 
 getData().then(() => {
     getChart()
+}).then(() => {
+    getBarChart();
 }).catch(e => {
     console.error(e)
-}), timeSeries().then(() => {
+}), timeSeries(0, country).then(() => {
     getConfirmed()
 }).catch(e => {
     console.log(e)

@@ -297,7 +297,7 @@
                                 <div class="card-body">
                                     <h5 class="number mb-0 font-28">{{total.confirmed}}  <p style="color: rgb(255, 107, 138); font-size: 20px">+{{total.deltaconfirmed}}</p></h5>
                                     <div class="table-responsive">
-                                        <canvas id="canvas1" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                        <canvas id="confirmed" style="height:80px;" class="chartjs-render-monitor"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -310,7 +310,7 @@
                                 <div class="card-body">
                                     <h5 class="number mb-0 font-28">{{total.active}} <p style="color: rgb(148, 197, 250);; font-size: 20px;">{{calculate total.deltaconfirmed total.deltarecovered total.deltadeaths}}</p></h5>
                                     <div class="table-responsive">
-                                        <canvas id="canvas4" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                        <canvas id="active" style="height:80px;" class="chartjs-render-monitor"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -323,7 +323,7 @@
                                 <div class="card-body">
                                     <h5 class="number mb-0 font-28">{{total.recovered}}  <p style="color: rgb(127, 203, 144); font-size: 20px">+{{total.deltarecovered}}</p></h5>
                                     <div class="table-responsive">
-                                        <canvas id="canvas2" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                        <canvas id="recovered" style="height:80px;" class="chartjs-render-monitor"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -336,7 +336,7 @@
                                 <div class="card-body">
                                     <h5 class="number mb-0 font-28">{{total.deaths}}  <p style="color: rgb(168, 173, 178); font-size: 20px">+{{total.deltadeaths}}</p></h5>
                                     <div class="table-responsive">
-                                        <canvas id="canvas3" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                        <canvas id="deceased" style="height:80px;" class="chartjs-render-monitor"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -394,6 +394,51 @@
             </div>
         </div>
 
+        <hr>
+        <center>
+            <h3><span class="badge badge-secondary">Covid19 India Statistics</span></h3><br>
+            <b><label for="type">Select type: </label></b>
+            <select id="type" name="type" onchange="type_select()">
+                <option value="select" disabled>Choose Option</option>
+                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv">Confirmed Cases</option>
+                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv">Recovered Cases</option>
+                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv">Death Cases</option>
+            </select>
+
+            <div id="caseType" style="margin: 15px">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="Cumulative1" onclick="cumulative1()" id="Cumulative1" value="Cumulative1" checked>
+                    <label class="form-check-label" for="Cumulative1">Cumulative</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="Cumulative1" onclick="daily1()" id="Daily1" value="Daily1">
+                    <label class="form-check-label" for="Daily1">Daily</label>
+                </div>
+            </div>
+        </center>
+        <center>
+            <div class="container">
+                <div class="row">
+                    <div class="chart_main co-lg-12 col-xl-12" style="width:100%; height: 50%;">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div>
+                            </div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <canvas id="canvas1" style="min-height:350px" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+            <div class="btn-group">
+                <a id="download" class="btn btn-outline-danger btn-sm btn-block" download="abhay_covid_19.jpg" href="" onclick="download_img1(this);">Click Here To Download Graph</a>
+            </div>
+        </center>
+
         <div class="section-body">
             <footer class="footer">
                 <div class="container-fluid">
@@ -422,9 +467,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
 <script src="assets/bundles/lib.vendor.bundle.js"></script>
 <script defer src="assets/js/core.js"></script>
+<script src="./assets/js/custom_chart_india.js"></script>
 <script>
-    var confirmed=[],recovered=[],deceased=[],active=[],xlables1=[],color=Chart.helpers.color;async function timeSeries1(){var e=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"),t=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"),a=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv");let n=(await e.text()).split("\n"),i=(await t.text()).split("\n"),o=(await a.text()).split("\n");xlables1=n[0].split(",").splice(4);let l,s,r,d=0,c=(n=n.splice(1)).length-1;for(;d<=c;){let e=n[l=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=l+1:c=l-1}for(d=0,c=(i=i.splice(1)).length-1;d<=c;){let e=i[s=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=s+1:c=s-1}for(d=0,c=(o=o.splice(1)).length-1;d<=c;){let e=o[r=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=r+1:c=r-1}let p=[],u=[],g=[],f=0;p=n[l].split(",").splice(4),u=i[s].split(",").splice(4),g=o[r].split(",").splice(4);let m=p.length;for(let e=m-30;e<m;++e)confirmed[f]=parseInt(p[e])-parseInt(p[e-1]),recovered[f]=parseInt(u[e])-parseInt(u[e-1]),deceased[f]=parseInt(g[e])-parseInt(g[e-1]),active[f]=confirmed[f]-recovered[f]-deceased[f],f+=1;xlables1=xlables1.splice(m-30),confirmed[29]-confirmed[28]==-1*confirmed[28]&&(confirmed.splice(-1),recovered.splice(-1),deceased.splice(-1),active.splice(-1),xlables1.splice(-1))}function getConfirmed1(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.red).alpha(.2).rgbString(),borderColor:window.chartColors.red,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:confirmed,pointBackgroundColor:function(e){return 29==e.dataIndex?"red":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("canvas1").getContext("2d");window.myLine1=new Chart(t,e)}function getConfirmed2(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.green).alpha(.2).rgbString(),borderColor:window.chartColors.green,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:recovered,pointBackgroundColor:function(e){return 29==e.dataIndex?"green":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("canvas2").getContext("2d");window.myLine2=new Chart(t,e)}function getConfirmed3(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.grey).alpha(.2).rgbString(),borderColor:window.chartColors.grey,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:deceased,pointBackgroundColor:function(e){return 29==e.dataIndex?"black":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("canvas3").getContext("2d");window.myLine3=new Chart(t,e)}function getConfirmed4(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.blue).alpha(.2).rgbString(),borderColor:window.chartColors.blue,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:active,pointBackgroundColor:function(e){return 29==e.dataIndex?"blue":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("canvas4").getContext("2d");window.myLine4=new Chart(t,e)}timeSeries1().then(()=>{getConfirmed1(),getConfirmed2(),getConfirmed3(),getConfirmed4()}).catch(e=>{console.log(e)});
+    var confirmed=[],recovered=[],deceased=[],active=[],xlables1=[];async function timeSeries1(){var e=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"),t=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"),a=await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv");let n=(await e.text()).split("\n"),i=(await t.text()).split("\n"),o=(await a.text()).split("\n");xlables1=n[0].split(",").splice(4);let l,s,r,d=0,c=(n=n.splice(1)).length-1;for(;d<=c;){let e=n[l=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=l+1:c=l-1}for(d=0,c=(i=i.splice(1)).length-1;d<=c;){let e=i[s=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=s+1:c=s-1}for(d=0,c=(o=o.splice(1)).length-1;d<=c;){let e=o[r=Math.floor((d+c)/2)].split(",");if("India"==e[1])break;e[1]<"India"?d=r+1:c=r-1}let p=[],u=[],g=[],f=0;p=n[l].split(",").splice(4),u=i[s].split(",").splice(4),g=o[r].split(",").splice(4);let m=p.length;for(let e=m-30;e<m;++e)confirmed[f]=parseInt(p[e])-parseInt(p[e-1]),recovered[f]=parseInt(u[e])-parseInt(u[e-1]),deceased[f]=parseInt(g[e])-parseInt(g[e-1]),active[f]=confirmed[f]-recovered[f]-deceased[f],f+=1;xlables1=xlables1.splice(m-30),confirmed[29]-confirmed[28]==-1*confirmed[28]&&(confirmed.splice(-1),recovered.splice(-1),deceased.splice(-1),active.splice(-1),xlables1.splice(-1))}function getConfirmed1(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.red).alpha(.2).rgbString(),borderColor:window.chartColors.red,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:confirmed,pointBackgroundColor:function(e){return 29==e.dataIndex?"red":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("confirmed").getContext("2d");window.myLine1=new Chart(t,e)}function getConfirmed2(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.green).alpha(.2).rgbString(),borderColor:window.chartColors.green,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:recovered,pointBackgroundColor:function(e){return 29==e.dataIndex?"green":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("recovered").getContext("2d");window.myLine2=new Chart(t,e)}function getConfirmed3(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.grey).alpha(.2).rgbString(),borderColor:window.chartColors.grey,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:deceased,pointBackgroundColor:function(e){return 29==e.dataIndex?"black":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("deceased").getContext("2d");window.myLine3=new Chart(t,e)}function getConfirmed4(){let e={type:"line",data:{labels:xlables1,datasets:[{backgroundColor:color(window.chartColors.blue).alpha(.2).rgbString(),borderColor:window.chartColors.blue,pointRadius:function(e){return 29==e.dataIndex?4:1},fill:!1,data:active,pointBackgroundColor:function(e){return 29==e.dataIndex?"blue":""}}]},options:{legend:{display:!1},responsive:!0,maintainAspectRatio:!1,title:{display:!1},scales:{xAxes:[{display:!1}],yAxes:[{display:!1}]},tooltips:{intersect:!1,mode:"index",callbacks:{label:function(e,t){var a=t.datasets[e.datasetIndex].label||"";return a&&(a+=": "),a+e.value}}}}};var t=document.getElementById("active").getContext("2d");window.myLine4=new Chart(t,e)}timeSeries1().then(()=>{getConfirmed1(),getConfirmed2(),getConfirmed3(),getConfirmed4()}).catch(e=>{console.log(e)});
 </script>
-
 </body>
 </html>
