@@ -98,14 +98,12 @@ async function timeSeries(e = 0, c) {
     t.forEach(e => {
         tmk.push(e.split(",")[1]);
     })
-    console.log(new Set(tmk))
 
     xlables1 = t[0].split(",").splice(4);
     let o, l = 0,
         d = (t = t.splice(1)).length - 1;
     for (; l <= d;) {
         let e = t[o = Math.floor((l + d) / 2)].split(",");
-        console.log(e[1]);
         if (c.localeCompare(e[1]) == 0) break;
         c.localeCompare(e[1]) > 0 ? l = o + 1 : d = o - 1
     }
