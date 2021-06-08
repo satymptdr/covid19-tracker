@@ -20,11 +20,13 @@ Covid 19 Tracker is web application to display up to date data of covid cases.
 1. Fatility rate by COMORBIDITY
 1. Situation report by WHO
 1. Latest News
+1. Tweet from Indian health authorities
 1. Interactive Charts
 1. Civic freedom tracker
 
+
 ## Future Update
-I am working on notification features. On opening the site, web app will send covid data to user as per their location(state).
+Working on Bot Support
 
 ## Sample
 Dashboard Highlight           |  World wide data           |  Situation report & Latest News
