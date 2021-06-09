@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/App.js",
     "compress": "node src/compress.js",
+    "restart": "nodemon src/App.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Abhay Sardhara",
@@ -31,8 +32,5 @@
     "redis": "^3.1.2",
     "socket.io": "^4.0.1"
   },
-  "devDependencies": {
-    "grunt-contrib-cssmin": "^4.0.0",
-    "grunt-uncss": "^0.10.0"
-  }
+  "devDependencies": {}
 }

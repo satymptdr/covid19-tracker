@@ -103,6 +103,7 @@
         display: none;
     }
 
+    /* Rocket Luncher */
     #rocketmeluncur {
         position: fixed;
         bottom: 50px;
@@ -165,6 +166,116 @@
         -moz-transform: scale(1.4, 3.2);
         transform: scale(1.4, 3.2)
     }
+
+    /* Progress Bar CSS */
+    .progress-bar-wrapper {
+        -webkit-tap-highlight-color: transparent;
+        font-family: "archia";
+        animation-duration: .45s;
+        animation-fill-mode: both;
+        animation-name: fadeInUp;
+        color: #6c757d;
+        font-size: 12px;
+        margin-bottom: .25rem;
+        margin-top: .5rem;
+        position: relative;
+        width: 100%;
+        animation-delay: 2000ms;
+    }
+
+    .legend {
+        -webkit-tap-highlight-color: transparent;
+        color: #6c757d;
+        font-size: 12px;
+        font-family: "archia";
+        opacity: .6;
+    }
+
+    .label-wrapper {
+        -webkit-tap-highlight-color: transparent;
+        color: #6c757d;
+        font-size: 12px;
+        font-family: "archia";
+        display: flex;
+    }
+
+    .progress-bar {
+        -webkit-tap-highlight-color: transparent;
+        font-size: 12px;
+        font-family: "archia";
+        background-color: rgba(219,85,129,.12549019607843137);
+        border-radius: 5px;
+        color: #db5581;
+        height: 24px;
+        margin-bottom: .1rem;
+        margin-top: .1rem;
+        position: relative;
+    }
+
+    .value {
+        -webkit-tap-highlight-color: transparent;
+        font-size: 12px;
+        font-family: "archia";
+        background-color: rgba(219,85,129,.12549019607843137);
+        border-radius: 5px;
+        color: #db5581;
+        background-image: linear-gradient(45deg,rgba(219,85,129,.6) 25%,rgba(219,85,129,.12549019607843137) 0,rgba(219,85,129,.12549019607843137) 50%,rgba(219,85,129,.6) 0,rgba(219,85,129,.6) 75%,rgba(219,85,129,.12549019607843137) 0,rgba(219,85,129,.12549019607843137));
+        background-size: 14px 14px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        margin: 0;
+        opacity: .6;
+        position: absolute;
+        width: 14.415%;
+    }
+
+    .opaque {
+        -webkit-tap-highlight-color: transparent;
+        font-size: 12px;
+        font-family: "archia";
+        border-radius: 5px;
+        color: #db5581;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        margin: 0;
+        position: absolute;
+        background: rgba(219,85,129,.6);
+        opacity: 1;
+        width: 3.52024%;
+    }
+    
+    #progress-text {
+        -webkit-tap-highlight-color: transparent;
+        font-size: 12px;
+        color: #db5581;
+        cursor: pointer;
+        font-family: "archia";
+        margin-left: calc(100% + .25rem);
+        width: max-content;
+    }
+
+    .highlighted {
+        -webkit-tap-highlight-color: transparent;
+        color: #6c757d;
+        font-size: 12px;
+        font-family: "archia";
+        opacity: 1;
+    }
+
+    .label-wrapper {
+        -webkit-tap-highlight-color: transparent;
+        color: #6c757d;
+        font-size: 12px;
+        font-family: "archia";
+        display: flex;
+    }
+
 </style>
 </head>
 
@@ -426,6 +537,35 @@
                     <option value="WB">West Bengal</option>
                 </select>
                 </center>
+            </div>
+
+            <div class="container" style="width: 90%;">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="progress-bar-wrapper fadeInUp" id="progressbar" style="animation-delay: 2000ms;">
+                            <div class="legend">
+                                <div class="label-wrapper">
+                                    <div id="upper-label"></div>
+                                    <div class="label">At least one dose</div>
+                                </div>
+                                <div class="arrow" id="upper-arrow">|</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar value" id="value">
+                                    <span id="progress-text"></span>
+                                </div>
+                                <div class="progress-bar value opaque highlighted" id="opaque"></div>
+                            </div>
+                            <div class="legend highlighted">
+                                <div class="arrow" id="lower-arrow">|</div>
+                                <div class="label-wrapper">
+                                    <div id="lower-label"></div>
+                                    <div class="label" id="label"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="container mt-4">

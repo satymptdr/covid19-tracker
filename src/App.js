@@ -112,7 +112,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: 'application/*+json' }));
 
 hbs.registerHelper('formatIndiaCasesTime', function (date, format) {
-    return moment.unix(parseInt(moment(date, format).format("X")) - 330*60).fromNow();
+    return moment.unix(parseInt(moment(date, format).format("X"))).fromNow();
 });
 
 hbs.registerHelper('getTime', function (timestamp) {
@@ -127,7 +127,7 @@ hbs.registerHelper('check', function (timestamp) {
 });
 
 hbs.registerHelper('getDayMonth', function (timestamp, format) {
-    return moment.unix((parseInt(timestamp) + 330*60)).format(format);
+    return moment.unix((parseInt(timestamp))).format(format);
 });
 
 hbs.registerHelper('percent', function (cases, total) {
@@ -164,12 +164,18 @@ var arrUpdate = [];  // Latest Update
 var db;
 
 function connect_db() {
-    MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true }, { useUnifiedTopology: true }, (error, client) => {
-        if (error) {
-            throw error
+    MongoClient.connect(process.env.MONGODB_URI, 
+        {
+            useNewUrlParser: true, 
+            useUnifiedTopology: true 
+        }, 
+        (error, client) => {
+            if (error) {
+                throw error
+            }
+            db = client.db('covidtracker_user')
         }
-        db = client.db('covidtracker_user')
-    });
+    );
 }
 
 connect_db();

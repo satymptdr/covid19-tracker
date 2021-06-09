@@ -6,6 +6,46 @@ function isStateExists() {
         if (e[a].value == code) return !0;
     return !1
 }
+
+const population = {
+    "AN": 434000,
+    "AP": 49577103,
+    "AR": 1383727,
+    "AS": 31205576,
+    "BR": 119520000,
+    "CH": 1179000,
+    "CT": 28724000,
+    "DL": 31181000,
+    "DN": 585764,
+    "GA": 1504000,
+    "GJ": 60439692,
+    "HP": 6864602,
+    "HR": 25351462,
+    "JH": 32988134,
+    "JK": 12267032,
+    "KA": 64100000,
+    "KL": 33406061,
+    "LA": 274000,
+    "LD": 64473,
+    "MH": 112374333,
+    "ML": 2966889,
+    "MN": 2570390,
+    "MP": 72626809,
+    "MZ": 1097206,
+    "NL": 1978502,
+    "OR": 41974219,
+    "PB": 27743338,
+    "PY": 1247953,
+    "RJ": 68548437,
+    "SK": 610577,
+    "TG": 35003674,
+    "TN": 72147030,
+    "TR": 3673917,
+    "UP": 199812341,
+    "UT": 10086292,
+    "WB": 91276115
+}
+
 var config, config1, g_idx = 0,
     xlables = [],
     xlables1 = [],
@@ -19,6 +59,7 @@ var config, config1, g_idx = 0,
     india_time = [],
     state_name = "GJ",
     country = "India",
+    vaccine1=0, vaccine2=0,
     color = Chart.helpers.color,
     series_label = "Confirmed Cases",
     bg = color(window.chartColors.red).alpha(.5).rgbString(),
@@ -74,7 +115,7 @@ async function getData() {
         n = await d.json();
     xlables.length = 0, xlables = Object.keys(n[state_name].dates), ydata1.length = 0, ydata2.length = 0, ydata3.length = 0, ydata4.length = 0, ydata5.length = 0, ydata6.length = 0, Object.keys(n[state_name]).map(d => {
         xlables.forEach(r => {
-            e = n[state_name][d][r].total.confirmed || !1, a = n[state_name][d][r].total.recovered || !1, t = n[state_name][d][r].total.deceased || !1, o = n[state_name][d][r].total.tested || !1, l = n[state_name][d][r].total.vaccinated || !1, ydata1.push(e), ydata2.push(a), ydata3.push(t), ydata5.push(o), ydata6.push(l), ydata4.push(e - a - t)
+            e = n[state_name][d][r].total.confirmed || !1, a = n[state_name][d][r].total.recovered || !1, t = n[state_name][d][r].total.deceased || !1, o = n[state_name][d][r].total.tested || !1, vaccine1 = l = n[state_name][d][r].total.vaccinated1 || !1, vaccine2=n[state_name][d][r].total.vaccinated2 || !1, ydata1.push(e), ydata2.push(a), ydata3.push(t), ydata5.push(o), ydata6.push(l), ydata4.push(e - a - t)
         })
     }), state_obj[0].data = ydata1, state_obj[1].data = ydata2, state_obj[2].data = ydata4, state_obj[3].data = ydata3, state_obj[4].data = ydata5, state_obj[5].data = ydata6
     let index = xlables.length;
@@ -279,6 +320,14 @@ function updateBarChart() {
 
 function select_operation() {
     xlables.length = 0, ydata1.length = 0, ydata2.length = 0, ydata3.length = 0, ydata4.length = 0, ydata5.length = 0, ydata6.length = 0, state_name = document.getElementById("states").value, getData().then(() => {
+        document.getElementById("label").innerHTML = "Fully vaccinated (" + ((vaccine2 / population[state_name]) * 100).toFixed(2) + "%) - " + vaccine2;
+        document.getElementById("progress-text").innerHTML = ((vaccine1 / population[state_name]) * 100).toFixed(2) + "% - " + vaccine1;
+        document.getElementById("upper-label").style.width = ((vaccine1 / population[state_name]) * 100 - 5) + "%";
+        document.getElementById("upper-arrow").style.marginLeft = ((vaccine1 / population[state_name]) * 100) + "%";
+        document.getElementById("lower-label").style.width = ((vaccine2 / population[state_name]) * 100 - 3) + "%";
+        document.getElementById("lower-arrow").style.marginLeft = ((vaccine2 / population[state_name]) * 100) + "%";
+        document.getElementById("value").style.width = ((vaccine1 / population[state_name]) * 100) + "%";
+        document.getElementById("opaque").style.width = ((vaccine2 / population[state_name]) * 100) + "%";
         window.myLine.data.labels = xlables, window.myLine.data.datasets[0].data = ydata1, window.myLine.data.datasets[0].label = state_obj[0].label, window.myLine.data.datasets[0].backgroundColor = state_obj[0].backgroundColor, window.myLine.data.datasets[0].borderColor = state_obj[0].borderColor, window.myLine.update()
         updateBarChart();
     })
@@ -351,6 +400,14 @@ function daily1() {
 }
 
 getData().then(() => {
+    document.getElementById("label").innerHTML = "Fully vaccinated (" + ((vaccine2 / population[state_name]) * 100).toFixed(2) + "%) - " + vaccine2;
+    document.getElementById("progress-text").innerHTML = ((vaccine1 / population[state_name]) * 100).toFixed(2) + "% - " + vaccine1;
+    document.getElementById("upper-label").style.width = ((vaccine1 / population[state_name]) * 100 - 5) + "%";
+    document.getElementById("upper-arrow").style.marginLeft = ((vaccine1 / population[state_name]) * 100) + "%";
+    document.getElementById("lower-label").style.width = ((vaccine2 / population[state_name]) * 100 - 3) + "%";
+    document.getElementById("lower-arrow").style.marginLeft = ((vaccine2 / population[state_name]) * 100) + "%";
+    document.getElementById("value").style.width = ((vaccine1 / population[state_name]) * 100) + "%";
+    document.getElementById("opaque").style.width = ((vaccine2 / population[state_name]) * 100) + "%";
     getChart()
 }).then(() => {
     getBarChart();
