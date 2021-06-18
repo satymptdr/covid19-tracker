@@ -7,7 +7,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const path = require('path');
 var bodyParser = require('body-parser');
-const dotenv = require('dotenv');
+require('dotenv').config();
 var compression = require('compression');
 const redis = require('redis');
 const fetch = require('node-fetch')
@@ -16,7 +16,6 @@ const cheerio = require('cheerio')
 var moment = require('moment-timezone');
 moment.tz.add("Asia/Calcutta|HMT BURT IST IST|-5R.k -6u -5u -6u|01232|-18LFR.k 1unn.k HB0 7zX0");
 moment.tz.link("Asia/Calcutta|Asia/Kolkata");
-dotenv.config();
 
 // Node Mailer
 const nodemailer = require('nodemailer');
@@ -173,7 +172,7 @@ function connect_db() {
             if (error) {
                 throw error
             }
-            db = client.db('covidtracker_user')
+            db = client.db(process.env.MONGODB_DATABASE)
         }
     );
 }
