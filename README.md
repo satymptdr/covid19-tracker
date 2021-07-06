@@ -20,7 +20,7 @@ Covid 19 Tracker is web application to display up to date data of covid cases.
 1. Fatility rate by COMORBIDITY
 1. Situation report by WHO
 1. Latest News
-1. Tweet from Indian health authorities
+1. Facebook Page from Indian health authorities
 1. Interactive Charts
 1. Civic freedom tracker
 
