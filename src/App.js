@@ -12,8 +12,18 @@ const nodemailer = require('nodemailer')
 const {civicFreedomTracker, get_news, getUpdate, situationReports,
     indiaCasesByStates, reports} = require('./Api')
 
+/* Normalize a port into a number, string, or false. */
+ function normalizePort(val) {
+    var port = parseInt(val, 10);
+    if (isNaN(port)) return val;
+    if (port >= 0) return port;
+    return false;
+}
+
 const client = redis.createClient({
-    url: process.env.REDIS_URL,
+    host: process.env.REDIS_HOST,
+    port: normalizePort(process.env.REDIS_PORT),
+    password: process.env.REDIS_PASS,
     tls: {
         rejectUnauthorized: false
     }
