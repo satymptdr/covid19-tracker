@@ -266,17 +266,14 @@
 
 </head>
 
-{{!-- class = "offcanvas-active" --}}
 <body class="font-roboto">
 
-
-<!-- Page Loader -->
-{{!-- <div class="page-loader-wrapper">
-    <div class="loader"></div>
-</div> --}}
+{{!-- Facebook Plugin start --}}
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/gu_IN/sdk.js#xfbml=1&version=v11.0" nonce="jVp9iNOs"></script>
+{{!-- Facebook Plugin end --}}
 
 <div id="main_content">
-
     <div id="header_top" class="header_top">
         <div class="container">
             <div class="hleft">
@@ -581,7 +578,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3">
                         <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
                             <div class="card-header" style="background-color: #283041;">
                                 <h3 class="card-title" style="color: white; font-weight: 500;">Live Case Updates</h3>
@@ -614,16 +611,50 @@
                         </div>
                     </div>
 
-                    {{!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3">
                         <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
                             <div class="card-header" style="background-color: #283041;">
-                                <h3 class="card-title" style="color: white; font-weight: 500;">Local and health authorities on Twitter</h3>
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Local and health authorities on Facebook</h3>
                             </div>
                             <div class="card-body" style="height: 550px; overflow-y:scroll;">
-                                <a class="twitter-timeline" href="https://twitter.com/MoHFW_INDIA?ref_src=twsrc%5Etfw">Tweets by MoHFW_INDIA</a>
+                                <div class="fb-page responsive" data-href="https://www.facebook.com/MoHFWIndia" data-tabs="timeline" data-width="500px" data-height="" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/MoHFWIndia" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/MoHFWIndia">Ministry of Health and Family Welfare, Government of India</a></blockquote></div>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
+
+                    <div class="col-12 col-sm-12 mb-2">
+                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                            <div class="card-header" style="background-color: #283041;">
+                                <h3 class="card-title" style="color: white; font-weight: 500;">Weekly operational update by WHO (World Health Organization)</h3>
+                            </div>
+                            <div class="card-body" style="height: 300px; overflow-y:scroll;">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped table-vcenter mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th style="font-weight: bolder;">Date</th>
+                                                <th style="font-weight: bolder;">Download Pdf</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{#each report}}
+                                            <tr>
+                                                <td>{{this.date}}</td>
+                                                <td>
+                                                    <a href="{{this.pdf}}" target="_blank"><i class="fi-page-pdf" aria-hidden="true" style="font-size: 20px; margin-right: 8px"></i>
+                                                        {{#if (isNew this.index)}}
+                                                            <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/new.gif" loading="lazy" alt="Covid 19 Situation Report world" height="20px" width="33px">
+                                                        {{/if}}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="col-xl-6 col-lg-6 mb-2">
                         <div class="card mb-4" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
@@ -732,48 +763,7 @@
             </div>
         </div>
         
-        <div class="section-body">
-            <div class="container-fluid">    
-                <div class="row clearfix">
-                    <div class="col-12 col-sm-12 mb-3">
-                        <div class="card" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                            <div class="card-header" style="background-color: #283041;">
-                                <h3 class="card-title" style="color: white; font-weight: 500;">Situation Reports By WHO (World Health Organization)</h3>
-                            </div>
-                            <div class="card-body" style="height: 300px; overflow-y:scroll;">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped table-vcenter mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th style="font-weight: bolder;">#</th>
-                                                <th style="font-weight: bolder;">Date</th>
-                                                <th style="font-weight: bolder;">Download Pdf</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{#each report}}
-                                                <tr>
-                                                    <td>{{this.report}}</td>
-                                                    <td>{{this.date}}</td>
-                                                    <td>
-                                                        <a href="{{this.pdf}}" target="_blank"><i class="fi-page-pdf" aria-hidden="true" style="font-size: 20px; margin-right: 8px"></i>
-                                                            {{#if this.new}}
-                                                                <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="image/new.gif" loading="lazy" alt="Covid 19 Situation Report world" height="20px" width="33px">
-                                                            {{/if}}
-                                                        </a>
-                                                    </td>
-                                            </tr>
-                                            {{/each}}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    
         <!-- Back to top button -->
         <a href="javascript:void(0);" id="rocketmeluncur" class="showrocket" ><i></i></a>
 
@@ -806,6 +796,5 @@
 <script src="assets/js/core.js"></script>
 <script src="assets/js/notification/user_data.js"></script>
 <script src="assets/js/utility_pre.js"></script>
-{{!-- <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> --}}
 </body>
 </html>

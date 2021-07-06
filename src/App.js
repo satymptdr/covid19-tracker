@@ -1,46 +1,19 @@
-const os = require('os');
-process.env.UV_THREADPOOL_SIZE=os.cpus().length;
-const covid = require('covid19-api');
-const express = require('express');
-const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-const path = require('path');
-var bodyParser = require('body-parser');
-require('dotenv').config();
-var compression = require('compression');
-const redis = require('redis');
-const fetch = require('node-fetch')
-const axios = require('axios').default
-const cheerio = require('cheerio')
-var moment = require('moment-timezone');
-moment.tz.add("Asia/Calcutta|HMT BURT IST IST|-5R.k -6u -5u -6u|01232|-18LFR.k 1unn.k HB0 7zX0");
-moment.tz.link("Asia/Calcutta|Asia/Kolkata");
-
-// Node Mailer
-const nodemailer = require('nodemailer');
-
-/**  Normalize a port into a number, string, or false. */
- function normalizePort(val) {
-    var port = parseInt(val, 10);
-  
-    if (isNaN(port)) {
-      // named pipe
-      return val;
-    }
-  
-    if (port >= 0) {
-      // port number
-      return port;
-    }
-  
-    return false;
-  }
+const os = require('os')
+process.env.UV_THREADPOOL_SIZE=os.cpus().length
+const express = require('express')
+const app = express()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
+require('dotenv').config()
+const redis = require('redis')
+const mongodb = require('mongodb')
+const MongoClient = mongodb.MongoClient
+const nodemailer = require('nodemailer')
+const {civicFreedomTracker, get_news, getUpdate, situationReports,
+    indiaCasesByStates, reports} = require('./Api')
 
 const client = redis.createClient({
-    port: normalizePort(process.env.REDIS_PORT),
-    host: process.env.REDIS_HOST,
-    password: process.env.REDIS_PASS,
+    url: process.env.REDIS_URL,
     tls: {
         rejectUnauthorized: false
     }
@@ -51,117 +24,26 @@ client.on('connect', (err, reply) => {
         console.log('error redis');
     }
     console.log('redis connected');
-});
-
-client.on('error', (err) => {
+}).on('error', (err) => {
     console.log('Error: ' + err);
 });
 
-// mongodb-mLab-robo 3T
-const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient
-
-const databaseName = process.env.MONGODB_URI;
-
-var hbs = require('hbs');
-const { request } = require('http');
-app.set('view engine', 'hbs');
-app.use(compression());
-app.use(express.static("public", {
-    etag: true,
-    lastModified: true,
-    setHeaders: (res, path) => {
-
-        if (path.match(/\.(css|png|jpg|jpeg|gif|ico|svg)$/)) {
-            const date = new Date();
-            date.setFullYear(date.getFullYear() + 1);
-            res.setHeader("Expires", date.toUTCString());
-            res.setHeader("Cache-Control", "public, max-age=345600, immutable");
-        }
-        if (path.match(/\.(js)$/)) {
-            const date = new Date();
-            date.setFullYear(date.getFullYear() + 1);
-            res.setHeader("Expires", date.toUTCString());
-            res.setHeader("Cache-Control", "public, max-age=172800, immutable");
-        }
-    }
-}));
-// compress all responses
-app.use('/', express.static("views", {
-    etag: true,
-    lastModified: true,
-    setHeaders: (res, path) => {
-
-        if (path.match(/\.(css|png|jpg|jpeg|gif|ico|svg|woff)$/)) {
-            const date = new Date();
-            date.setFullYear(date.getFullYear() + 1);
-            res.setHeader("Expires", date.toUTCString());
-            res.setHeader("Cache-Control", "public, max-age=345600, immutable");
-        }
-        if (path.match(/\.(js)$/)) {
-            const date = new Date();
-            date.setFullYear(date.getFullYear() + 1);
-            res.setHeader("Expires", date.toUTCString());
-            res.setHeader("Cache-Control", "public, max-age=172800, immutable");
-        }
-    }
-}));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json({ type: 'application/*+json' }));
-
-hbs.registerHelper('formatIndiaCasesTime', function (date, format) {
-    return moment.unix(parseInt(moment(date, format).format("X"))).fromNow();
-});
-
-hbs.registerHelper('getTime', function (timestamp) {
-    return moment.unix(timestamp).fromNow();
-});
-
-hbs.registerHelper('check', function (timestamp) {
-    if(moment.unix(timestamp).format('D') === moment().format('D')) {
-        return true;
-    }
-    return false;
-});
-
-hbs.registerHelper('getDayMonth', function (timestamp, format) {
-    return moment.unix((parseInt(timestamp))).format(format);
-});
-
-hbs.registerHelper('percent', function (cases, total) {
-    return ((cases / total) * 100).toFixed(1) + '%';
-});
-
-hbs.registerHelper('calculate', function (confirm, deceased, recover) {
-    let z = confirm - deceased - recover
-    if(z >= 0) {
-        return '+' + z;
-    }
-    return z;
-});
-
-hbs.registerHelper('filterZero', (value) => {
-    if(value == '0' || value == 0) {
-        return '';
-    }
-    else {
-        return '+' + value;
-    }
-});
+// Handlebar helper registation and Express App middlewares
+require('./init')(app, express);
 
 var arr = [];      // World Data
 var arr2 = [];     // India Data
 var arr4 = [];     // WHO reports
 var arr5 = [];     // Civic Tracker
 var total, india_total, india_new;
-var results = [];   // Latest News
-var arrUpdate = [];  // Latest Update
+var results  // Latest News
+var arrUpdate  // Latest Update
 
+get_news().then(data => { results = data })
+getUpdate().then(data => { arrUpdate = data})
 
 // MongoDB database connection
 var db;
-
 function connect_db() {
     MongoClient.connect(process.env.MONGODB_URI, 
         {
@@ -179,83 +61,15 @@ function connect_db() {
 
 connect_db();
 
-// Web Scrapping for news
-const getPostsDailyHunt = (html) => {
-    let $ = cheerio.load(html)
-    $('div.listtostory').each(function() {
-        let left = $(this).children()
-        let news_uri = 'https://www.livemint.com' + left.children().attr('href')
-        let news_img  = left.children().children().attr('src')
-        let news_type = 'Covid News'
-        let a = left.next().children().children().text().replace(/^\s+|\s+$/gm,'').split('\n')
-        let obj = {
-                title: a[0],
-                uri: news_uri,
-                img: news_img,
-                type: news_type,
-                time: a[1].split('.')[1].slice(0,8)
-            }
-        if(obj.title != '') {
-            results.push(obj);
-        }
-    })
-}
-
-const getAllHTMLDailyHunt = async () => {
-    fetch('https://www.livemint.com/Search/Link/Keyword/covid')
-        .then(resp => resp.text()) 
-        .then(htmls => getPostsDailyHunt(htmls))
-}
-
-async function get_news() {
-    // await connect_db();
-    results.length = 0;
-    await getAllHTMLDailyHunt();
-}
-
-get_news();
-setInterval(get_news, 1000 * 60 * 15);
-
-async function getUpdate() {
-    arrUpdate.length = 0;
-    var res = await fetch('https://api.covid19india.org/updatelog/log.json');
-    var d = await res.json();
-    arrUpdate = d.reverse();
-}
-
-getUpdate();
-setInterval(getUpdate, 1000 * 60 * 15);
-
 // Routing
 app.get('/', (req, res) => {
     client.get('report', (err, result) => {
         if(result) {
             arr4 = JSON.parse(result);
-
         }
         else {
-            covid.plugins[0].situationReports().then((result) => {
-                var data;
-            
-                for(var i=0; i<result.length; i++) {
-                    if(i == 0) {
-                        data = {
-                            report : (result[i].report).slice(19),
-                            date : result[i].date,
-                            pdf : result[i].pdf,
-                            new : true
-                        };
-                    }
-                    else {
-                        data = {
-                            report : (result[i].report).slice(19),
-                            date : result[i].date,
-                            pdf : result[i].pdf,
-                            new : false
-                        };
-                    }
-                    arr4.push(data);
-                }
+            situationReports().then((result) => {
+                arr4 = result;    
             }).then(() => {
                 client.setex('report', 1296000, JSON.stringify(arr4));
             });
@@ -272,8 +86,7 @@ app.get('/', (req, res) => {
             res.render('index', {main : arr, report : arr4, cont: results, update: arrUpdate});
         }
         else {
-            covid.plugins[0].reports().then((result) => {
-                var data;
+            reports().then((result) => {
                 arr.length = 0;
                 for(var i=0; i < result[0].table[0].length - 1; i++) {
                         let x = result[0].table[0][i];
@@ -283,7 +96,7 @@ app.get('/', (req, res) => {
                             india_new = x.NewCases;
                         }
 
-                        data = {
+                        arr.push({
                             Country : x.Country,
                             TotalCases : x.TotalCases,
                             NewCases : x.NewCases,
@@ -293,8 +106,7 @@ app.get('/', (req, res) => {
                             TotalTests: x.TotalTests,
                             TotalRecovered : x.TotalRecovered,
                             DeathRate : x.Deaths_1M_pop
-                        };
-                        arr.push(data);
+                        });
                 }
                 arr.sort((a, b) => {
                     return b.TotalCases > a.TotalCases;
@@ -327,9 +139,9 @@ app.get('/india', (req, res) => {
             res.render('india', {india : result, total : total_data});
         }
         else {
-            covid.plugins[0].indiaCasesByStates().then((result) => {            
-                total = result[0].table[0]; 
-                arr2 = result[0].table;
+            indiaCasesByStates().then((result) => {
+                total = result[0]; 
+                arr2 = result;
                 arr2.shift();
                 arr2.sort((a, b) => {
                     return b.confirmed - a.confirmed;
@@ -348,33 +160,7 @@ app.get('/chart', (req, res) => {
     res.render('chart');
 })
 
-// Scrapping Civiv Freedom Tracker
-const civicFreedomTracker = async() =>{
-    const res = await fetch('https://www.icnl.org/covid19tracker/')
-    const body = await res.text();
-    const $ = cheerio.load(body);
-    
-    const promises = [];
-  
-    $('div#entries div.entry').each((index, element) =>{
-      const $element = $(element);
-      const country = $element.find('div.entrypretitle').text().trim();
-      const title = $element.find('h3').text().trim();
-      let type = $element.find('span.order').text().trim();
-      const date = $element.find('span.date').text().trim().substr(11);
-      const issue = $element.find('span.issue').text().trim().substr(10);
-      const description = $element.find('p').text().trim().split("\n")[0];
-  
-      promises.push({country , title , description , type , date, issue});
-    });
-  
-    const table = [{table: promises}];
-  
-    return Promise.all(table);
-};
-
 app.get('/news', (req, res) => {
-    const mySet = new Set()
     client.get('civic', (err, result) => {
         if(result) {
             result = JSON.parse(result);
@@ -417,10 +203,10 @@ app.post('/userContact', (req, res) => {
     };
 
     var mailOptions = {
-        from: req.body.email,
-        to: 'abhaysardharaa@gmail.com',
-        subject: req.body.subject,
-        text: req.body.text + ' sended by ' + req.body.email
+        from: 'abhaysardharaa@gmail.com',
+        to: req.body.email,
+        subject: 'Covid19 Tracker - We received your response',
+        text: 'Hello ' + req.body.name + '. Thank you for your response. We will shortly communicate with you.\n\n Stay Safe.'
     };
       
     transporter.sendMail(mailOptions, function(error, info){
@@ -478,6 +264,21 @@ app.get('/abhay/data', (req, res) => {
         res.render('data', {user : result});
     });
 });
+
+app.get('/Api/getNews', (req, res) => {
+    get_news().then(data => res.json(data))
+})
+
+app.get('/Api/civicFreedomTracker', (req, res) => {
+    civicFreedomTracker().then(data => res.json(data))
+})
+
+app.get('/Api/situationReports', (req, res) => {
+    situationReports().then(data => res.json(data))
+})
+app.get('/Api/worldData', (req, res) => {
+    reports().then(data => res.json(data))
+})
 
 io.on('connection', (socket) => {  
     // when the client emits 'request data', this listens and executes
