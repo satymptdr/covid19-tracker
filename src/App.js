@@ -45,7 +45,7 @@ var arr = [];      // World Data
 var arr2 = [];     // India Data
 var arr4 = [];     // WHO reports
 var arr5 = [];     // Civic Tracker
-var total, india_total, india_new;
+var total, india_total, india_new, india_active, india_death, india_new_death, world_total, world_new, world_active, world_death, world_new_death;
 var results  // Latest News
 var arrUpdate  // Latest Update
 
@@ -81,7 +81,7 @@ app.get('/', (req, res) => {
             situationReports().then((result) => {
                 arr4 = result;    
             }).then(() => {
-                client.setex('report', 1296000, JSON.stringify(arr4));
+                client.setex('report', 24*60*60, JSON.stringify(arr4));
             });
         }
     });
@@ -90,9 +90,21 @@ app.get('/', (req, res) => {
         if(result) {
             arr.length = 0;
             arr = JSON.parse(result);
+
             let obj = arr.find(obj => obj.Country == 'India');
             india_total = obj.TotalCases;
             india_new = obj.NewCases == '' ? '+0' : obj.NewCases;
+            india_active = obj.ActiveCases == '' ? '+0' : obj.ActiveCases;
+            india_death = obj.TotalDeaths == '' ? '+0' : obj.TotalDeaths;
+            india_new_death = obj.NewDeaths == '' ? '+0' : obj.NewDeaths;
+
+            let test = arr.find(obj => obj.Country == 'World');
+            world_total = test.TotalCases;
+            world_new = test.NewCases == '' ? '+0' : test.NewCases;
+            world_active = test.ActiveCases == '' ? '+0' : test.ActiveCases;
+            world_death = test.TotalDeaths == '' ? '+0' : test.TotalDeaths;
+            world_new_death = test.NewDeaths == '' ? '+0' : test.NewDeaths;
+
             res.render('index', {main : arr, report : arr4, cont: results, update: arrUpdate});
         }
         else {
@@ -104,6 +116,16 @@ app.get('/', (req, res) => {
                         if(x.Country == 'India') {
                             india_total = x.TotalCases;
                             india_new = x.NewCases;
+                            india_active = x.ActiveCases,
+                            india_death = x.TotalDeaths,
+                            india_new_death = x.NewDeaths
+                        }
+                        else if(x.Country == 'World') {
+                            world_total = x.TotalCases;
+                            world_new = x.NewCases;
+                            world_active = x.ActiveCases,
+                            world_death = x.TotalDeaths,
+                            world_new_death = x.NewDeaths
                         }
 
                         arr.push({
@@ -124,7 +146,7 @@ app.get('/', (req, res) => {
 
             }).then(function() {
                 res.render('index', {main : arr, report : arr4, cont: results,  update: arrUpdate});
-                client.setex('world_data', 3600, JSON.stringify(arr));
+                client.setex('world_data', 60*60, JSON.stringify(arr));
             });
         }
     });
@@ -159,8 +181,8 @@ app.get('/india', (req, res) => {
                 arr2.pop();
             }).then(function() {
                 res.render('india', {india : arr2, total : total});
-                client.setex('india_data', 600, JSON.stringify(arr2));
-                client.setex('total', 600, JSON.stringify(total));
+                client.setex('india_data', 10*60, JSON.stringify(arr2));
+                client.setex('total', 10*60, JSON.stringify(total));
             });
         }
     });
@@ -182,7 +204,7 @@ app.get('/news', (req, res) => {
                 arr5 = r[0].table;
             }).then(function() {
                 res.render('news', {news : arr5});
-                client.setex('civic', 432000, JSON.stringify(arr5));
+                client.setex('civic', 5*24*60*60, JSON.stringify(arr5));
             });
         }
     });
@@ -276,18 +298,32 @@ app.get('/abhay/data', (req, res) => {
 });
 
 app.get('/Api/getNews', (req, res) => {
-    get_news().then(data => res.json(data))
+    client.get('civic', (err, result) => {
+        if(result) {
+            res.json(result);
+        }
+        else {
+            get_news().then(data => res.json(data))
+        }
+    });
 })
 
 app.get('/Api/civicFreedomTracker', (req, res) => {
     civicFreedomTracker().then(data => res.json(data))
 })
 
-app.get('/Api/situationReports', (req, res) => {
+app.get('/Api/ ', (req, res) => {
     situationReports().then(data => res.json(data))
 })
 app.get('/Api/worldData', (req, res) => {
-    reports().then(data => res.json(data))
+    client.get('world_data', (err, result) => {
+        if(result) {
+            res.json(result);
+        }
+        else {
+            reports().then(data => res.json(data))
+        }
+    });
 })
 
 io.on('connection', (socket) => {  
@@ -296,6 +332,21 @@ io.on('connection', (socket) => {
         socket.emit('answer data', {
             india_total : india_total,
             india_new : india_new
+        });
+    });
+
+    socket.on('bot_data_request', () => {
+        socket.emit('bot_data_answer', {
+            india_total : india_total,
+            india_new : india_new,
+            india_active : india_active,
+            india_death : india_death,
+            india_new_death : india_new_death,
+            world_total : world_total,
+            world_new : world_new,
+            world_active : world_active,
+            world_death : world_death,
+            world_new_death : world_new_death
         });
     });
 });

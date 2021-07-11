@@ -159,109 +159,257 @@
         color: mediumturquoise;
         font-weight: 500;
     }
-    #button {
-        display: inline-block;
-        background-color: #FF9800;
-        width: 50px;
-        height: 50px;
-        text-align: center;
-        border-radius: 4px;
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        transition: background-color .3s, 
-            opacity .5s, visibility .5s;
-        opacity: 0;
-        visibility: hidden;
-        z-index: 1000;
-    }
-    #button::after {
-        content: "\f077";
-        font-family: FontAwesome;
-        font-weight: normal;
-        font-style: normal;
-        font-size: 2em;
-        line-height: 50px;
-        color: #fff;
-    }
-    #button:hover {
+
+    /* Covid Bot Styling*/
+    /*************************************** Chat Toggle ***********************************/
+
+    .floating-chat {
         cursor: pointer;
-        background-color: #333;
-    }
-    #button:active {
-        background-color: #555;
-    }
-    #button.show {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    #scrolltop {
-        display: none;
-    }
-
-    #rocketmeluncur {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
         position: fixed;
-        bottom: 50px;
-        z-index: 7;
-        display: none;
-        visibility: hidden;
-        width: 26px;
-        height: 48px;
-        right: 25px;
-        background: url(https://3.bp.blogspot.com/-GZOBULN1Q4s/VbNxQrf37EI/AAAAAAAAAPk/rak337seJ70/s1600/Ask.png) no-repeat 50% 0;
+        bottom: 20px;
+        right: 20px;
+        width: 70px;
+        height: 70px;
+        transform: translateY(70px);
+        transition: all 250ms ease-out;
+        border-radius: 50%;
         opacity: 0;
-        -webkit-transition: visibility .6s cubic-bezier(0.6, 0.04, 0.98, 0.335), opacity .6s cubic-bezier(0.6, 0.04, 0.98, 0.335), -webkit-transform .6s cubic-bezier(0.6, 0.04, 0.98, 0.335);
-        -moz-transition: visibility .6s cubic-bezier(0.6, 0.04, 0.98, 0.335), opacity .6s cubic-bezier(0.6, 0.04, 0.98, 0.335), -moz-transform .6s cubic-bezier(0.6, 0.04, 0.98, 0.335);
-        transition: visibility .6s cubic-bezier(0.6, 0.04, 0.98, 0.335), opacity .6s cubic-bezier(0.6, 0.04, 0.98, 0.335), transform .6s cubic-bezier(0.6, 0.04, 0.98, 0.335);
+        background: -moz-linear-gradient(-45deg, #183850 0, #183850 25%, #192c46 50%, #22254c 75%, #22254c 100%);
+        background: -webkit-linear-gradient(-45deg, #183850 0, #183850 25%, #192c46 50%, #22254c 75%, #22254c 100%);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    .floating-chat.enter:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        opacity: 1;
+    }
+    .floating-chat.enter {
+        transform: translateY(0);
+        opacity: 0.6;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.14);
     }
 
-    #rocketmeluncur i {
-        display: block;
-        margin-top: 48px;
-        height: 14px;
-        background: url(https://1.bp.blogspot.com/-UR9I7YEuEUY/VXIJn8MrBPI/AAAAAAAAKRE/qZObHBd5zIo/s1600/rocket.png) no-repeat 50% -48px;
-        opacity: .5;
-        -webkit-transition: -webkit-transform .2s;
-        -moz-transition: -moz-transform .2s;
-        transition: transform .2s;
-        -webkit-transform-origin: 50% 0;
-        -moz-transform-origin: 50% 0;
-        transform-origin: 50% 0
+    .floating-chat.expand {
+        z-index: 2;
+        width: 25%;
+        max-height: 90%;
+        height: 90%;
+        border-radius: 5px;
+        cursor: auto;
+        opacity: 1;
     }
 
-    #rocketmeluncur:hover {
-        background-position: 50% -62px
+    .floating-chat :focus {
+        outline: 0;
+        box-shadow: 0 0 3pt 2pt rgba(14, 200, 121, 0.3);
     }
-
-    #rocketmeluncur:hover i {
-        background-position: 50% 100%;
-        -webkit-animation: flaming .7s infinite;
-        -moz-animation: flaming .7s infinite;
-        animation: flaming .7s infinite
+    .floating-chat button {
+        background: transparent;
+        border: 0;
+        color: white;
+        text-transform: uppercase;
+        border-radius: 3px;
+        cursor: pointer;
     }
-
-    #rocketmeluncur.showrocket {
-        visibility: visible;
-        opacity: 1
-    }
-
-    #rocketmeluncur.launchrocket {
-        background-position: 50% -62px;
+    .floating-chat .chat {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
         opacity: 0;
-        -webkit-transform: translateY(-800px);
-        -moz-transform: translateY(-800px);
-        -ms-transform: translateY(-800px);
-        transform: translateY(-800px);
-        pointer-events: none
+        width: 1px;
+        height: 1px;
+        border-radius: 50%;
+        transition: all 250ms ease-out;
+        margin: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .floating-chat .chat.enter {
+        opacity: 1;
+        border-radius: 0;
+        margin: 10px;
+        width: auto;
+        height: auto;
+    }
+    .floating-chat .chat .header {
+        flex-shrink: 0;
+        padding-bottom: 10px;
+        display: flex;
+        background: transparent;
+    }
+    .floating-chat .chat .header .title {
+        flex-grow: 1;
+        flex-shrink: 1;
+        padding: 0 5px;
+    }
+    .floating-chat .chat .header button {
+        flex-shrink: 0;
+    }
+    .floating-chat .chat .messages {
+        padding: 10px;
+        margin: 0;
+        list-style: none;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        flex-grow: 1;
+        border-radius: 4px;
+        background: transparent;
+    }
+    .floating-chat .chat .messages::-webkit-scrollbar {
+        width: 5px;
+    }
+    .floating-chat .chat .messages::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background-color: rgba(25, 147, 147, 0.1);
+    }
+    .floating-chat .chat .messages::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: rgba(25, 147, 147, 0.2);
+    }
+    .floating-chat .chat .messages li {
+        position: relative;
+        clear: both;
+        display: inline-block;
+        padding: 14px;
+        margin: 0 0 20px 0;
+        font: 12px/16px 'Noto Sans', sans-serif;
+        border-radius: 10px;
+        background-color: rgba(25, 147, 147, 0.2);
+        word-wrap: break-word;
+        max-width: 81%;
+    }
+    .floating-chat .chat .messages li:before {
+        position: absolute;
+        top: 0;
+        width: 25px;
+        height: 25px;
+        border-radius: 25px;
+        content: '';
+        background-size: cover;
+    }
+    .floating-chat .chat .messages li:after {
+        position: absolute;
+        top: 10px;
+        content: '';
+        width: 0;
+        height: 0;
+        border-top: 10px solid rgba(25, 147, 147, 0.2);
+    }
+    .floating-chat .chat .messages li.other {
+        animation: show-chat-odd 0.15s 1 ease-in;
+        -moz-animation: show-chat-odd 0.15s 1 ease-in;
+        -webkit-animation: show-chat-odd 0.15s 1 ease-in;
+        float: right;
+        margin-right: 45px;
+        color: #ffffff;
+    }
+    .floating-chat .chat .messages li.other:before {
+        right: -45px;
+        background-image: url(./assets/images/Thatkookooguy_tiny.jpg);
+    }
+    .floating-chat .chat .messages li.other:after {
+        border-right: 10px solid transparent;
+        right: -10px;
+    }   
+    .floating-chat .chat .messages li.self {
+        animation: show-chat-even 0.15s 1 ease-in;
+        -moz-animation: show-chat-even 0.15s 1 ease-in;
+        -webkit-animation: show-chat-even 0.15s 1 ease-in;
+        float: left;
+        margin-left: 45px;
+        color: #ffffff;
+    }
+    .floating-chat .chat .messages li.self:before {
+        left: -45px;
+        background-image: url(./assets/images/virus.png);
+    }
+    .floating-chat .chat .messages li.self:after {
+        border-left: 10px solid transparent;
+        left: -10px;
+    }
+    .floating-chat .chat .footer {
+        flex-shrink: 0;
+        display: flex;
+        padding-top: 10px;
+        max-height: 90px;
+        background: transparent;
+    }
+    .floating-chat .chat .footer .text-box {
+        border-radius: 3px;
+        background: rgba(25, 147, 147, 0.2);
+        min-height: 100%;
+        width: 100%;
+        margin-right: 5px;
+        color: #0ec879;
+        overflow-y: auto;
+        padding: 2px 5px;
+    }
+    .floating-chat .chat .footer .text-box::-webkit-scrollbar {
+        width: 5px;
+    }
+    .floating-chat .chat .footer .text-box::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background-color: rgba(25, 147, 147, 0.1);
+    }
+    .floating-chat .chat .footer .text-box::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: rgba(25, 147, 147, 0.2);
+    }
+    @keyframes show-chat-even {
+        0% {
+            margin-left: -480px;
+        }
+        100% {
+            margin-left: 0;
+        }
+    }
+    @-moz-keyframes show-chat-even {
+        0% {
+            margin-left: -480px;
+        }
+        100% {
+            margin-left: 0;
+        }
+    }
+    @-webkit-keyframes show-chat-even {
+        0% {
+            margin-left: -480px;
+        }
+        100% {
+            margin-left: 0;
+        }
+    }
+    @keyframes show-chat-odd {
+        0% {
+            margin-right: -480px;
+        }
+        100% {
+            margin-right: 0;
+        }
+    }
+    @-moz-keyframes show-chat-odd {
+        0% {
+            margin-right: -480px;
+        }
+        100% {
+            margin-right: 0;
+        }
+    }
+    @-webkit-keyframes show-chat-odd {
+        0% {
+            margin-right: -480px;
+        }
+        100% {
+            margin-right: 0;
+        }
     }
 
-    #rocketmeluncur.launchrocket i {
-        background-position: 50% 100%;
-        -webkit-transform: scale(1.4, 3.2);
-        -moz-transform: scale(1.4, 3.2);
-        transform: scale(1.4, 3.2)
-    }
 </style>
 
 </head>
@@ -763,9 +911,32 @@
             </div>
         </div>
         
+        {{!-- Chat Toggle Start--}}
+        <div class="floating-chat">
+            <div id="styledBadge" class="active"></div>
+            <i class="fi-comment" style="font-size: larger;" aria-hidden="true"></i>
+            <div class="chat">
+                <div class="header">
+                    <span class="title">
+                        Chat
+                    </span>
+                    <button>
+                        <i class="fi-x" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <ul class="messages">
+                    <li class="self">Welcome to Covid19 Tracker. Ask me covid related questions.</li>
+                </ul>
+                <div class="footer">
+                    <div class="text-box" contenteditable="true" disabled="true"></div>
+                    <button id="sendMessage">send</button>
+                </div>
+            </div>
+        </div>
+        {{!-- Chat Toggle End --}}
     
         <!-- Back to top button -->
-        <a href="javascript:void(0);" id="rocketmeluncur" class="showrocket" ><i></i></a>
+        {{!-- <a href="javascript:void(0);" id="rocketmeluncur" class="showrocket" ><i></i></a> --}}
 
         <div class="section-body">
             <footer class="footer">
@@ -796,5 +967,6 @@
 <script src="assets/js/core.js"></script>
 <script src="assets/js/notification/user_data.js"></script>
 <script src="assets/js/utility_pre.js"></script>
+<script src="assets/js/chatbot.js"></script>
 </body>
 </html>
