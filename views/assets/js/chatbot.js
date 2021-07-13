@@ -10,6 +10,32 @@ const getNews = async () => {
     return response
 }
 
+const getVaccineStats = async () => {
+    var response = await fetch(`https://api.cowin.gov.in/api/v1/reports/v2/getVacPublicReports`)
+    response = response.json()
+    return response
+}
+
+function vaccineStatsFormat(data) {
+    let last2Days = data.last30DaysVaccination.splice((data.last30DaysVaccination).length - 2, 2);
+    let temp = ''
+    temp += `--- ${last2Days[1].vaccine_date} ---`
+    temp += `<br>Dose 1: ${last2Days[1].dose_1}<br>`
+    temp += `Dose 2: ${last2Days[1].dose_2}<br>`
+    temp += `Urban: ${last2Days[1].urban}<br>`
+    temp += `Rural: ${last2Days[1].rural}<br>`
+    temp += `Total: ${last2Days[1].total}<br><br>`
+
+    temp += `--- ${last2Days[0].vaccine_date} ---`
+    temp += `<br>Dose 1: ${last2Days[0].dose_1}<br>`
+    temp += `Dose 2: ${last2Days[0].dose_2}<br>`
+    temp += `Urban: ${last2Days[0].urban}<br>`
+    temp += `Rural: ${last2Days[0].rural}<br>`
+    temp += `Total: ${last2Days[0].total}`
+    
+    return temp
+}
+
 function giveFormattedMsg(e) {
     let temp = ''
     temp += '--- World ---'
@@ -95,20 +121,17 @@ function sendNewMessage() {
                     receiveNewMessage(temp);
                 }
             })
-
-            // for(let i=0; i<jsson.length; ++i) {
-            //     let temp = ''
-            //     temp += jsson[i].title
-            //     temp += `<br><br><a href="${jsson[i].uri}" target="_blank">Link</a><br>`
-            //     temp += `Time: ${jsson[i].time}`
-            //     receiveNewMessage(temp);
-            // }
         }
         else if(data.data == 'case_stats') {
             socket.emit("bot_data_request");
             socket.on("bot_data_answer", (e) => {
                 receiveNewMessage(giveFormattedMsg(e));
             })
+        }
+        else if(data.data == 'Vaccination_stats') {
+            getVaccineStats().then(data => {
+                receiveNewMessage(vaccineStatsFormat(data))
+            }) 
         }
         else {
             receiveNewMessage(data.data);
