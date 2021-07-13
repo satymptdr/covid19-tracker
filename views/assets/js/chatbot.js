@@ -125,7 +125,7 @@ function sendNewMessage() {
         else if(data.data == 'case_stats') {
             socket.emit("bot_data_request");
             socket.on("bot_data_answer", (e) => {
-                receiveNewMessage(giveFormattedMsg(e));
+                receiveNewMessage(e.data);
             })
         }
         else if(data.data == 'Vaccination_stats') {

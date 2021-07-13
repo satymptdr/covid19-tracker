@@ -298,7 +298,7 @@ app.get('/abhay/data', (req, res) => {
 });
 
 app.get('/Api/getNews', (req, res) => {
-    client.get('civic', (err, result) => {
+    client.get('get_news_latest', (err, result) => {
         if(result) {
             res.json(result);
         }
@@ -309,12 +309,16 @@ app.get('/Api/getNews', (req, res) => {
 })
 
 app.get('/Api/civicFreedomTracker', (req, res) => {
-    civicFreedomTracker().then(data => res.json(data))
+    client.get('civic', (err, result) => {
+        if(result) {
+            res.json(result);
+        }
+        else {
+            civicFreedomTracker().then(data => res.json(data))
+        }
+    });
 })
 
-app.get('/Api/ ', (req, res) => {
-    situationReports().then(data => res.json(data))
-})
 app.get('/Api/worldData', (req, res) => {
     client.get('world_data', (err, result) => {
         if(result) {
@@ -336,17 +340,23 @@ io.on('connection', (socket) => {
     });
 
     socket.on('bot_data_request', () => {
+        var temp = ''
+        temp += '--- World ---'
+        temp += `<br>World Total: ${world_total}<br>`
+        temp += `World New: ${world_new}<br>`
+        temp += `World Active: ${world_active}<br>`
+        temp += `World Death: ${world_death}<br>`
+        temp += `World New Death: ${world_new_death}<br><br>`
+
+        temp += '--- India ---'
+        temp += `<br>India Total: ${india_total}<br>`
+        temp += `India New: ${india_new}<br>`
+        temp += `India Active: ${india_active}<br>`
+        temp += `India Death: ${india_death}<br>`
+        temp += `India New Death: ${india_new_death}`;
+        
         socket.emit('bot_data_answer', {
-            india_total : india_total,
-            india_new : india_new,
-            india_active : india_active,
-            india_death : india_death,
-            india_new_death : india_new_death,
-            world_total : world_total,
-            world_new : world_new,
-            world_active : world_active,
-            world_death : world_death,
-            world_new_death : world_new_death
+            data : temp
         });
     });
 });
