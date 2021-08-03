@@ -8,42 +8,42 @@ function isStateExists() {
 }
 
 const population = {
-    "AN": 434000,
-    "AP": 49577103,
-    "AR": 1383727,
-    "AS": 31205576,
+    "AN": 397000,
+    "AP": 52221000,
+    "AR": 1504000,
+    "AS": 34293000,
     "BR": 119520000,
     "CH": 1179000,
     "CT": 28724000,
-    "DL": 31181000,
-    "DN": 585764,
-    "GA": 1504000,
-    "GJ": 60439692,
-    "HP": 6864602,
-    "HR": 25351462,
-    "JH": 32988134,
-    "JK": 12267032,
-    "KA": 64100000,
-    "KL": 33406061,
-    "LA": 274000,
-    "LD": 64473,
-    "MH": 112374333,
-    "ML": 2966889,
-    "MN": 2570390,
-    "MP": 72626809,
-    "MZ": 1097206,
-    "NL": 1978502,
-    "OR": 41974219,
-    "PB": 27743338,
-    "PY": 1247953,
-    "RJ": 68548437,
-    "SK": 610577,
-    "TG": 35003674,
-    "TN": 72147030,
-    "TR": 3673917,
-    "UP": 199812341,
-    "UT": 10086292,
-    "WB": 91276115
+    "DL": 19814000,
+    "DN": 959000,
+    "GA": 1540000,
+    "GJ": 67936000,
+    "HP": 7300000,
+    "HR": 28672000,
+    "JH": 37403000,
+    "JK": 13203000,
+    "KA": 65798000,
+    "KL": 35125000,
+    "LA": 293000,
+    "LD": 68000,
+    "MH": 122153000,
+    "ML": 3224000,
+    "MN": 3103000,
+    "MP": 82232000,
+    "MZ": 1192000,
+    "NL": 2150000,
+    "OR": 43671000,
+    "PB": 29859000,
+    "PY": 1504000,
+    "RJ": 77264000,
+    "SK": 664000,
+    "TG": 37220000,
+    "TN": 75695000,
+    "TR": 3992000,
+    "UP": 224979000,
+    "UT": 11141000,
+    "WB": 96906000
 }
 
 var config, config1, g_idx = 0,
@@ -58,7 +58,7 @@ var config, config1, g_idx = 0,
     ydata1_last, ydata2_last, ydata4_last,
     india_time = [],
     state_name = "GJ",
-    country = "India",
+    country = "_India",
     vaccine1=0, vaccine2=0,
     color = Chart.helpers.color,
     series_label = "Confirmed Cases",
@@ -135,18 +135,21 @@ async function timeSeries(e = 0, c) {
     }
     let t = (await a.text()).split("\n");
 
-    let tmk = []
-    t.forEach(e => {
-        tmk.push(e.split(",")[1]);
-    })
-
     xlables1 = t[0].split(",").splice(4);
-    let o, l = 0,
-        d = (t = t.splice(1)).length - 1;
-    for (; l <= d;) {
-        let e = t[o = Math.floor((l + d) / 2)].split(",");
-        if (c.localeCompare(e[1]) == 0) break;
-        c.localeCompare(e[1]) > 0 ? l = o + 1 : d = o - 1
+    var o, d = (t = t.splice(1)).length - 1, mid = Math.floor(d / 2);
+    let flag=0;
+
+    for(let i=mid; i<=d; ++i) {
+        o=i, e=t[i].split(",");
+        console.log(c + " : " + e[0]+"_"+e[1]);
+        if (c.localeCompare(e[0]+"_"+e[1]) == 0) { flag=1; break; }
+    }
+    if(!flag) {
+        for(let i=0; i<mid; ++i) {
+            o=i, e=t[i].split(",");
+            console.log(c + " : " + e[0]+"_"+e[1]);
+            if (c.localeCompare(e[0]+"_"+e[1]) == 0) { break; }
+        }
     }
     india_time.length = 0, india_time = t[o].split(",").splice(4), temp.data = india_time
 }
@@ -363,6 +366,7 @@ function daily() {
 function Select_Country() {
     document.getElementById('Cumulative1').checked = true;
     country = document.getElementById('type').value;
+    console.log(country);
     india_time.length = 0;
 
     timeSeries(0, country).then(() => {

@@ -55,3 +55,10 @@ async function notification() {
 }).then(() => {
     setTimeout(notification, 1e3)
 });
+
+async function pingChatBotApi() {
+    await fetch('https://covidbot-api.herokuapp.com/?q=Hello', {mode:'cors'})
+}
+pingChatBotApi().then(() => {
+    console.log("Chat Bot Ready To Talk");
+});
