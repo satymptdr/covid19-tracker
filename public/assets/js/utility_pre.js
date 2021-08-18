@@ -57,7 +57,7 @@ async function notification() {
 });
 
 async function pingChatBotApi() {
-    await fetch('https://covidbot-api.herokuapp.com/?q=Hello', {mode:'cors'})
+    await fetch('https://covidbot-api.herokuapp.com/?q=Hello')
 }
 pingChatBotApi().then(() => {
     console.log("Chat Bot Ready To Talk");

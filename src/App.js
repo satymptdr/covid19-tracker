@@ -172,13 +172,12 @@ app.get('/india', (req, res) => {
         }
         else {
             indiaCasesByStates().then((result) => {
-                total = result[0]; 
                 arr2 = result;
-                arr2.shift();
                 arr2.sort((a, b) => {
                     return b.confirmed - a.confirmed;
                 });
-                arr2.pop();
+                total = arr2[0];
+                arr2.shift();
             }).then(function() {
                 res.render('india', {india : arr2, total : total});
                 client.setex('india_data', 10*60, JSON.stringify(arr2));

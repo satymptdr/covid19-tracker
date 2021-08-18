@@ -122,3 +122,7 @@ timeSeries_india().then(() => {
     var a = document.getElementById("canvas1").toDataURL("image/jpg");
     e.href = a
 };
+
+
+// Charts for dashboard
+/**********************/

@@ -3,6 +3,45 @@ const cheerio = require('cheerio')
 const tabletojson = require('tabletojson').Tabletojson;
 const WHO_BASE_URL = 'https://www.who.int';
 const BASE_URL = 'https://www.worldometers.info';
+const state_name = {
+    'AN' : 'Andaman and Nicobar Islands',
+    'AP' : 'Andhra Pradesh',
+    'AR' : 'Arunachal Pradesh',
+    'AS' : 'Assam',
+    'BR' : 'Bihar',
+    'CH' : 'Chandigarh',
+    'CT' : 'Chhattisgarh',
+    'DN' : 'Dadra and Nagar Haveli and Daman and Diu',
+    'DL' : 'Delhi',
+    'GA' : 'Goa',
+    'GJ' : 'Gujarat',
+    'HR' : 'Haryana',
+    'HP' : 'Himachal Pradesh',
+    'JK' : 'Jammu and Kashmir',
+    'JH' : 'Jharkhand',
+    'KA' : 'Karnataka',
+    'KL' : 'Kerala',
+    'LA' : 'Ladakh',
+    'LD' : 'Lakshadweep',
+    'MP' : 'Madhya Pradesh',
+    'MH' : 'Maharashtra',
+    'MN' : 'Manipur',
+    'ML' : 'Meghalaya',
+    'MZ' : 'Mizoram',
+    'NL' : 'Nagaland',
+    'OR' : 'Odisha',
+    'PY' : 'Puducherry',
+    'PB' : 'Punjab',
+    'RJ' : 'Rajasthan',
+    'SK' : 'Sikkim',
+    'TN' : 'Tamil Nadu',
+    'TG' : 'Telangana',
+    'TR' : 'Tripura',
+    'TT' : 'Total',
+    'UP' : 'Uttar Pradesh',
+    'UT' : 'Uttarakhand',
+    'WB' : 'West Bengal'
+}
 
 const renameKey = (obj, old_key, new_key) => {
     if (old_key !== new_key) {
@@ -93,10 +132,31 @@ const situationReports = async() =>{
 };
 
 const indiaCasesByStates = async () =>{
-    const res = await fetch('https://api.covid19india.org/data.json');
+    const res = await fetch('https://data.covid19india.org/v4/min/data.min.json');
     const data = await res.json();
-
-    return Promise.all(data.statewise);
+    const response = new Array();
+    Object.keys(data).forEach(key => {
+        let temp = {
+			"confirmed": data[key]['total']['confirmed'],
+			"deaths": data[key]['total']['deceased'],
+            "recovered": data[key]['total']['recovered'],
+            "active": data[key]['total']['confirmed'] - data[key]['total']['deceased'] - data[key]['total']['recovered'],
+			"deltaconfirmed": data[key]['delta'].hasOwnProperty('confirmed') ? data[key]['delta']['confirmed'] : 0,
+			"deltadeaths": data[key]['delta'].hasOwnProperty('deceased') ? data[key]['delta']['confirmed'] : 0,
+			"deltarecovered": data[key]['delta'].hasOwnProperty('recovered') ? data[key]['delta']['confirmed'] : 0,
+            "tested" : data[key]['total']['tested'],
+            "vaccinated1" : data[key]['total']['vaccinated1'],
+            "vaccinated2" : data[key]['total']['vaccinated2'],
+            "deltatested" : data[key]['delta'].hasOwnProperty('tested') ? data[key]['delta']['tested'] : 0,
+            "deltavaccinated1" : data[key]['delta'].hasOwnProperty('vaccinated1') ? data[key]['delta']['vaccinated1'] : 0,
+            "deltavaccinated2" : data[key]['delta'].hasOwnProperty('vaccinated2') ? data[key]['delta']['vaccinated2'] : 0,
+			"lastupdatedtime": data[key]['meta']['last_updated'],
+			"state": state_name[key],
+			"statecode": key
+        };
+        response.push(temp);
+    });
+    return Promise.all(response);
 }
 
 const reports = async () =>{

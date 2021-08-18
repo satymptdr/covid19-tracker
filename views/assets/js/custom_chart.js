@@ -111,7 +111,7 @@ var state_obj = [{
         data: india_time
     };
 async function getData() {
-    var e, a, t, o, l, d = await fetch("https://api.covid19india.org/v4/min/timeseries.min.json"),
+    var e, a, t, o, l, d = await fetch("https://data.covid19india.org/v4/min/timeseries.min.json"),
         n = await d.json();
     xlables.length = 0, xlables = Object.keys(n[state_name].dates), ydata1.length = 0, ydata2.length = 0, ydata3.length = 0, ydata4.length = 0, ydata5.length = 0, ydata6.length = 0, Object.keys(n[state_name]).map(d => {
         xlables.forEach(r => {

@@ -5,7 +5,11 @@ var bodyParser = require('body-parser');
 const path = require('path');
 
 module.exports = function(app, express) {
-    hbs.registerHelper('formatIndiaCasesTime', function (date, format) {
+    hbs.registerHelper('formatIndiaCasesTime', function (date) {
+        return moment(date).startOf('hour').fromNow();
+    });
+
+    hbs.registerHelper('formatTop10NewsTime', function (date, format) {
         return moment.unix(parseInt(moment(date, format).format("X"))).fromNow();
     });
     
@@ -22,10 +26,6 @@ module.exports = function(app, express) {
     
     hbs.registerHelper('getDayMonth', function (timestamp, format) {
         return moment.unix((parseInt(timestamp))).format(format);
-    });
-    
-    hbs.registerHelper('percent', function (cases, total) {
-        return ((cases / total) * 100).toFixed(1) + '%';
     });
     
     hbs.registerHelper('calculate', function (confirm, deceased, recover) {
