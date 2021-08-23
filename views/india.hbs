@@ -303,14 +303,14 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-6 mb-2">
-                            <div class="card border-info" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                                <div class="card-header" style="background-color: rgb(148, 197, 250);">
-                                    <h3 class="card-title"><b>Active</b></h3>
+                            <div class="card border-secondary" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: rgb(168, 173, 178);">
+                                    <h3 class="card-title"><b>Deceased</b></h3>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="number mb-0 font-28">{{total.active}} <p style="color: rgb(148, 197, 250);; font-size: 20px;">{{calculate total.deltaconfirmed total.deltarecovered total.deltadeaths}}</p></h5>
+                                    <h5 class="number mb-0 font-28">{{total.deaths}}  <p style="color: rgb(168, 173, 178); font-size: 20px">+{{total.deltadeaths}}</p></h5>
                                     <div class="table-responsive">
-                                        <canvas id="active" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                        <canvas id="deceased" style="height:80px;" class="chartjs-render-monitor"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -323,20 +323,20 @@
                                 <div class="card-body">
                                     <h5 class="number mb-0 font-28">{{total.recovered}}  <p style="color: rgb(127, 203, 144); font-size: 20px">+{{total.deltarecovered}}</p></h5>
                                     <div class="table-responsive">
-                                        <canvas id="recovered" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                        {{!-- <canvas id="recovered" style="height:80px;" class="chartjs-render-monitor"></canvas> --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6 mb-2">
-                            <div class="card border-secondary" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
-                                <div class="card-header" style="background-color: rgb(168, 173, 178);">
-                                    <h3 class="card-title"><b>Deceased</b></h3>
+                            <div class="card border-info" style="box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.75);">
+                                <div class="card-header" style="background-color: rgb(148, 197, 250);">
+                                    <h3 class="card-title"><b>Active</b></h3>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="number mb-0 font-28">{{total.deaths}}  <p style="color: rgb(168, 173, 178); font-size: 20px">+{{total.deltadeaths}}</p></h5>
+                                    <h5 class="number mb-0 font-28">{{total.active}} <p style="color: rgb(148, 197, 250);; font-size: 20px;">{{calculate total.deltaconfirmed total.deltarecovered total.deltadeaths}}</p></h5>
                                     <div class="table-responsive">
-                                        <canvas id="deceased" style="height:80px;" class="chartjs-render-monitor"></canvas>
+                                        {{!-- <canvas id="active" style="height:80px;" class="chartjs-render-monitor"></canvas> --}}
                                     </div>
                                 </div>
                             </div>
@@ -399,7 +399,7 @@
             <select id="type" name="type" onchange="type_select()">
                 <option value="select" disabled>Choose Option</option>
                 <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv">Confirmed Cases</option>
-                <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv">Recovered Cases</option>
+                {{!-- <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv">Recovered Cases</option> --}}
                 <option value="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv">Death Cases</option>
             </select>
 
@@ -468,17 +468,17 @@
 <script src="./assets/js/custom_chart_india.js"></script>
 <script>
     var confirmed = [],
-    recovered = [],
     deceased = [],
-    active = [],
     xlables1 = [];
+    // recovered = [], active = []
     async function timeSeries1() {
         var e = await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"),
-            t = await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"),
             a = await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv");
+            // t = await fetch("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv")
+
         let n = (await e.text()).split("\n"),
-            i = (await t.text()).split("\n"),
             o = (await a.text()).split("\n");
+            // i = (await t.text()).split("\n"),
         xlables1 = n[0].split(",").splice(4);
         let l, s, r, d = 0,
             c = (n = n.splice(1)).length - 1;
@@ -487,30 +487,30 @@
             if ("India" == e[1]) break;
             e[1] < "India" ? d = l + 1 : c = l - 1
         }
-        for (d = 0, c = (i = i.splice(1)).length - 1; d <= c;) {
+        /* for (d = 0, c = (i = i.splice(1)).length - 1; d <= c;) {
             let e = i[s = Math.floor((d + c) / 2)].split(",");
             if ("India" == e[1]) break;
             e[1] < "India" ? d = s + 1 : c = s - 1
-        }
+        } */
         for (d = 0, c = (o = o.splice(1)).length - 1; d <= c;) {
             let e = o[r = Math.floor((d + c) / 2)].split(",");
             if ("India" == e[1]) break;
             e[1] < "India" ? d = r + 1 : c = r - 1
         }
         let p = [],
-            u = [],
             g = [],
             f = 0;
-        p = n[l].split(",").splice(4), u = i[s].split(",").splice(4), g = o[r].split(",").splice(4);
+            // u = [],
+        p = n[l].split(",").splice(4), g = o[r].split(",").splice(4); // u = i[s].split(",").splice(4),
         let m = p.length;
         for (let e = m - 30; e < m; ++e) {
             confirmed[f] = parseInt(p[e]) - parseInt(p[e - 1])
-            recovered[f] = parseInt(u[e])==0 ? parseInt(u[e]) : parseInt(u[e]) - parseInt(u[e - 1])
+            //recovered[f] = parseInt(u[e])==0 ? parseInt(u[e]) : parseInt(u[e]) - parseInt(u[e - 1])
             deceased[f] = parseInt(g[e]) - parseInt(g[e - 1])
-            active[f] = confirmed[f] - recovered[f] - deceased[f]
+            //active[f] = confirmed[f] - recovered[f] - deceased[f]
             f += 1;
         }
-        xlables1 = xlables1.splice(m - 30), confirmed[29] - confirmed[28] == -1 * confirmed[28] && (confirmed.splice(-1), recovered.splice(-1), deceased.splice(-1), active.splice(-1), xlables1.splice(-1))
+        xlables1 = xlables1.splice(m - 30), confirmed[29] - confirmed[28] == -1 * confirmed[28] && (confirmed.splice(-1), deceased.splice(-1), xlables1.splice(-1))
     }
 
     function getConfirmed1() {
@@ -564,7 +564,7 @@
         window.myLine1 = new Chart(t, e)
     }
 
-    function getConfirmed2() {
+    /* function getConfirmed2() {
         let e = {
             type: "line",
             data: {
@@ -613,7 +613,7 @@
         };
         var t = document.getElementById("recovered").getContext("2d");
         window.myLine2 = new Chart(t, e)
-    }
+    } */
 
     function getConfirmed3() {
         let e = {
@@ -666,7 +666,7 @@
         window.myLine3 = new Chart(t, e)
     }
 
-    function getConfirmed4() {
+    /* function getConfirmed4() {
         let e = {
             type: "line",
             data: {
@@ -715,9 +715,10 @@
         };
         var t = document.getElementById("active").getContext("2d");
         window.myLine4 = new Chart(t, e)
-    }
+    } */
+
     timeSeries1().then(() => {
-        getConfirmed1(), getConfirmed2(), getConfirmed3(), getConfirmed4()
+        getConfirmed1(), getConfirmed3()
     }).catch(e => {
         console.log(e)
     });
